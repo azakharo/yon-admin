@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from '@features/auth';
-import {IconButton} from '@mui/material';
+import {Box, ButtonBase, IconButton, Typography} from '@mui/material';
 
 import {ROUTE__CURRENT_USER_PROFILE} from '@shared/constants';
 import {UserAvatarDoubleBordered} from '../UserAvatarDoubleBordered';
@@ -10,13 +10,19 @@ export const UserProfileButton = () => {
   const {currentUser} = useAuth();
   const {name, avatar} = currentUser!;
 
-  const handleAvatarClick = () => {
+  const handleClick = () => {
     navigate(ROUTE__CURRENT_USER_PROFILE);
   };
 
   return (
-    <IconButton size="small" onClick={handleAvatarClick}>
-      <UserAvatarDoubleBordered name={name} photoUrl={avatar} size={48} />
-    </IconButton>
+    <Box display="flex" alignItems="center" gap={1}>
+      <IconButton size="small" onClick={handleClick}>
+        <UserAvatarDoubleBordered name={name} photoUrl={avatar} size={48} />
+      </IconButton>
+
+      <ButtonBase onClick={handleClick}>
+        <Typography>{name}</Typography>
+      </ButtonBase>
+    </Box>
   );
 };

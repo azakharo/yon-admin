@@ -19,7 +19,8 @@ const GlobalStyles = (): JSX.Element => {
           height: '100%',
           width: '100%',
           fontFamily,
-          scrollbarGutter: 'stable both-edges',
+          // Preserve space for the vertical scrollbar on the right side and the same space on the left
+          // scrollbarGutter: 'stable both-edges',
         },
         body: {
           height: '100%',

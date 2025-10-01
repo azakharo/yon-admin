@@ -6,12 +6,10 @@
   grid-template-areas:
   "header header"
   "sidebar mainContent";
-  background-color: lightgoldenrodyellow;
 }
 
 .header {
   grid-area: header;
-  background-color: cadetblue;
 }
 
 .sidebar {
@@ -21,5 +19,5 @@
 
 .mainContent {
   grid-area: mainContent;
-  background-color: darkolivegreen;
+  background-color: #F6F6F6;
 }
