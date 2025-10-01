@@ -5,18 +5,18 @@
   grid-template-rows: auto 1fr;
   grid-template-areas:
   "header header"
-  "sidebar mainContent";
+  "sidebar main";
 }
 
-.header {
+header {
   grid-area: header;
 }
 
-.sidebar {
+aside {
   grid-area: sidebar;
 }
 
-.mainContent {
-  grid-area: mainContent;
+main {
+  grid-area: main;
   background-color: #F6F6F6;
 }
