@@ -9,6 +9,10 @@
       "dest": "/"
     },
     {
+      "src": "/profile",
+      "dest": "/"
+    },
+    {
       "src": "/",
       "dest": "/"
     }
