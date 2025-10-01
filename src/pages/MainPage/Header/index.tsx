@@ -1,11 +1,10 @@
 import {FC} from 'react';
 import {Box, BoxProps} from '@mui/material';
-import {darken} from '@mui/material/styles';
 
 import {UserProfileButton} from '@entities/user';
 
 import Logo from '@/shared/images/logo.svg?react';
-import {COLOR__PRIMARY_LIGHT} from '@/theme/colors';
+import {COLOR__HEADER_BG} from '@/theme/colors';
 
 export const Header: FC<BoxProps> = props => {
   return (
@@ -16,7 +15,7 @@ export const Header: FC<BoxProps> = props => {
       gap={1}
       px={2}
       py={0.5}
-      bgcolor={darken(COLOR__PRIMARY_LIGHT, 0.05)}
+      bgcolor={COLOR__HEADER_BG}
       {...props}
     >
       <Box textAlign="center">

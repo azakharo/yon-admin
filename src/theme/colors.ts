@@ -1,3 +1,5 @@
+import {darken} from '@mui/material/styles';
+
 export const COLOR__BLACK = '#000';
 export const COLOR__MAIN_BLACK = '#171717';
 export const COLOR__GRAY = '#636170';
@@ -40,3 +42,5 @@ export const COLOR__WARNING_DARK = '#4F3304';
 export const COLOR__MAGENTA_LIGHT = '#F5DDED';
 export const COLOR__MAGENTA_SOFT_DARK = '#581040';
 export const COLOR__MAGENTA_DARK = '#3B0A2B';
+
+export const COLOR__HEADER_BG = darken(COLOR__PRIMARY_LIGHT, 0.05);

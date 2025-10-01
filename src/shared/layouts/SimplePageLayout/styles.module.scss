@@ -1,0 +1,19 @@
+.container {
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+  "header"
+  "main";
+}
+
+header {
+  grid-area: header;
+}
+
+main {
+  grid-area: main;
+  padding: 16px;
+  background-color: #F6F6F6;
+}
