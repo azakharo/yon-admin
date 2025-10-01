@@ -1,0 +1,25 @@
+.container {
+  height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(240px, 20%) 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+  "header header"
+  "sidebar mainContent";
+  background-color: lightgoldenrodyellow;
+}
+
+.header {
+  grid-area: header;
+  background-color: cadetblue;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  background-color: lightcoral;
+}
+
+.mainContent {
+  grid-area: mainContent;
+  background-color: darkolivegreen;
+}
