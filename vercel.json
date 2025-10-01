@@ -1,0 +1,16 @@
+{
+  "routes": [
+    {
+      "src": "/login.*",
+      "dest": "/"
+    },
+    {
+      "src": "/(main|search|portfolio|activity|rewards|profile|topics|categories|stat|yonner|leaderboard|balance|transaction-history).*",
+      "dest": "/"
+    },
+    {
+      "src": "/",
+      "dest": "/"
+    }
+  ]
+}

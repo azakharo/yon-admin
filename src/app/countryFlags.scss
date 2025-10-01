@@ -1,0 +1,8 @@
+// custom configuration
+@use "../../node_modules/flag-icons/sass/flag-icons" with (
+  // Override path to flags directory
+  $flag-icons-path: "../../node_modules/flag-icons/flags",
+
+  // Include only specific country flags
+  $flag-icons-included-countries: ("br", "mx", "ph", "ru", "us")
+);
