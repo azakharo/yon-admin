@@ -28,6 +28,7 @@
     "date-fns": "4.1.0",
     "flag-icons": "7.5.0",
     "lodash": "4.17.21",
+    "material-react-table": "3.2.1",
     "memoize": "10.1.0",
     "mui-one-time-password-input": "3.0.1",
     "mui-tel-input": "8.0.1",
