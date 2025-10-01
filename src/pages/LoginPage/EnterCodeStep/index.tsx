@@ -200,12 +200,17 @@ export const EnterCodeStep = () => {
           <Typography
             align="left"
             display="block"
-            sx={{color: COLOR__GRAY, fontSize: 16, fontWeight: 500}}
+            sx={{
+              color: COLOR__GRAY,
+              fontSize: 16,
+              fontWeight: 500,
+              whiteSpace: 'pre-line',
+            }}
             mt={4.5}
           >
-            {`You can request a new SMS code in [${Math.round(countdown / 1000)
+            {`You can request a new SMS\ncode in ${Math.round(countdown / 1000)
               .toString()
-              .padStart(2, '0')} seconds].`}
+              .padStart(2, '0')} seconds.`}
           </Typography>
         )}
 

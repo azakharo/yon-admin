@@ -1,3 +1,4 @@
+import {useNavigate} from 'react-router-dom';
 import {useAuth} from '@features/auth';
 import {Button, Stack, Typography} from '@mui/material';
 
@@ -9,6 +10,7 @@ import {COLOR__GRAY, COLOR__HEADER_BG} from '@/theme/colors';
 
 export const CurrentUserProfilePage = () => {
   const {currentUser, logout} = useAuth();
+  const navigate = useNavigate();
   const {name, avatar, username} = currentUser!;
 
   return (
@@ -28,7 +30,16 @@ export const CurrentUserProfilePage = () => {
             @{username}
           </Typography>
 
-          <Button onClick={logout}>Logout</Button>
+          <Button
+            onClick={() => {
+              logout();
+              // This is necessary for preventing saving /profile in urlToReturnAfterLogin.
+              // It can't be done in the auth context, because it is outside the router's context.
+              navigate('/');
+            }}
+          >
+            Logout
+          </Button>
         </Stack>
       }
     />
