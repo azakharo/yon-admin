@@ -37,7 +37,12 @@ export const routes = createRoutesFromElements(
             <MainPage />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="section1" element={<div>Section 1</div>} />
+        <Route path="section2" element={<div>Section 2</div>} />
+        <Route index element={<Navigate replace to="section1" />} />
+        <Route path="*" element={<ErrorPage404 />} />
+      </Route>
 
       <Route
         path={ROUTE__CURRENT_USER_PROFILE}
