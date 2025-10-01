@@ -1,5 +1,6 @@
 import {FC} from 'react';
 import {Box, BoxProps} from '@mui/material';
+import {darken} from '@mui/material/styles';
 
 import {UserProfileButton} from '@entities/user';
 
@@ -15,7 +16,7 @@ export const Header: FC<BoxProps> = props => {
       gap={1}
       px={2}
       py={0.5}
-      bgcolor={COLOR__PRIMARY_LIGHT}
+      bgcolor={darken(COLOR__PRIMARY_LIGHT, 0.05)}
       {...props}
     >
       <Box textAlign="center">
