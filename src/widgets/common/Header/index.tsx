@@ -39,6 +39,7 @@ export const Header: FC<Props> = ({
       onClick={handleBack}
       sx={{
         color: 'inherit',
+        marginLeft: 1,
         ...backButtonSx,
       }}
       {...restBackButtonProps}

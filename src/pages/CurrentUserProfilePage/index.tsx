@@ -1,39 +1,47 @@
+import {useNavigate} from 'react-router-dom';
 import {useAuth} from '@features/auth';
-import {Box, Stack, Typography} from '@mui/material';
+import {Button, Stack, Typography} from '@mui/material';
 
 import {UserAvatarDoubleBordered} from '@entities/user';
+import {SimplePageLayout} from '@shared/layouts';
 import {Header} from '@widgets/common';
-import {SettingsMenu} from '@widgets/user/currentUserProfile';
 
-import {COLOR__GRAY} from '@/theme/colors';
+import {COLOR__GRAY, COLOR__HEADER_BG} from '@/theme/colors';
 
 export const CurrentUserProfilePage = () => {
-  const {currentUser} = useAuth();
+  const {currentUser, logout} = useAuth();
+  const navigate = useNavigate();
   const {name, avatar, username} = currentUser!;
 
   return (
-    <Box
-      px={2}
-      pt={1}
-      maxWidth="fit-content"
-      margin="0 auto"
-      display="flex"
-      flexDirection="column"
-      flexWrap="nowrap"
-    >
-      <Header title={'Profile'} mb={1} rightPart={<SettingsMenu />} />
+    <SimplePageLayout
+      header={
+        <Header title="Profile" minHeight={66} bgcolor={COLOR__HEADER_BG} />
+      }
+      mainContent={
+        <Stack spacing={1} alignItems="center" pt={0.25} mb={4}>
+          <UserAvatarDoubleBordered name={name} photoUrl={avatar} size={100} />
 
-      <Stack spacing={1} alignItems="center" pt={0.25} mb={4}>
-        <UserAvatarDoubleBordered name={name} photoUrl={avatar} size={100} />
+          <Typography sx={{fontSize: 20, fontWeight: 800}}>
+            {name || username}
+          </Typography>
 
-        <Typography sx={{fontSize: 20, fontWeight: 800}}>
-          {name || username}
-        </Typography>
+          <Typography variant="b3regular" sx={{color: COLOR__GRAY}}>
+            @{username}
+          </Typography>
 
-        <Typography variant="b3regular" sx={{color: COLOR__GRAY}}>
-          @{username}
-        </Typography>
-      </Stack>
-    </Box>
+          <Button
+            onClick={() => {
+              logout();
+              // This is necessary for preventing saving /profile in urlToReturnAfterLogin.
+              // It can't be done in the auth context, because it is outside the router's context.
+              navigate('/');
+            }}
+          >
+            Logout
+          </Button>
+        </Stack>
+      }
+    />
   );
 };

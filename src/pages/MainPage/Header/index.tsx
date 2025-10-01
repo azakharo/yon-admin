@@ -4,22 +4,25 @@ import {Box, BoxProps} from '@mui/material';
 import {UserProfileButton} from '@entities/user';
 
 import Logo from '@/shared/images/logo.svg?react';
+import {COLOR__HEADER_BG} from '@/theme/colors';
 
 export const Header: FC<BoxProps> = props => {
   return (
     <Box
-      component="header"
       display="flex"
       alignItems="center"
-      mb={1}
+      justifyContent="space-between"
       gap={1}
+      px={2}
+      py={0.5}
+      bgcolor={COLOR__HEADER_BG}
       {...props}
     >
-      <UserProfileButton />
-
-      <Box flex="1" textAlign="center">
-        <Logo width={57} height={'100%'} />
+      <Box textAlign="center">
+        <Logo width={87} height={'100%'} />
       </Box>
+
+      <UserProfileButton />
     </Box>
   );
 };

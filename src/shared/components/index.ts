@@ -25,6 +25,7 @@ export {ProgressBar} from './ProgressBar';
 export {Radio} from './Radio';
 export type {SelectOption, SelectProps, SelectValue} from './Select';
 export {Select} from './Select';
+export * from './tables';
 export * from './Tabs';
 export {TextLimitedNChars} from './TextLimitedNChars';
 export {TextLimitedNLines} from './TextLimitedNLines';

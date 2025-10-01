@@ -16,6 +16,7 @@ import {LoginPage} from '@/pages/LoginPage';
 import {EnterCodeStep} from '@/pages/LoginPage/EnterCodeStep';
 import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
+import {TaskCategoryTable} from '@/pages/MainPage/Section1/TaskCategoryTable';
 
 export const routes = createRoutesFromElements(
   <>
@@ -37,7 +38,12 @@ export const routes = createRoutesFromElements(
             <MainPage />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="section1" element={<TaskCategoryTable />} />
+        <Route path="section2" element={<div>Section 2</div>} />
+        <Route index element={<Navigate replace to="section1" />} />
+        <Route path="*" element={<ErrorPage404 />} />
+      </Route>
 
       <Route
         path={ROUTE__CURRENT_USER_PROFILE}
