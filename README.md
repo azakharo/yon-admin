@@ -1,4 +1,4 @@
-# YON админка
+# YON admin UI
 
 ## Quick start for the development
 
