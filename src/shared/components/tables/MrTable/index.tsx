@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {
   MaterialReactTable,
@@ -5,6 +6,7 @@ import {
   useMaterialReactTable,
 } from 'material-react-table';
 
+import {loadDataFromLocalStorage, saveDataToLocalStorage} from '../../../utils';
 import {ClickToSortIcon} from './icons/ClickToSortIcon';
 import {SortIcon} from './icons/SortIcon';
 
@@ -14,11 +16,37 @@ import typographyOptions from '@/theme/typography';
 
 const sortIconCommonStyles = {ml: 1} as const;
 
-export const MrTable = <T extends object>(props: MRT_TableOptions<T>) => {
+interface TablePersistentSettings {
+  columnOrder: string[];
+}
+
+interface Props<T extends object> extends MRT_TableOptions<T> {
+  localStorageKeyForSettings?: string;
+}
+
+export const MrTable = <T extends object>({
+  localStorageKeyForSettings,
+  enableColumnOrdering,
+  ...restProps
+}: Props<T>) => {
+  const persistentSettings: TablePersistentSettings | null =
+    localStorageKeyForSettings
+      ? (loadDataFromLocalStorage<TablePersistentSettings>(
+          localStorageKeyForSettings,
+        ) ?? null)
+      : null;
+
   // The search value is taken from URL.
   // It will take effect only if enableGlobalFilter prop is set to True.
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get('search') ?? '';
+
+  const defaultColumnOrder = restProps.columns.map(
+    col => col.accessorKey,
+  ) as string[];
+  const initialColumnOrder =
+    persistentSettings?.columnOrder ?? defaultColumnOrder;
+  const [columnOrder, setColumnOrder] = useState<string[]>(initialColumnOrder);
 
   const table = useMaterialReactTable({
     enableGlobalFilter: false,
@@ -31,6 +59,21 @@ export const MrTable = <T extends object>(props: MRT_TableOptions<T>) => {
     enableBottomToolbar: false,
     enableHiding: false,
     enableTopToolbar: false,
+    enableColumnOrdering: enableColumnOrdering,
+    enableColumnDragging: enableColumnOrdering,
+    onColumnOrderChange: enableColumnOrdering
+      ? newColumnOrder => {
+          setColumnOrder(newColumnOrder);
+          if (localStorageKeyForSettings) {
+            saveDataToLocalStorage<TablePersistentSettings>(
+              {
+                columnOrder: newColumnOrder as string[],
+              },
+              localStorageKeyForSettings,
+            );
+          }
+        }
+      : undefined,
     muiTablePaperProps: {
       sx: {
         ...tablePaperStyles,
@@ -69,11 +112,12 @@ export const MrTable = <T extends object>(props: MRT_TableOptions<T>) => {
         );
       },
     },
-    ...props,
+    ...restProps,
     // Чтобы TS не ругался, state должен быть передан ПОСЛЕ props.
     // Почему так, пока непонятно.
     state: {
       globalFilter: searchText,
+      columnOrder,
     },
     globalFilterFn: 'contains', // turn off fuzzy matching and use simple contains filter function
   });

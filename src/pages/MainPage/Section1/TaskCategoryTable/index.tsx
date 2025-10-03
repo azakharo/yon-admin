@@ -103,6 +103,8 @@ export const columns: MRT_ColumnDef<TaskCategory>[] = [
   },
 ];
 
+const localStorageKey = 'section1Table';
+
 export const TaskCategoryTable = () => {
   return (
     <MrTable
@@ -125,6 +127,8 @@ export const TaskCategoryTable = () => {
           />
         </TableRowActionsContainer>
       )}
+      enableColumnOrdering
+      localStorageKeyForSettings={localStorageKey}
       {...entityTableCommonProps}
     />
   );

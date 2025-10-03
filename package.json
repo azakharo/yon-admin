@@ -10,8 +10,7 @@
     "lint": "eslint .",
     "ts": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "chromatic": "npx chromatic --project-token=chpt_c5423c4c574b4d9"
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
