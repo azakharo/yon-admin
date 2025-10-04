@@ -1,5 +1,6 @@
+import {useEffect, useState} from 'react';
 import {Button} from '@mui/material';
-import {MRT_ColumnDef} from 'material-react-table';
+import {MRT_ColumnDef, MRT_ColumnFiltersState} from 'material-react-table';
 
 import {
   DeleteButton,
@@ -8,6 +9,7 @@ import {
   TableRowActionsContainer,
 } from '@shared/components';
 import {entityTableCommonProps} from '@shared/constants';
+import {sleep} from '@shared/utils';
 
 interface TaskCategory {
   id: number;
@@ -16,7 +18,7 @@ interface TaskCategory {
   typeId: number;
 }
 
-const categories: TaskCategory[] = [
+const allCategories: TaskCategory[] = [
   {
     id: 1,
     name: 'Категория №1 для типа №1',
@@ -79,15 +81,33 @@ const categories: TaskCategory[] = [
   },
 ];
 
-export const columns: MRT_ColumnDef<TaskCategory>[] = [
+const getCategories = async (nameFilter?: string): Promise<TaskCategory[]> => {
+  await sleep(1000); // simulate delay
+
+  if (nameFilter) {
+    const searchString = nameFilter.toLowerCase();
+
+    return allCategories.filter(({name}) => {
+      return name.toLowerCase().includes(searchString);
+    });
+  }
+
+  return allCategories;
+};
+
+const columns: MRT_ColumnDef<TaskCategory>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
     size: 0,
+    enableColumnFilter: false,
   },
   {
     accessorKey: 'name',
     header: 'Название',
+    muiFilterTextFieldProps: {
+      placeholder: 'name',
+    },
   },
   {
     accessorKey: 'isDefault',
@@ -95,17 +115,40 @@ export const columns: MRT_ColumnDef<TaskCategory>[] = [
     Cell: ({row}) => {
       return row.original.isDefault ? 'Да' : 'Нет';
     },
+    // filterVariant: 'checkbox',
+    enableColumnFilter: false,
   },
   {
     accessorKey: 'typeId',
     header: 'ID типа',
     size: 0,
+    enableColumnFilter: false,
   },
 ];
 
 const localStorageKey = 'section1Table';
 
 export const TaskCategoryTable = () => {
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
+    [],
+  );
+
+  const [categories, setCategories] = useState<TaskCategory[]>([]);
+
+  useEffect(() => {
+    let nameSearchString = '';
+
+    const nameFilter = columnFilters.find(filter => filter.id === 'name');
+    if (nameFilter) {
+      nameSearchString = nameFilter.value as string;
+    }
+
+    void getCategories(nameSearchString).then(data => {
+      setCategories(data);
+      return;
+    });
+  }, [columnFilters]);
+
   return (
     <MrTable
       columns={columns}
@@ -129,6 +172,10 @@ export const TaskCategoryTable = () => {
       )}
       enableColumnOrdering
       localStorageKeyForSettings={localStorageKey}
+      enableColumnFilters
+      columnFilters={columnFilters}
+      onColumnFiltersChange={setColumnFilters}
+      manualFiltering={true}
       {...entityTableCommonProps}
     />
   );

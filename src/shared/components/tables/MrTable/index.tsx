@@ -2,6 +2,8 @@ import {useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {
   MaterialReactTable,
+  MRT_ColumnFiltersState,
+  MRT_ColumnOrderState,
   MRT_TableOptions,
   useMaterialReactTable,
 } from 'material-react-table';
@@ -17,16 +19,19 @@ import typographyOptions from '@/theme/typography';
 const sortIconCommonStyles = {ml: 1} as const;
 
 interface TablePersistentSettings {
-  columnOrder: string[];
+  columnOrder: MRT_ColumnOrderState;
 }
 
 interface Props<T extends object> extends MRT_TableOptions<T> {
   localStorageKeyForSettings?: string;
+  columnFilters?: MRT_ColumnFiltersState;
 }
 
 export const MrTable = <T extends object>({
   localStorageKeyForSettings,
   enableColumnOrdering,
+  columnFilters,
+  enableColumnFilters,
   ...restProps
 }: Props<T>) => {
   const persistentSettings: TablePersistentSettings | null =
@@ -43,15 +48,16 @@ export const MrTable = <T extends object>({
 
   const defaultColumnOrder = restProps.columns.map(
     col => col.accessorKey,
-  ) as string[];
+  ) as MRT_ColumnOrderState;
   const initialColumnOrder =
     persistentSettings?.columnOrder ?? defaultColumnOrder;
-  const [columnOrder, setColumnOrder] = useState<string[]>(initialColumnOrder);
+  const [columnOrder, setColumnOrder] =
+    useState<MRT_ColumnOrderState>(initialColumnOrder);
 
   const table = useMaterialReactTable({
     enableGlobalFilter: false,
     enableColumnActions: false,
-    enableColumnFilters: false,
+    enableColumnFilters,
     enablePagination: false,
     enableSorting: true,
     enableFullScreenToggle: false,
@@ -67,7 +73,8 @@ export const MrTable = <T extends object>({
           if (localStorageKeyForSettings) {
             saveDataToLocalStorage<TablePersistentSettings>(
               {
-                columnOrder: newColumnOrder as string[],
+                ...persistentSettings,
+                columnOrder: newColumnOrder as MRT_ColumnOrderState,
               },
               localStorageKeyForSettings,
             );
@@ -97,6 +104,9 @@ export const MrTable = <T extends object>({
         borderBottom: `1px solid ${COLOR__LINE}`,
       },
     },
+    muiFilterTextFieldProps: {
+      variant: 'outlined',
+    },
     icons: {
       SyncAltIcon: () => <ClickToSortIcon sx={sortIconCommonStyles} />,
       ArrowDownwardIcon: ({className}: {className: string}) => {
@@ -113,11 +123,15 @@ export const MrTable = <T extends object>({
       },
     },
     ...restProps,
+    initialState: {
+      showColumnFilters: enableColumnFilters,
+    },
     // Чтобы TS не ругался, state должен быть передан ПОСЛЕ props.
     // Почему так, пока непонятно.
     state: {
       globalFilter: searchText,
       columnOrder,
+      columnFilters,
     },
     globalFilterFn: 'contains', // turn off fuzzy matching and use simple contains filter function
   });
