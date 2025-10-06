@@ -1,10 +1,12 @@
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
+import useUpdateEffect from 'ahooks/es/useUpdateEffect';
 import {
   MaterialReactTable,
   MRT_ColumnFiltersState,
   MRT_ColumnOrderState,
   MRT_TableOptions,
+  MRT_VisibilityState,
   useMaterialReactTable,
 } from 'material-react-table';
 
@@ -19,12 +21,14 @@ import typographyOptions from '@/theme/typography';
 const sortIconCommonStyles = {ml: 1} as const;
 
 interface TablePersistentSettings {
-  columnOrder: MRT_ColumnOrderState;
+  columnOrder?: MRT_ColumnOrderState;
+  columnVisibility?: MRT_VisibilityState;
 }
 
 interface Props<T extends object> extends MRT_TableOptions<T> {
   localStorageKeyForSettings?: string;
   columnFilters?: MRT_ColumnFiltersState;
+  isLoading?: boolean;
 }
 
 export const MrTable = <T extends object>({
@@ -32,6 +36,8 @@ export const MrTable = <T extends object>({
   enableColumnOrdering,
   columnFilters,
   enableColumnFilters,
+  enableHiding,
+  isLoading,
   ...restProps
 }: Props<T>) => {
   const persistentSettings: TablePersistentSettings | null =
@@ -46,13 +52,33 @@ export const MrTable = <T extends object>({
   const [searchParams] = useSearchParams();
   const searchText = searchParams.get('search') ?? '';
 
-  const defaultColumnOrder = restProps.columns.map(
-    col => col.accessorKey,
-  ) as MRT_ColumnOrderState;
-  const initialColumnOrder =
-    persistentSettings?.columnOrder ?? defaultColumnOrder;
-  const [columnOrder, setColumnOrder] =
-    useState<MRT_ColumnOrderState>(initialColumnOrder);
+  const colNames = useMemo(() => {
+    return restProps.columns.map(col => col.accessorKey) as string[];
+  }, [restProps.columns]);
+
+  const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(
+    persistentSettings?.columnOrder ?? colNames,
+  );
+
+  const defaultColumnVisibility = {} as MRT_VisibilityState;
+  for (const colName of colNames) {
+    defaultColumnVisibility[colName] = true;
+  }
+  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(
+    persistentSettings?.columnVisibility ?? defaultColumnVisibility,
+  );
+
+  useUpdateEffect(() => {
+    if (localStorageKeyForSettings) {
+      saveDataToLocalStorage<TablePersistentSettings>(
+        {
+          ...persistentSettings,
+          columnVisibility,
+        },
+        localStorageKeyForSettings,
+      );
+    }
+  }, [columnVisibility]);
 
   const table = useMaterialReactTable({
     enableGlobalFilter: false,
@@ -63,13 +89,14 @@ export const MrTable = <T extends object>({
     enableFullScreenToggle: false,
     enableDensityToggle: false,
     enableBottomToolbar: false,
-    enableHiding: false,
-    enableTopToolbar: false,
+    enableHiding,
+    enableTopToolbar: enableHiding,
     enableColumnOrdering: enableColumnOrdering,
     enableColumnDragging: enableColumnOrdering,
     onColumnOrderChange: enableColumnOrdering
       ? newColumnOrder => {
           setColumnOrder(newColumnOrder);
+
           if (localStorageKeyForSettings) {
             saveDataToLocalStorage<TablePersistentSettings>(
               {
@@ -81,6 +108,7 @@ export const MrTable = <T extends object>({
           }
         }
       : undefined,
+    onColumnVisibilityChange: setColumnVisibility,
     muiTablePaperProps: {
       sx: {
         ...tablePaperStyles,
@@ -132,6 +160,8 @@ export const MrTable = <T extends object>({
       globalFilter: searchText,
       columnOrder,
       columnFilters,
+      columnVisibility,
+      isLoading,
     },
     globalFilterFn: 'contains', // turn off fuzzy matching and use simple contains filter function
   });

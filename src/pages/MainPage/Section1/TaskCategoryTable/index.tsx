@@ -129,6 +129,7 @@ const columns: MRT_ColumnDef<TaskCategory>[] = [
 const localStorageKey = 'section1Table';
 
 export const TaskCategoryTable = () => {
+  const [loading, setLoading] = useState(true);
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     [],
   );
@@ -143,10 +144,14 @@ export const TaskCategoryTable = () => {
       nameSearchString = nameFilter.value as string;
     }
 
-    void getCategories(nameSearchString).then(data => {
-      setCategories(data);
-      return;
-    });
+    void getCategories(nameSearchString)
+      .then(data => {
+        setCategories(data);
+        return;
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [columnFilters]);
 
   return (
@@ -175,7 +180,9 @@ export const TaskCategoryTable = () => {
       enableColumnFilters
       columnFilters={columnFilters}
       onColumnFiltersChange={setColumnFilters}
-      manualFiltering={true}
+      manualFiltering
+      enableHiding
+      isLoading={loading}
       {...entityTableCommonProps}
     />
   );
