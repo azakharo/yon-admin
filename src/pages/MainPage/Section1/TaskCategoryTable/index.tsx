@@ -1,10 +1,12 @@
 import {useEffect, useState} from 'react';
 import {Button} from '@mui/material';
+import isEmpty from 'lodash/isEmpty';
 import {
   MRT_ColumnDef,
   MRT_ColumnFiltersState,
   MRT_PaginationState,
 } from 'material-react-table';
+import {useSnackbar} from 'notistack';
 
 import {GetListOutput, GetListParams} from '@shared/api';
 import {
@@ -14,7 +16,10 @@ import {
   TableRowActionsContainer,
 } from '@shared/components';
 import {entityTableCommonProps} from '@shared/constants';
+import {useNotImplementedToast} from '@shared/hooks';
 import {sleep} from '@shared/utils';
+
+const defaultPageSize = 10;
 
 interface TaskCategory {
   id: number;
@@ -84,6 +89,42 @@ const allCategories: TaskCategory[] = [
     isDefault: true,
     typeId: 13,
   },
+  {
+    id: 21,
+    name: 'Категория №1 для типа №11',
+    isDefault: false,
+    typeId: 12,
+  },
+  {
+    id: 22,
+    name: 'Категория №2 для типа №11',
+    isDefault: false,
+    typeId: 12,
+  },
+  {
+    id: 23,
+    name: 'Категория №1 для типа №12',
+    isDefault: true,
+    typeId: 13,
+  },
+  {
+    id: 24,
+    name: 'Категория №2 для типа №12',
+    isDefault: false,
+    typeId: 13,
+  },
+  {
+    id: 25,
+    name: 'Категория №1 для типа №13',
+    isDefault: true,
+    typeId: 14,
+  },
+  {
+    id: 27,
+    name: 'Категория №2 для типа №13',
+    isDefault: false,
+    typeId: 14,
+  },
 ];
 
 interface GetCategoriesParams extends GetListParams {
@@ -137,14 +178,14 @@ const columns: MRT_ColumnDef<TaskCategory>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Название',
+    header: 'Name',
     muiFilterTextFieldProps: {
       placeholder: 'name',
     },
   },
   {
     accessorKey: 'isDefault',
-    header: 'Группа по умолчанию',
+    header: 'Is default?',
     Cell: ({row}) => {
       return row.original.isDefault ? 'Да' : 'Нет';
     },
@@ -153,7 +194,7 @@ const columns: MRT_ColumnDef<TaskCategory>[] = [
   },
   {
     accessorKey: 'typeId',
-    header: 'ID типа',
+    header: 'Type ID',
     size: 0,
     enableColumnFilter: false,
   },
@@ -162,6 +203,8 @@ const columns: MRT_ColumnDef<TaskCategory>[] = [
 const localStorageKey = 'section1Table';
 
 export const TaskCategoryTable = () => {
+  const {enqueueSnackbar} = useSnackbar();
+  const showNotImplemented = useNotImplementedToast();
   const [loading, setLoading] = useState(true);
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     [],
@@ -169,13 +212,13 @@ export const TaskCategoryTable = () => {
 
   const [pagination, setPagination] = useState<MRT_PaginationState>({
     pageIndex: 0,
-    pageSize: 2,
+    pageSize: defaultPageSize,
   });
 
   const [categories, setCategories] = useState<GetListOutput<TaskCategory>>({
     items: [],
     page: 1,
-    pageSize: 2,
+    pageSize: defaultPageSize,
     total: 0,
     totalPages: 0,
   });
@@ -190,7 +233,7 @@ export const TaskCategoryTable = () => {
 
     void getCategories({
       page: pagination.pageIndex + 1,
-      pageSize: 2,
+      pageSize: defaultPageSize,
       nameFilter: nameSearchString,
     })
       .then(data => {
@@ -208,14 +251,14 @@ export const TaskCategoryTable = () => {
       data={categories.items}
       renderRowActions={({row}) => (
         <TableRowActionsContainer>
-          <Button variant="text" color="secondary">
+          <Button variant="text" color="secondary" onClick={showNotImplemented}>
             Подкатегории
           </Button>
 
-          <EditButton />
+          <EditButton onClick={showNotImplemented} />
 
           <DeleteButton
-            removeMethod={() => {}}
+            removeMethod={showNotImplemented}
             entityId={row.original.id}
             disabled={false}
             confirmationTitle="Удалить категорию?"
@@ -230,25 +273,36 @@ export const TaskCategoryTable = () => {
       manualFiltering
       enableHiding
       enableRowSelection
-      // getRowId={originalRow => {
-      //   console.log({originalRow});
-      //
-      //   if (!isNil(originalRow?.id)) {
-      //     return originalRow.id.toString();
-      //   }
-      //
-      //   return '';
-      // }}
-      renderTopToolbarCustomActions={({table}) => (
-        <Button
-          onClick={() => {
-            const rowSelection = table.getState().rowSelection; //read state
-            console.log({rowSelection});
-          }}
-        >
-          Do something
-        </Button>
-      )}
+      renderTopToolbarCustomActions={({table}) => {
+        const rowSelection = table.getState().rowSelection; //read state
+
+        return (
+          <Button
+            disabled={isEmpty(rowSelection)}
+            onClick={() => {
+              const selectedIndexes = Object.keys(rowSelection);
+              const selectedCategories = selectedIndexes
+                .map(ind => categories?.items?.[Number.parseInt(ind, 10)]?.name)
+                .filter(item => !!item);
+
+              if (isEmpty(selectedCategories)) {
+                return;
+              }
+
+              const message = `You selected the following categories:\n${selectedCategories.join('\n')}`;
+
+              enqueueSnackbar(message, {
+                variant: 'info',
+                style: {
+                  whiteSpace: 'pre-line',
+                },
+              });
+            }}
+          >
+            Do something
+          </Button>
+        );
+      }}
       enablePagination
       manualPagination
       state={{

@@ -143,7 +143,7 @@ export const MrTable = <TData extends MRT_RowData>({
     },
     muiTableBodyCellProps: {
       sx: {
-        padding: 1.5,
+        padding: 1,
         borderBottom: `1px solid ${COLOR__LINE}`,
       },
     },
@@ -168,6 +168,7 @@ export const MrTable = <TData extends MRT_RowData>({
     initialState: {
       ...initialState,
       showColumnFilters: enableColumnFilters,
+      density: 'compact',
     },
     state: {
       ...state,

@@ -6,8 +6,11 @@ const commonProps = {
   enableStickyHeader: true,
   muiTableContainerProps: {
     sx: {
-      // 85px - header, 32px - bottom padding
-      maxHeight: 'calc(100dvh - 85px - 32px)',
+      // 66px - header,
+      // 32px - padding Y,
+      // 56px - pagination,
+      // 58px - top toolbar
+      maxHeight: 'calc(100dvh - 66px - 32px - 56px - 58px)',
     },
   },
 } as const;
