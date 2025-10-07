@@ -3,8 +3,9 @@ import {useSearchParams} from 'react-router-dom';
 import useUpdateEffect from 'ahooks/es/useUpdateEffect';
 import {
   MaterialReactTable,
-  MRT_ColumnFiltersState,
+  MRT_ColumnDef,
   MRT_ColumnOrderState,
+  MRT_RowData,
   MRT_TableOptions,
   MRT_VisibilityState,
   useMaterialReactTable,
@@ -25,21 +26,24 @@ interface TablePersistentSettings {
   columnVisibility?: MRT_VisibilityState;
 }
 
-interface Props<T extends object> extends MRT_TableOptions<T> {
+interface Props<TData extends MRT_RowData> extends MRT_TableOptions<TData> {
   localStorageKeyForSettings?: string;
-  columnFilters?: MRT_ColumnFiltersState;
-  isLoading?: boolean;
+  columns: MRT_ColumnDef<TData>[];
+  data: TData[];
 }
 
-export const MrTable = <T extends object>({
+export const MrTable = <TData extends MRT_RowData>({
   localStorageKeyForSettings,
   enableColumnOrdering,
-  columnFilters,
   enableColumnFilters,
   enableHiding,
-  isLoading,
+  enablePagination,
+  initialState,
+  state,
   ...restProps
-}: Props<T>) => {
+}: Props<TData>) => {
+  const isPaginationEnabled = !!enablePagination;
+
   const persistentSettings: TablePersistentSettings | null =
     localStorageKeyForSettings
       ? (loadDataFromLocalStorage<TablePersistentSettings>(
@@ -84,13 +88,23 @@ export const MrTable = <T extends object>({
     enableGlobalFilter: false,
     enableColumnActions: false,
     enableColumnFilters,
-    enablePagination: false,
+    enablePagination: isPaginationEnabled,
+    paginationDisplayMode: 'pages',
+    muiPaginationProps: isPaginationEnabled
+      ? {
+          color: 'primary',
+          shape: 'rounded',
+          showRowsPerPage: false,
+          variant: 'outlined',
+        }
+      : undefined,
     enableSorting: true,
     enableFullScreenToggle: false,
     enableDensityToggle: false,
-    enableBottomToolbar: false,
+    enableBottomToolbar: isPaginationEnabled,
     enableHiding,
-    enableTopToolbar: enableHiding,
+    enableTopToolbar:
+      !!enableHiding || !!restProps.renderTopToolbarCustomActions,
     enableColumnOrdering: enableColumnOrdering,
     enableColumnDragging: enableColumnOrdering,
     onColumnOrderChange: enableColumnOrdering
@@ -109,6 +123,7 @@ export const MrTable = <T extends object>({
         }
       : undefined,
     onColumnVisibilityChange: setColumnVisibility,
+    positionToolbarAlertBanner: 'head-overlay',
     muiTablePaperProps: {
       sx: {
         ...tablePaperStyles,
@@ -150,20 +165,18 @@ export const MrTable = <T extends object>({
         );
       },
     },
-    ...restProps,
     initialState: {
+      ...initialState,
       showColumnFilters: enableColumnFilters,
     },
-    // Чтобы TS не ругался, state должен быть передан ПОСЛЕ props.
-    // Почему так, пока непонятно.
     state: {
+      ...state,
       globalFilter: searchText,
       columnOrder,
-      columnFilters,
       columnVisibility,
-      isLoading,
     },
     globalFilterFn: 'contains', // turn off fuzzy matching and use simple contains filter function
+    ...restProps,
   });
 
   return <MaterialReactTable table={table} />;

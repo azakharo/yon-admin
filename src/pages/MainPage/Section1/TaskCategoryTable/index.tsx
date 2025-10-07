@@ -1,7 +1,12 @@
 import {useEffect, useState} from 'react';
 import {Button} from '@mui/material';
-import {MRT_ColumnDef, MRT_ColumnFiltersState} from 'material-react-table';
+import {
+  MRT_ColumnDef,
+  MRT_ColumnFiltersState,
+  MRT_PaginationState,
+} from 'material-react-table';
 
+import {GetListOutput, GetListParams} from '@shared/api';
 import {
   DeleteButton,
   EditButton,
@@ -81,18 +86,46 @@ const allCategories: TaskCategory[] = [
   },
 ];
 
-const getCategories = async (nameFilter?: string): Promise<TaskCategory[]> => {
+interface GetCategoriesParams extends GetListParams {
+  nameFilter?: string;
+}
+
+const getCategories = async ({
+  nameFilter,
+  page,
+  pageSize,
+}: GetCategoriesParams = {}): Promise<GetListOutput<TaskCategory>> => {
   await sleep(1000); // simulate delay
 
+  let filteredCategories = allCategories;
   if (nameFilter) {
     const searchString = nameFilter.toLowerCase();
 
-    return allCategories.filter(({name}) => {
+    filteredCategories = allCategories.filter(({name}) => {
       return name.toLowerCase().includes(searchString);
     });
   }
 
-  return allCategories;
+  if (page && pageSize) {
+    const startPos = (page - 1) * pageSize;
+    const items = filteredCategories.slice(startPos, startPos + pageSize);
+
+    return {
+      items: items,
+      page,
+      pageSize,
+      total: filteredCategories.length,
+      totalPages: Math.ceil(filteredCategories.length / pageSize),
+    };
+  }
+
+  return {
+    items: filteredCategories,
+    page: 1,
+    pageSize: 10,
+    total: filteredCategories.length,
+    totalPages: 1,
+  };
 };
 
 const columns: MRT_ColumnDef<TaskCategory>[] = [
@@ -134,7 +167,18 @@ export const TaskCategoryTable = () => {
     [],
   );
 
-  const [categories, setCategories] = useState<TaskCategory[]>([]);
+  const [pagination, setPagination] = useState<MRT_PaginationState>({
+    pageIndex: 0,
+    pageSize: 2,
+  });
+
+  const [categories, setCategories] = useState<GetListOutput<TaskCategory>>({
+    items: [],
+    page: 1,
+    pageSize: 2,
+    total: 0,
+    totalPages: 0,
+  });
 
   useEffect(() => {
     let nameSearchString = '';
@@ -144,7 +188,11 @@ export const TaskCategoryTable = () => {
       nameSearchString = nameFilter.value as string;
     }
 
-    void getCategories(nameSearchString)
+    void getCategories({
+      page: pagination.pageIndex + 1,
+      pageSize: 2,
+      nameFilter: nameSearchString,
+    })
       .then(data => {
         setCategories(data);
         return;
@@ -152,12 +200,12 @@ export const TaskCategoryTable = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [columnFilters]);
+  }, [columnFilters, pagination]);
 
   return (
     <MrTable
       columns={columns}
-      data={categories}
+      data={categories.items}
       renderRowActions={({row}) => (
         <TableRowActionsContainer>
           <Button variant="text" color="secondary">
@@ -178,11 +226,38 @@ export const TaskCategoryTable = () => {
       enableColumnOrdering
       localStorageKeyForSettings={localStorageKey}
       enableColumnFilters
-      columnFilters={columnFilters}
       onColumnFiltersChange={setColumnFilters}
       manualFiltering
       enableHiding
-      isLoading={loading}
+      enableRowSelection
+      // getRowId={originalRow => {
+      //   console.log({originalRow});
+      //
+      //   if (!isNil(originalRow?.id)) {
+      //     return originalRow.id.toString();
+      //   }
+      //
+      //   return '';
+      // }}
+      renderTopToolbarCustomActions={({table}) => (
+        <Button
+          onClick={() => {
+            const rowSelection = table.getState().rowSelection; //read state
+            console.log({rowSelection});
+          }}
+        >
+          Do something
+        </Button>
+      )}
+      enablePagination
+      manualPagination
+      state={{
+        isLoading: loading,
+        columnFilters,
+        pagination,
+      }}
+      onPaginationChange={setPagination}
+      rowCount={categories.total}
       {...entityTableCommonProps}
     />
   );
