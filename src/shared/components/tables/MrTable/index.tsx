@@ -1,5 +1,4 @@
 import {useMemo, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
 import useUpdateEffect from 'ahooks/es/useUpdateEffect';
 import {
   MaterialReactTable,
@@ -38,6 +37,7 @@ export const MrTable = <TData extends MRT_RowData>({
   enableColumnFilters,
   enableHiding,
   enablePagination,
+  enableGlobalFilter,
   initialState,
   state,
   ...restProps
@@ -50,11 +50,6 @@ export const MrTable = <TData extends MRT_RowData>({
           localStorageKeyForSettings,
         ) ?? null)
       : null;
-
-  // The search value is taken from URL.
-  // It will take effect only if enableGlobalFilter prop is set to True.
-  const [searchParams] = useSearchParams();
-  const searchText = searchParams.get('search') ?? '';
 
   const colNames = useMemo(() => {
     return restProps.columns.map(col => col.accessorKey) as string[];
@@ -85,7 +80,7 @@ export const MrTable = <TData extends MRT_RowData>({
   }, [columnVisibility]);
 
   const table = useMaterialReactTable({
-    enableGlobalFilter: false,
+    enableGlobalFilter,
     enableColumnActions: false,
     enableColumnFilters,
     enablePagination: isPaginationEnabled,
@@ -99,7 +94,7 @@ export const MrTable = <TData extends MRT_RowData>({
         }
       : undefined,
     enableSorting: true,
-    enableFullScreenToggle: false,
+    enableFullScreenToggle: true,
     enableDensityToggle: false,
     enableBottomToolbar: isPaginationEnabled,
     enableHiding,
@@ -169,10 +164,10 @@ export const MrTable = <TData extends MRT_RowData>({
       ...initialState,
       showColumnFilters: enableColumnFilters,
       density: 'compact',
+      showGlobalFilter: enableGlobalFilter,
     },
     state: {
       ...state,
-      globalFilter: searchText,
       columnOrder,
       columnVisibility,
     },

@@ -134,115 +134,115 @@ export const typographyOptions: TypographyOptions = {
   //=============================================
   // Variants from Figma
   h1: {
-    fontSize: 32,
+    fontSize: 30,
     ...boldProps,
-    lineHeight: '37px',
+    lineHeight: '35px',
   },
   h2: {
-    fontSize: 22,
+    fontSize: 20,
     ...mediumProps,
-    lineHeight: '25px',
+    lineHeight: '23px',
   },
   h2bold: {
-    fontSize: 22,
+    fontSize: 20,
     ...boldProps,
-    lineHeight: '25px',
+    lineHeight: '23px',
   },
   h3: {
-    fontSize: 20,
+    fontSize: 18,
     ...mediumProps,
-    lineHeight: '23px',
+    lineHeight: '21px',
   },
   h3bold: {
-    fontSize: 20,
+    fontSize: 18,
     ...boldProps,
-    lineHeight: '23px',
+    lineHeight: '21px',
   },
   button: {
     textTransform: 'none',
-    fontSize: 14,
+    fontSize: 12,
     ...mediumProps,
-    lineHeight: '20px',
+    lineHeight: '18px',
   },
   /////////////////////////////////////////////////////////
   b1regular: {
-    fontSize: 17,
+    fontSize: 15,
     ...regularProps,
-    lineHeight: '22px',
+    lineHeight: '20px',
   },
   b1medium: {
-    fontSize: 17,
+    fontSize: 15,
     ...mediumProps,
-    lineHeight: '22px',
+    lineHeight: '20px',
   },
   b1bold: {
-    fontSize: 17,
+    fontSize: 15,
     ...boldProps,
-    lineHeight: '22px',
+    lineHeight: '20px',
   },
   /////////////////////////////////////////////////////////
   b2regular: {
-    fontSize: 16,
+    fontSize: 14,
     ...regularProps,
-    lineHeight: '20px',
+    lineHeight: '18px',
   },
   b2medium: {
-    fontSize: 16,
+    fontSize: 14,
     ...mediumProps,
-    lineHeight: '20px',
+    lineHeight: '18px',
   },
   b2bold: {
-    fontSize: 16,
+    fontSize: 14,
     ...boldProps,
-    lineHeight: '20px',
+    lineHeight: '18px',
   },
   /////////////////////////////////////////////////////////
   b3regular: {
-    fontSize: 15,
+    fontSize: 13,
     ...regularProps,
-    lineHeight: '18px',
+    lineHeight: '16px',
   },
   b3medium: {
-    fontSize: 15,
+    fontSize: 13,
     ...mediumProps,
-    lineHeight: '18px',
+    lineHeight: '16px',
   },
   b3bold: {
-    fontSize: 15,
+    fontSize: 13,
     ...boldProps,
-    lineHeight: '18px',
+    lineHeight: '16px',
   },
   /////////////////////////////////////////////////////////
   b4regular: {
-    fontSize: 13,
+    fontSize: 11,
     ...regularProps,
-    lineHeight: '16px',
+    lineHeight: '14px',
   },
   b4medium: {
-    fontSize: 13,
+    fontSize: 11,
     ...mediumProps,
-    lineHeight: '16px',
+    lineHeight: '14px',
   },
   b4bold: {
-    fontSize: 13,
+    fontSize: 11,
     ...boldProps,
-    lineHeight: '16px',
+    lineHeight: '14px',
   },
   /////////////////////////////////////////////////////////
   b5regular: {
-    fontSize: 12,
+    fontSize: 10,
     ...regularProps,
-    lineHeight: '15px',
+    lineHeight: '13px',
   },
   b5medium: {
-    fontSize: 12,
+    fontSize: 10,
     ...mediumProps,
-    lineHeight: '15px',
+    lineHeight: '13px',
   },
   b5bold: {
-    fontSize: 12,
+    fontSize: 10,
     ...boldProps,
-    lineHeight: '15px',
+    lineHeight: '13px',
   },
   // Variants from Figma
   //=============================================

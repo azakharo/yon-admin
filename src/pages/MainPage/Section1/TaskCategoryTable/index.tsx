@@ -206,6 +206,9 @@ export const TaskCategoryTable = () => {
   const {enqueueSnackbar} = useSnackbar();
   const showNotImplemented = useNotImplementedToast();
   const [loading, setLoading] = useState(true);
+
+  const [globalFilter, setGlobalFilter] = useState('');
+
   const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(
     [],
   );
@@ -234,7 +237,7 @@ export const TaskCategoryTable = () => {
     void getCategories({
       page: pagination.pageIndex + 1,
       pageSize: defaultPageSize,
-      nameFilter: nameSearchString,
+      nameFilter: nameSearchString || globalFilter,
     })
       .then(data => {
         setCategories(data);
@@ -243,7 +246,7 @@ export const TaskCategoryTable = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [columnFilters, pagination]);
+  }, [columnFilters, globalFilter, pagination]);
 
   return (
     <MrTable
@@ -305,13 +308,16 @@ export const TaskCategoryTable = () => {
       }}
       enablePagination
       manualPagination
+      onPaginationChange={setPagination}
+      rowCount={categories.total}
+      enableGlobalFilter
+      onGlobalFilterChange={setGlobalFilter}
       state={{
         isLoading: loading,
+        globalFilter,
         columnFilters,
         pagination,
       }}
-      onPaginationChange={setPagination}
-      rowCount={categories.total}
       {...entityTableCommonProps}
     />
   );
