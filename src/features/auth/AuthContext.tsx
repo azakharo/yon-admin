@@ -2,7 +2,7 @@ import React, {createContext, FC, useCallback, useMemo, useState} from 'react';
 import {useErrorBoundary} from 'react-error-boundary';
 import useMount from 'ahooks/es/useMount';
 
-import {getCurrentUser, User} from '@entities/user';
+import {CurrentUser, getCurrentUser} from '@entities/user';
 import {
   getAuthTokenFromLocalStorage,
   setAuthTokenInLocalStorage,
@@ -15,7 +15,7 @@ const isAuthed = (): boolean => !!getAuthTokenFromLocalStorage();
 
 export interface AuthState {
   isAuthenticated: boolean;
-  currentUser: User | null;
+  currentUser: CurrentUser | null;
 }
 
 const initialAuthState: AuthState = {
@@ -37,11 +37,11 @@ export const AuthContext = createContext<AuthContextType>({
 export const AuthProvider: FC<React.PropsWithChildren> = ({children}) => {
   const {showBoundary} = useErrorBoundary();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const [initializing, setInitializing] = useState(true);
 
   const getLoggedInUser = useCallback(async () => {
-    let user: User | null = null;
+    let user: CurrentUser | null = null;
     try {
       user = await getCurrentUser();
     } catch (err) {

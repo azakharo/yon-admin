@@ -832,6 +832,131 @@
         ]
       }
     },
+    "/v1/auth/market_maker": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Market Maker",
+        "operationId": "market_maker_v1_auth_market_maker_post",
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/profiles": {
+      "get": {
+        "tags": [
+          "profile"
+        ],
+        "summary": "Profiles",
+        "operationId": "profiles_v1_profiles_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "username",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search value",
+              "title": "Username"
+            },
+            "description": "Search value"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Per Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedProfilesDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/profile/current_user": {
       "get": {
         "tags": [
@@ -2109,13 +2234,407 @@
         }
       }
     },
-    "/v1/banners": {
+    "/v1/control-center/current_user/limits/daily-time": {
       "get": {
         "tags": [
-          "banners"
+          "control-center"
         ],
-        "summary": "User Banners",
-        "operationId": "user_banners_v1_banners_get",
+        "summary": "My Daily Time Limit",
+        "operationId": "my_daily_time_limit_v1_control_center_current_user_limits_daily_time_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeLimitResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "control-center"
+        ],
+        "summary": "Update My Daily Time Limit",
+        "operationId": "update_my_daily_time_limit_v1_control_center_current_user_limits_daily_time_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TimeLimitRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Daily time limit value > max value",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "DailyTimeLimitMaxValueException": {
+                    "summary": "Daily time limit value > max value",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            "body -> value"
+                          ],
+                          "msg": "Daily time limit value > max value",
+                          "type": "DailyTimeLimitMaxValueException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/control-center/current_user/limits/time-off": {
+      "get": {
+        "tags": [
+          "control-center"
+        ],
+        "summary": "My Time Off",
+        "operationId": "my_time_off_v1_control_center_current_user_limits_time_off_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TimeLimitResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "control-center"
+        ],
+        "summary": "Update My Time Off",
+        "operationId": "update_my_time_off_v1_control_center_current_user_limits_time_off_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TimeLimitRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/control-center/current_user/limits/investment-per-event": {
+      "get": {
+        "tags": [
+          "control-center"
+        ],
+        "summary": "My Max Investment Per Event",
+        "operationId": "my_max_investment_per_event_v1_control_center_current_user_limits_investment_per_event_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BalanceLimitResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "control-center"
+        ],
+        "summary": "Update My Max Investment Per Event",
+        "operationId": "update_my_max_investment_per_event_v1_control_center_current_user_limits_investment_per_event_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceLimitRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Period is not allowed for max investment",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "MaxInvestmentPeriodNotAllowedException": {
+                    "summary": "Period is not allowed for max investment",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            "body -> period"
+                          ],
+                          "msg": "Period is not allowed for max investment",
+                          "type": "MaxInvestmentPeriodNotAllowedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/control-center/current_user/limits/deposit": {
+      "get": {
+        "tags": [
+          "control-center"
+        ],
+        "summary": "My Deposit Limit",
+        "operationId": "my_deposit_limit_v1_control_center_current_user_limits_deposit_get",
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -2123,9 +2642,196 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/BannerResponseDTO"
+                    "$ref": "#/components/schemas/BalanceLimitResponseDTO"
                   },
                   "type": "array",
+                  "title": "Response My Deposit Limit V1 Control Center Current User Limits Deposit Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "control-center"
+        ],
+        "summary": "Update My Deposit Limit",
+        "operationId": "update_my_deposit_limit_v1_control_center_current_user_limits_deposit_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "$ref": "#/components/schemas/BalanceLimitRequestDTO"
+                },
+                "type": "array",
+                "title": "Data"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Periods duplicate",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "DepositPeriodDuplicateException": {
+                    "summary": "Periods duplicate",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            "body -> period"
+                          ],
+                          "msg": "Periods duplicate",
+                          "type": "DepositPeriodDuplicateException"
+                        }
+                      ]
+                    }
+                  },
+                  "DepositPeriodIsEmptyException": {
+                    "summary": "Period is empty",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            "body -> period"
+                          ],
+                          "msg": "Period is empty",
+                          "type": "DepositPeriodIsEmptyException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/banners": {
+      "get": {
+        "tags": [
+          "banners"
+        ],
+        "summary": "User Banners",
+        "operationId": "user_banners_v1_banners_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Client's preferred language(s)",
+              "example": "en-US,en;q=0.9",
+              "title": "Accept-Language"
+            },
+            "description": "Client's preferred language(s)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BannerResponseDTO"
+                  },
                   "title": "Response User Banners V1 Banners Get"
                 }
               }
@@ -2190,13 +2896,18 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
+        }
       }
     },
     "/v1/categories": {
@@ -2212,6 +2923,24 @@
           }
         ],
         "parameters": [
+          {
+            "name": "search_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search by `name`",
+              "title": "Search Query"
+            },
+            "description": "Search by `name`"
+          },
           {
             "name": "Accept-Language",
             "in": "header",
@@ -2792,6 +3521,24 @@
             }
           },
           {
+            "name": "search_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search by `name`",
+              "title": "Search Query"
+            },
+            "description": "Search by `name`"
+          },
+          {
             "name": "Accept-Language",
             "in": "header",
             "required": false,
@@ -3021,6 +3768,24 @@
               ],
               "title": "Is Favorite"
             }
+          },
+          {
+            "name": "search_query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search by `name`, `description`",
+              "title": "Search Query"
+            },
+            "description": "Search by `name`, `description`"
           },
           {
             "name": "Accept-Language",
@@ -6901,6 +7666,377 @@
         }
       }
     },
+    "/v1/admin/users/{user_id}/grant_admin": {
+      "put": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Grant Admin",
+        "operationId": "grant_admin_v1_admin_users__user_id__grant_admin_put",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/users/{user_id}/top_up": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Balance Top Up",
+        "operationId": "balance_top_up_v1_admin_users__user_id__top_up_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/users": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Get Users",
+        "operationId": "get_users_v1_admin_users_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UserAdminResponseDTO"
+                  },
+                  "type": "array",
+                  "title": "Response Get Users V1 Admin Users Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/admin/users/{user_id}/orders": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Get Orders",
+        "operationId": "get_orders_v1_admin_users__user_id__orders_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OrderAdminResponseDTO"
+                  },
+                  "title": "Response Get Orders V1 Admin Users  User Id  Orders Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/orders/{order_id}": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Get Order",
+        "operationId": "get_order_v1_admin_orders__order_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "order_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Order Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminPortfolioOrderSchema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "OrderNotFound": {
+                    "summary": "Order not found",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Order not found",
+                          "type": "OrderNotFound"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health/liveness": {
       "get": {
         "tags": [
@@ -6975,6 +8111,258 @@
           "potential_profit"
         ],
         "title": "ActivePicksSummaryDTO"
+      },
+      "AdminPortfolioOrderSchema": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Date",
+            "description": "Event start date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Date"
+          },
+          "side": {
+            "$ref": "#/components/schemas/OrderSideEnum"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "requested_items_quantity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requested Items Quantity"
+          },
+          "executed_items_quantity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Executed Items Quantity"
+          },
+          "requested_max_inv": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requested Max Inv"
+          },
+          "executed_max_inv": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Executed Max Inv"
+          },
+          "investment": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Investment"
+          },
+          "invested": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invested"
+          },
+          "current_value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Value"
+          },
+          "live_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Live Profit"
+          },
+          "auto_cancel": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AutoCancelSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "stop_loss": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OrderTriggerSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "take_profit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/OrderTriggerSchema"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "slippage": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slippage"
+          },
+          "selling_price": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Selling Price"
+          },
+          "potential_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Potential Profit"
+          },
+          "avg_exit_price": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avg Exit Price"
+          },
+          "unfilled": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unfilled"
+          },
+          "matched_quantity": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Matched Quantity"
+          },
+          "matching": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MarketOrderTypeEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Profit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "start_date",
+          "end_date",
+          "side",
+          "type"
+        ],
+        "title": "AdminPortfolioOrderSchema"
       },
       "AuthByPhoneDTO": {
         "properties": {
@@ -7065,14 +8453,30 @@
             "type": "string",
             "format": "date-time",
             "title": "Timeout At"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AutoCancelStatusEnum"
           }
         },
         "type": "object",
         "required": [
           "order_id",
-          "timeout_at"
+          "timeout_at",
+          "status"
         ],
         "title": "AutoCancelSchema"
+      },
+      "AutoCancelStatusEnum": {
+        "type": "string",
+        "enum": [
+          "pending",
+          "settled",
+          "failed",
+          "canceled",
+          "voided",
+          "executed"
+        ],
+        "title": "AutoCancelStatusEnum"
       },
       "AutoCancelUpdateSchema": {
         "properties": {
@@ -7087,6 +8491,96 @@
           "timeout_at"
         ],
         "title": "AutoCancelUpdateSchema"
+      },
+      "BalanceLimitRequestDTO": {
+        "properties": {
+          "value": {
+            "type": "integer",
+            "title": "Value"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "daily",
+                  "weekly",
+                  "monthly"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "title": "Is Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "is_enabled"
+        ],
+        "title": "BalanceLimitRequestDTO"
+      },
+      "BalanceLimitResponseDTO": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value"
+          },
+          "period": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "daily",
+                  "weekly",
+                  "monthly"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Period"
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "title": "Is Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "is_enabled"
+        ],
+        "title": "BalanceLimitResponseDTO"
+      },
+      "BalanceRequestDTO": {
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "title": "Amount",
+            "examples": [
+              100
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "amount"
+        ],
+        "title": "BalanceRequestDTO"
       },
       "BalanceResponseDTO": {
         "properties": {
@@ -7109,6 +8603,10 @@
           "withdraw": {
             "type": "integer",
             "title": "Withdraw"
+          },
+          "coins": {
+            "type": "integer",
+            "title": "Coins"
           }
         },
         "type": "object",
@@ -7117,7 +8615,8 @@
           "promo_amount",
           "invested",
           "unmatched",
-          "withdraw"
+          "withdraw",
+          "coins"
         ],
         "title": "BalanceResponseDTO"
       },
@@ -7171,6 +8670,17 @@
               }
             ],
             "title": "Web Url"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
           }
         },
         "type": "object",
@@ -7365,14 +8875,12 @@
             "title": "Logo Url"
           },
           "yes_price": {
-            "type": "number",
-            "title": "Yes Price",
-            "default": 74
+            "type": "integer",
+            "title": "Yes Price"
           },
           "no_price": {
-            "type": "number",
-            "title": "No Price",
-            "default": 26
+            "type": "integer",
+            "title": "No Price"
           },
           "is_live": {
             "type": "boolean",
@@ -7414,6 +8922,16 @@
               }
             ],
             "title": "Category Logo Url"
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TopicShortResponseDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -7425,6 +8943,8 @@
           "sub_categories",
           "start_date",
           "is_favorite",
+          "yes_price",
+          "no_price",
           "is_live",
           "trading_volume"
         ],
@@ -7670,7 +9190,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "144c20f7-d1cf-4e44-aafb-dde5ce5ed8c8"
+              "8846f4ff-8325-4b3b-a6dd-615a255175ad"
             ]
           },
           "side": {
@@ -7789,7 +9309,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "144c20f7-d1cf-4e44-aafb-dde5ce5ed8c8"
+              "8846f4ff-8325-4b3b-a6dd-615a255175ad"
             ]
           },
           "side": {
@@ -7892,6 +9412,88 @@
           "matched"
         ],
         "title": "MatchedFunds"
+      },
+      "OrderAdminResponseDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Date"
+          },
+          "type": {
+            "$ref": "#/components/schemas/OrderTypeEnum"
+          },
+          "side": {
+            "$ref": "#/components/schemas/OrderSideEnum"
+          },
+          "event_id": {
+            "type": "string",
+            "title": "Event Id"
+          },
+          "requested_items_quantity": {
+            "type": "integer",
+            "title": "Requested Items Quantity"
+          },
+          "requested_max_inv": {
+            "type": "integer",
+            "title": "Requested Max Inv"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "slippage": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slippage"
+          },
+          "matching": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MarketOrderTypeEnum"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "start_date",
+          "end_date",
+          "type",
+          "side",
+          "event_id",
+          "requested_items_quantity",
+          "requested_max_inv",
+          "matching"
+        ],
+        "title": "OrderAdminResponseDTO"
       },
       "OrderCancelEnum": {
         "type": "string",
@@ -8052,13 +9654,17 @@
           "price": {
             "type": "integer",
             "title": "Price"
+          },
+          "status": {
+            "$ref": "#/components/schemas/AutoCancelStatusEnum"
           }
         },
         "type": "object",
         "required": [
           "order_id",
           "type",
-          "price"
+          "price",
+          "status"
         ],
         "title": "OrderTriggerSchema"
       },
@@ -8084,6 +9690,15 @@
           "auto_cancel"
         ],
         "title": "OrderTriggersEnum"
+      },
+      "OrderTypeEnum": {
+        "type": "string",
+        "enum": [
+          "limit",
+          "quantity",
+          "max_investment"
+        ],
+        "title": "OrderTypeEnum"
       },
       "PaginatedEventResponseDTO": {
         "properties": {
@@ -8300,6 +9915,42 @@
           "total"
         ],
         "title": "PaginatedPortfolioEventsSchemaDTO"
+      },
+      "PaginatedProfilesDTO": {
+        "properties": {
+          "array": {
+            "items": {
+              "$ref": "#/components/schemas/ProfileDTO"
+            },
+            "type": "array",
+            "title": "Array"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "per_page": {
+            "type": "integer",
+            "title": "Per Page"
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "array",
+          "page",
+          "per_page",
+          "total_pages",
+          "total"
+        ],
+        "title": "PaginatedProfilesDTO"
       },
       "PaginatedReferralHistoryDTO": {
         "properties": {
@@ -8650,6 +10301,16 @@
               }
             ],
             "title": "Category Logo Url"
+          },
+          "topic": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TopicShortResponseDTO"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -8751,6 +10412,17 @@
             ],
             "title": "Investment"
           },
+          "invested": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Invested"
+          },
           "current_value": {
             "anyOf": [
               {
@@ -8836,7 +10508,7 @@
             ],
             "title": "Selling Price"
           },
-          "potential_price": {
+          "potential_profit": {
             "anyOf": [
               {
                 "type": "integer"
@@ -8845,7 +10517,7 @@
                 "type": "null"
               }
             ],
-            "title": "Potential Price"
+            "title": "Potential Profit"
           },
           "avg_exit_price": {
             "anyOf": [
@@ -9653,6 +11325,62 @@
         ],
         "title": "TakeProfitDTO"
       },
+      "TimeLimitRequestDTO": {
+        "properties": {
+          "value": {
+            "type": "integer",
+            "title": "Value",
+            "description": "Duration in seconds"
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "title": "Is Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "value",
+          "is_enabled"
+        ],
+        "title": "TimeLimitRequestDTO"
+      },
+      "TimeLimitResponseDTO": {
+        "properties": {
+          "value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Value",
+            "description": "Duration in seconds"
+          },
+          "max_value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Value",
+            "description": "Duration in seconds"
+          },
+          "is_enabled": {
+            "type": "boolean",
+            "title": "Is Enabled"
+          }
+        },
+        "type": "object",
+        "required": [
+          "is_enabled"
+        ],
+        "title": "TimeLimitResponseDTO"
+      },
       "TopicFavoriteRequestDTO": {
         "properties": {
           "id": {
@@ -9738,6 +11466,10 @@
             "type": "string",
             "title": "Name"
           },
+          "short_name": {
+            "type": "string",
+            "title": "Short Name"
+          },
           "logo_url": {
             "anyOf": [
               {
@@ -9789,6 +11521,7 @@
         "required": [
           "id",
           "name",
+          "short_name",
           "category_name",
           "sub_categories",
           "start_date",
@@ -9809,6 +11542,24 @@
         },
         "type": "object",
         "title": "TopicSectionsDTO"
+      },
+      "TopicShortResponseDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "TopicShortResponseDTO"
       },
       "TotalInvested": {
         "properties": {
@@ -9920,7 +11671,8 @@
         "enum": [
           "all",
           "credit",
-          "debit"
+          "debit",
+          "coins"
         ],
         "title": "TransactionFilterEnum"
       },
@@ -9957,6 +11709,83 @@
           "unmatched"
         ],
         "title": "UnmatchedFunds"
+      },
+      "UserAdminResponseDTO": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "cell_phone": {
+            "type": "string",
+            "title": "Cell Phone"
+          },
+          "avatar": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Email"
+          },
+          "country": {
+            "type": "string",
+            "title": "Country"
+          },
+          "is_verified": {
+            "type": "boolean",
+            "title": "Is Verified"
+          },
+          "is_admin": {
+            "type": "boolean",
+            "title": "Is Admin"
+          },
+          "real_funds": {
+            "type": "integer",
+            "title": "Real Funds"
+          },
+          "promo_funds": {
+            "type": "integer",
+            "title": "Promo Funds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "username",
+          "name",
+          "cell_phone",
+          "avatar",
+          "email",
+          "country",
+          "is_verified",
+          "is_admin",
+          "real_funds",
+          "promo_funds"
+        ],
+        "title": "UserAdminResponseDTO"
       },
       "ValidationError": {
         "properties": {

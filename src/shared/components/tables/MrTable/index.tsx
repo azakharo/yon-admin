@@ -80,9 +80,9 @@ export const MrTable = <TData extends MRT_RowData>({
   }, [columnVisibility]);
 
   const table = useMaterialReactTable({
-    enableGlobalFilter,
+    enableGlobalFilter: enableGlobalFilter ?? false,
     enableColumnActions: false,
-    enableColumnFilters,
+    enableColumnFilters: enableColumnFilters ?? false,
     enablePagination: isPaginationEnabled,
     paginationDisplayMode: 'pages',
     muiPaginationProps: isPaginationEnabled

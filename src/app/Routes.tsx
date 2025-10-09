@@ -7,7 +7,9 @@ import {
   ROUTE__LOGIN__ENTER_CODE,
   ROUTE__LOGIN__ENTER_PHONE,
   ROUTE__MAIN,
+  ROUTE__USERS,
 } from '@shared/constants';
+import {UsersPage} from '../pages/MainPage/Users';
 import {AppWrapper} from './AppWrapper';
 
 import {CurrentUserProfilePage} from '@/pages/CurrentUserProfilePage';
@@ -41,6 +43,8 @@ export const routes = createRoutesFromElements(
       >
         <Route path="section1" element={<TaskCategoryTable />} />
         <Route path="section2" element={<div>Section 2</div>} />
+        <Route path={ROUTE__USERS} element={<UsersPage />} />
+
         <Route index element={<Navigate replace to="section1" />} />
         <Route path="*" element={<ErrorPage404 />} />
       </Route>

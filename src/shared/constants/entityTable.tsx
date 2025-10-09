@@ -11,6 +11,10 @@ const commonProps = {
       // 56px - pagination,
       // 58px - top toolbar
       maxHeight: 'calc(100dvh - 66px - 32px - 56px - 58px)',
+      // 240px - width of sidebar. It's also specified in .scss file,
+      // 32px - padding X.
+      maxWidth: 'calc(100vw - 240px - 32px)',
+      overflowX: 'auto',
     },
   },
 } as const;

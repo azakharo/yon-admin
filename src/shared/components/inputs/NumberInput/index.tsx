@@ -19,37 +19,39 @@ const inputType2formatProps: Record<InputType, object> = {
   },
 };
 
-type Props = {
+export type NumberInputProps = {
   // If inputType is not specified, then there are no any restrictions on the input (type any)
   inputType?: InputType;
   formatProps?: Omit<NumericFormatProps, 'defaultValue'>;
 } & TextFieldProps;
 
-export const NumberInput = forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const {inputType, formatProps, ...restProps} = props;
+export const NumberInput = forwardRef<HTMLDivElement, NumberInputProps>(
+  (props, ref) => {
+    const {inputType, formatProps, ...restProps} = props;
 
-  let formatPropsDefinedByInputType: object = {};
-  if (inputType) {
-    formatPropsDefinedByInputType = inputType2formatProps[inputType];
+    let formatPropsDefinedByInputType: object = {};
+    if (inputType) {
+      formatPropsDefinedByInputType = inputType2formatProps[inputType];
 
-    if (!formatPropsDefinedByInputType) {
-      console.error(`Unexpected input type "${inputType}"`);
+      if (!formatPropsDefinedByInputType) {
+        console.error(`Unexpected input type "${inputType}"`);
+      }
     }
-  }
 
-  return (
-    <TextField
-      ref={ref}
-      InputProps={{
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        inputComponent: CustomNumberFormat,
-      }}
-      inputProps={{
-        ...formatPropsDefinedByInputType,
-        ...formatProps,
-      }}
-      {...restProps}
-    />
-  );
-});
+    return (
+      <TextField
+        ref={ref}
+        InputProps={{
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          inputComponent: CustomNumberFormat,
+        }}
+        inputProps={{
+          ...formatPropsDefinedByInputType,
+          ...formatProps,
+        }}
+        {...restProps}
+      />
+    );
+  },
+);

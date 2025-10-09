@@ -41,7 +41,7 @@ export const validateData = (
     });
   } catch (e) {
     console.log(`invalid data ${dataDescription || ''}`);
-    console.error(stringify(e));
+    console.error({errors: e});
     throw e;
   }
 };
@@ -53,3 +53,7 @@ export const numberOptionalNullable = number().optional().nullable();
 export const numberRequiredNullable = number()
   .nullable()
   .notOneOf([null], V8N_MESSAGE__REQUIRED);
+
+export const numberTransformEmptyStringToNull = number().transform(
+  (value: number, original: number | '') => (original === '' ? null : value),
+);

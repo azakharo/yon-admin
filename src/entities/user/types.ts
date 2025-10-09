@@ -1,25 +1,22 @@
-export interface OtherUser {
+export interface CurrentUser {
   username: string;
   name: string;
   avatar: string;
   bio: string;
-}
-
-export interface User extends OtherUser {
   phone: string;
   email: string;
 }
 
-export interface LeaderBoardPosition {
-  user: OtherUser;
-  profit: number;
-  position: number;
-}
-
-export interface UserBalance {
-  value: number; // in $
-  bonus: number; // in $
-  total: number;
-  invested: number; // in $
-  availableToWithdraw: number; // in $
+export interface User {
+  id: string;
+  username: string;
+  name: string;
+  phone: string;
+  avatar: string;
+  email: string;
+  country: string;
+  isVerified: boolean;
+  isAdmin: boolean;
+  fundsReal: number;
+  fundsPromo: number;
 }

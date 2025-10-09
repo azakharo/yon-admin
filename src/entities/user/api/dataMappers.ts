@@ -1,53 +1,45 @@
 import {currencyValueDivider} from '@shared/constants';
-import {LeaderBoardPosition, OtherUser, User, UserBalance} from '../types';
-import {
-  LeaderBoardPositionOnBackend,
-  OtherUserOnBackend,
-  UserBalanceOnBackend,
-  UserOnBackend,
-} from './backendTypes';
+import {CurrentUser, User} from '../types';
+import {CurrentUserOnBackend, UserOnBackend} from './backendTypes';
 
-export const mapOtherUserFromBackend = ({
+export const mapCurrentUserFromBackend = ({
   username,
   name,
   bio,
   avatar,
-}: OtherUserOnBackend): OtherUser => ({
+  email,
+  cell_phone,
+}: CurrentUserOnBackend): CurrentUser => ({
   username,
   name,
   bio: bio ?? '',
   avatar: avatar ?? '',
-});
-
-export const mapUserFromBackend = ({
-  email,
-  cell_phone,
-  ...restProps
-}: UserOnBackend): User => ({
-  ...mapOtherUserFromBackend(restProps),
   email: email ?? '',
   phone: cell_phone,
 });
 
-export const mapLeaderBoardPositionFromBackend = ({
-  profile,
-  profit,
-  place,
-}: LeaderBoardPositionOnBackend): LeaderBoardPosition => ({
-  user: mapOtherUserFromBackend(profile),
-  profit,
-  position: place,
-});
-
-export const mapUserBalanceFromBackend = ({
-  real_amount,
-  promo_amount,
-  invested,
-  withdraw,
-}: UserBalanceOnBackend): UserBalance => ({
-  value: real_amount / currencyValueDivider,
-  bonus: promo_amount / currencyValueDivider,
-  total: (real_amount + promo_amount) / currencyValueDivider,
-  invested: invested / currencyValueDivider,
-  availableToWithdraw: withdraw / currencyValueDivider,
+export const mapUserFromBackend = ({
+  id,
+  username,
+  name,
+  cell_phone,
+  avatar,
+  email,
+  country,
+  is_verified,
+  is_admin,
+  real_funds,
+  promo_funds,
+}: UserOnBackend): User => ({
+  id,
+  username,
+  name,
+  phone: cell_phone,
+  avatar: avatar ?? '',
+  email: email ?? '',
+  country,
+  isVerified: is_verified,
+  isAdmin: is_admin,
+  fundsReal: real_funds / currencyValueDivider,
+  fundsPromo: promo_funds / currencyValueDivider,
 });
