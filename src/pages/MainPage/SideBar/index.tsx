@@ -18,15 +18,19 @@ export const SideBar = () => {
           icon={<GroupOutlinedIcon />}
         />
 
-        <SubMenu text="Group 1" icon={<AllTasksIcon />} groupRoute="/main">
+        <SubMenu
+          text="Group 1"
+          icon={<AllTasksIcon />}
+          groupRoute="/main/group1"
+        >
           <NavigationLink
-            route="/main/section1"
+            route="/main/group1/section1"
             text="Section 1"
             icon={<RunningWithErrorsOutlinedIcon />}
           />
 
           <NavigationLink
-            route="/main/section2"
+            route="/main/group1/section2"
             text="Section 2"
             icon={<CategoryOutlinedIcon />}
           />

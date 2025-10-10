@@ -7,9 +7,9 @@ import {
   ROUTE__LOGIN__ENTER_CODE,
   ROUTE__LOGIN__ENTER_PHONE,
   ROUTE__MAIN,
+  ROUTE__USER_ORDERS,
   ROUTE__USERS,
 } from '@shared/constants';
-import {UsersPage} from '../pages/MainPage/Users';
 import {AppWrapper} from './AppWrapper';
 
 import {CurrentUserProfilePage} from '@/pages/CurrentUserProfilePage';
@@ -19,6 +19,8 @@ import {EnterCodeStep} from '@/pages/LoginPage/EnterCodeStep';
 import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
 import {TaskCategoryTable} from '@/pages/MainPage/Section1/TaskCategoryTable';
+import {UserOrdersPage} from '@/pages/MainPage/UserOrders';
+import {UsersPage} from '@/pages/MainPage/Users';
 
 export const routes = createRoutesFromElements(
   <>
@@ -41,11 +43,12 @@ export const routes = createRoutesFromElements(
           </ProtectedRoute>
         }
       >
-        <Route path="section1" element={<TaskCategoryTable />} />
-        <Route path="section2" element={<div>Section 2</div>} />
+        <Route path="group1/section1" element={<TaskCategoryTable />} />
+        <Route path="group1/section2" element={<div>Section 2</div>} />
         <Route path={ROUTE__USERS} element={<UsersPage />} />
+        <Route path={ROUTE__USER_ORDERS} element={<UserOrdersPage />} />
 
-        <Route index element={<Navigate replace to="section1" />} />
+        <Route index element={<Navigate replace to={ROUTE__USERS} />} />
         <Route path="*" element={<ErrorPage404 />} />
       </Route>
 

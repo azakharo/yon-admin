@@ -187,7 +187,7 @@ const columns: MRT_ColumnDef<TaskCategory>[] = [
     accessorKey: 'isDefault',
     header: 'Is default?',
     Cell: ({row}) => {
-      return row.original.isDefault ? 'Да' : 'Нет';
+      return row.original.isDefault ? 'Yes' : 'No';
     },
     // filterVariant: 'checkbox',
     enableColumnFilter: false,

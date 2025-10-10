@@ -23,7 +23,7 @@ export const entityTableCommonProps = {
   ...commonProps,
   renderEmptyRowsFallback: () => (
     <Box p={4} display="flex" justifyContent="center">
-      Нет записей
+      No data found
     </Box>
   ),
 } as const;
@@ -32,7 +32,7 @@ export const deletedEntityTableCommonProps = {
   ...commonProps,
   renderEmptyRowsFallback: () => (
     <Box p={4} display="flex" justifyContent="center">
-      Нет удалённых записей
+      No data found
     </Box>
   ),
 } as const;

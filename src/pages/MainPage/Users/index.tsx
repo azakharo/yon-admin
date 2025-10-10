@@ -1,22 +1,23 @@
+import {useNavigate} from 'react-router-dom';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import {Alert, Box, Button, IconButton} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
 
-import {User, UserAvatar} from '@entities/user';
 import {
   useGetUsers,
+  User,
+  UserAvatar,
   useSetAdmin,
   useTopUpBalance,
-} from '@entities/user/apiHooks';
+} from '@entities/user';
 import {
   CurrencyValue,
   MrTable,
   rightAlignmentColumnProps,
   TableRowActionsContainer,
 } from '@shared/components';
-import {entityTableCommonProps} from '@shared/constants';
-import {useNotImplementedToast} from '@shared/hooks';
+import {entityTableCommonProps, ROUTE__USER_ORDERS} from '@shared/constants';
 import {openTopUpBalanceDialog} from '@widgets/user';
 
 const columns: MRT_ColumnDef<User>[] = [
@@ -95,7 +96,7 @@ const columns: MRT_ColumnDef<User>[] = [
 const localStorageKey = 'userTable';
 
 export const UsersPage = () => {
-  const showNotImplemented = useNotImplementedToast();
+  const navigate = useNavigate();
   const {data: users, isPending: isLoading, error} = useGetUsers();
   const {mutate: setAdmin, isPending: isSettingAdmin} = useSetAdmin();
   const {mutate: topUpBalance, isPending: isToppingUpBalance} =
@@ -121,7 +122,9 @@ export const UsersPage = () => {
             <Button
               variant="text"
               color="secondary"
-              onClick={showNotImplemented}
+              onClick={() => {
+                navigate(ROUTE__USER_ORDERS.replace(':userId', id));
+              }}
             >
               Orders
             </Button>
