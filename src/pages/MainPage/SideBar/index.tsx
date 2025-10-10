@@ -1,12 +1,8 @@
-import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import RunningWithErrorsOutlinedIcon from '@mui/icons-material/RunningWithErrorsOutlined';
 import {Box, Stack} from '@mui/material';
 
 import {ROUTE__USERS} from '@shared/constants';
-import AllTasksIcon from './icons/allTasks.svg?react';
 import {NavigationLink} from './NavigationLink';
-import {SubMenu} from './SubMenu';
 
 export const SideBar = () => {
   return (
@@ -18,23 +14,23 @@ export const SideBar = () => {
           icon={<GroupOutlinedIcon />}
         />
 
-        <SubMenu
-          text="Group 1"
-          icon={<AllTasksIcon />}
-          groupRoute="/main/group1"
-        >
-          <NavigationLink
-            route="/main/group1/section1"
-            text="Section 1"
-            icon={<RunningWithErrorsOutlinedIcon />}
-          />
+        {/*<SubMenu*/}
+        {/*  text="Group 1"*/}
+        {/*  icon={<AllTasksIcon />}*/}
+        {/*  groupRoute="/main/group1"*/}
+        {/*>*/}
+        {/*  <NavigationLink*/}
+        {/*    route="/main/group1/section1"*/}
+        {/*    text="Section 1"*/}
+        {/*    icon={<RunningWithErrorsOutlinedIcon />}*/}
+        {/*  />*/}
 
-          <NavigationLink
-            route="/main/group1/section2"
-            text="Section 2"
-            icon={<CategoryOutlinedIcon />}
-          />
-        </SubMenu>
+        {/*  <NavigationLink*/}
+        {/*    route="/main/group1/section2"*/}
+        {/*    text="Section 2"*/}
+        {/*    icon={<CategoryOutlinedIcon />}*/}
+        {/*  />*/}
+        {/*</SubMenu>*/}
       </Stack>
     </Box>
   );

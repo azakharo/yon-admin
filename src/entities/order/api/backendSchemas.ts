@@ -1,5 +1,6 @@
 import {array, number, object, string} from 'yup';
 
+import {paginationV8nSchema} from '@shared/api';
 import {ChoiceVariant, MarketType, OrderType} from '../types';
 
 export const orderV8nSchema = object().shape({
@@ -16,4 +17,6 @@ export const orderV8nSchema = object().shape({
   matching: string().oneOf(Object.values(MarketType)).required().nullable(),
 });
 
-export const v8nSchemaOfGetUserOrdersResponse = array().of(orderV8nSchema);
+export const v8nSchemaOfGetUserOrdersResponse = paginationV8nSchema.shape({
+  array: array().of(orderV8nSchema).required(),
+});

@@ -1,7 +1,7 @@
 import {useNavigate} from 'react-router-dom';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
-import {Alert, Box, Button, IconButton, Tooltip} from '@mui/material';
+import {Alert, Box, Button, IconButton} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
 import {useSnackbar} from 'notistack';
 
@@ -19,6 +19,7 @@ import {
   TableRowActionsContainer,
 } from '@shared/components';
 import {entityTableCommonProps, ROUTE__USER_ORDERS} from '@shared/constants';
+import {useUrlState} from '@shared/hooks';
 import {openTopUpBalanceDialog} from '@widgets/user';
 
 const columns: MRT_ColumnDef<User>[] = [
@@ -96,10 +97,28 @@ const columns: MRT_ColumnDef<User>[] = [
 
 const localStorageKey = 'userTable';
 
+type UrlState = {
+  pageIndex: number;
+  pageSize: number;
+};
+
 export const UsersPage = () => {
   const {enqueueSnackbar} = useSnackbar();
   const navigate = useNavigate();
-  const {data: users, isPending: isLoading, error} = useGetUsers();
+
+  const {urlState, setUrl} = useUrlState<UrlState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const {
+    data,
+    isPending: isLoading,
+    error,
+  } = useGetUsers({
+    page: urlState.pageIndex + 1,
+    pageSize: urlState.pageSize,
+  });
   const {mutate: setAdmin, isPending: isSettingAdmin} = useSetAdmin();
   const {mutate: topUpBalance, isPending: isToppingUpBalance} =
     useTopUpBalance();
@@ -115,7 +134,7 @@ export const UsersPage = () => {
   return (
     <MrTable
       columns={columns}
-      data={users ?? []}
+      data={data?.items ?? []}
       renderRowActions={({row}) => {
         const {id, isAdmin} = row.original;
 
@@ -169,8 +188,16 @@ export const UsersPage = () => {
       enableColumnDragging={false}
       localStorageKeyForSettings={localStorageKey}
       enableHiding
+      /////////////////////////////
+      // pagination + state
+      enablePagination
+      manualPagination
+      onPaginationChange={setUrl}
+      rowCount={data?.total ?? 0}
+      /////////////////////////////
       state={{
         isLoading,
+        pagination: urlState,
       }}
       enableColumnPinning
       // layoutMode="grid-no-grow"

@@ -1,5 +1,6 @@
 import {array, boolean, number, object, string} from 'yup';
 
+import {paginationV8nSchema} from '@shared/api';
 import {stringOptionalNullable} from '@shared/utils';
 
 export const currentUserV8nSchema = object().shape({
@@ -25,4 +26,6 @@ export const userV8nSchema = object().shape({
   promo_funds: number().integer().required(),
 });
 
-export const v8nSchemaOfGetUsersResponse = array().of(userV8nSchema);
+export const v8nSchemaOfGetUsersResponse = paginationV8nSchema.shape({
+  array: array().of(userV8nSchema).required(),
+});

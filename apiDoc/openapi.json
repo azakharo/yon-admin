@@ -4155,6 +4155,113 @@
         }
       }
     },
+    "/v1/events/{event_id}/activity": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Get Event Activity",
+        "operationId": "get_event_activity_v1_events__event_id__activity_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Event Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventOrderItemsMatchedDTO"
+                  },
+                  "title": "Response Get Event Activity V1 Events  Event Id  Activity Get"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "EventNotFoundException": {
+                    "summary": "Event not found",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Event not found",
+                          "type": "EventNotFoundException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/balance": {
       "get": {
         "tags": [
@@ -7823,17 +7930,40 @@
         ],
         "summary": "Get Users",
         "operationId": "get_users_v1_admin_users_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Per Page"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
             "content": {
               "application/json": {
                 "schema": {
-                  "items": {
-                    "$ref": "#/components/schemas/UserAdminResponseDTO"
-                  },
-                  "type": "array",
-                  "title": "Response Get Users V1 Admin Users Get"
+                  "$ref": "#/components/schemas/PaginatedUserAdminResponseDTO"
                 }
               }
             }
@@ -7860,13 +7990,18 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
           }
-        },
-        "security": [
-          {
-            "HTTPBearer": []
-          }
-        ]
+        }
       }
     },
     "/v1/admin/users/{user_id}/orders": {
@@ -7890,6 +8025,26 @@
               "type": "string",
               "title": "User Id"
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Per Page"
+            }
           }
         ],
         "responses": {
@@ -7898,11 +8053,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderAdminResponseDTO"
-                  },
-                  "title": "Response Get Orders V1 Admin Users  User Id  Orders Get"
+                  "$ref": "#/components/schemas/PaginatedOrderAdminResponseDTO"
                 }
               }
             }
@@ -8829,6 +8980,28 @@
         ],
         "title": "EventFavoriteRequestDTO"
       },
+      "EventOrderItemsMatchedDTO": {
+        "properties": {
+          "yes": {
+            "$ref": "#/components/schemas/OrderItemMatchedInfoDTO"
+          },
+          "no": {
+            "$ref": "#/components/schemas/OrderItemMatchedInfoDTO"
+          },
+          "matching_time": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Matching Time"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yes",
+          "no",
+          "matching_time"
+        ],
+        "title": "EventOrderItemsMatchedDTO"
+      },
       "EventResponseDTO": {
         "properties": {
           "id": {
@@ -9190,7 +9363,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "8846f4ff-8325-4b3b-a6dd-615a255175ad"
+              "6cc9fbef-3db1-4c04-8fcc-952331387cd1"
             ]
           },
           "side": {
@@ -9309,7 +9482,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "8846f4ff-8325-4b3b-a6dd-615a255175ad"
+              "6cc9fbef-3db1-4c04-8fcc-952331387cd1"
             ]
           },
           "side": {
@@ -9550,6 +9723,35 @@
           "exiting"
         ],
         "title": "OrderCancelingSchema"
+      },
+      "OrderItemMatchedInfoDTO": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "avatar_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar Url"
+          },
+          "price": {
+            "type": "integer",
+            "title": "Price"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "price"
+        ],
+        "title": "OrderItemMatchedInfoDTO"
       },
       "OrderRequestDTO": {
         "properties": {
@@ -9844,6 +10046,42 @@
         ],
         "title": "PaginatedLeaderboardEntriesDTO"
       },
+      "PaginatedOrderAdminResponseDTO": {
+        "properties": {
+          "array": {
+            "items": {
+              "$ref": "#/components/schemas/OrderAdminResponseDTO"
+            },
+            "type": "array",
+            "title": "Array"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "per_page": {
+            "type": "integer",
+            "title": "Per Page"
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "array",
+          "page",
+          "per_page",
+          "total_pages",
+          "total"
+        ],
+        "title": "PaginatedOrderAdminResponseDTO"
+      },
       "PaginatedPortfolioEventOrdersDTO": {
         "properties": {
           "array": {
@@ -10059,6 +10297,42 @@
           "total"
         ],
         "title": "PaginatedTransactionsDTO"
+      },
+      "PaginatedUserAdminResponseDTO": {
+        "properties": {
+          "array": {
+            "items": {
+              "$ref": "#/components/schemas/UserAdminResponseDTO"
+            },
+            "type": "array",
+            "title": "Array"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "per_page": {
+            "type": "integer",
+            "title": "Per Page"
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "array",
+          "page",
+          "per_page",
+          "total_pages",
+          "total"
+        ],
+        "title": "PaginatedUserAdminResponseDTO"
       },
       "PaymentFilterEnum": {
         "type": "string",

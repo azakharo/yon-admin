@@ -1,14 +1,30 @@
-import {axi} from '@shared/api';
+import {axi, GetListOutput, GetListParams} from '@shared/api';
 import {validateData} from '@shared/utils';
 import {Order} from '../types';
 import {v8nSchemaOfGetUserOrdersResponse} from './backendSchemas';
-import {OrderOnBackend} from './backendTypes';
+import {GetUserOrdersResponse} from './backendTypes';
 import {mapOrderFromBackend} from './dataMappers';
 
-export const getUserOrders = async (userId: string): Promise<Order[]> => {
-  const response = await axi.get<OrderOnBackend[]>(
+export interface GetUserOrdersParams extends GetListParams {
+  userId: string;
+}
+
+export const getUserOrders = async ({
+  userId,
+  page,
+  pageSize,
+}: GetUserOrdersParams): Promise<GetListOutput<Order>> => {
+  const response = await axi.get<GetUserOrdersResponse>(
     `/admin/users/${userId}/orders`,
+    {
+      params: {
+        page,
+        per_page: pageSize,
+      },
+    },
   );
+
+  const data = response.data;
 
   validateData(
     response.data,
@@ -16,5 +32,19 @@ export const getUserOrders = async (userId: string): Promise<Order[]> => {
     'getUserOrders',
   );
 
-  return response.data.map(item => mapOrderFromBackend(item));
+  const {
+    total,
+    total_pages,
+    array,
+    page: pageFromBackend,
+    per_page: pageSizeFromBackend,
+  } = data;
+
+  return {
+    page: pageFromBackend,
+    pageSize: pageSizeFromBackend,
+    total,
+    totalPages: total_pages,
+    items: array.map(item => mapOrderFromBackend(item)),
+  };
 };

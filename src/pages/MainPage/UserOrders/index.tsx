@@ -12,7 +12,7 @@ import {
   TableRowActionsContainer,
 } from '@shared/components';
 import {entityTableCommonProps} from '@shared/constants';
-import {useNotImplementedToast} from '@shared/hooks';
+import {useNotImplementedToast, useUrlState} from '@shared/hooks';
 import {Header} from '@widgets/common';
 
 const columns: MRT_ColumnDef<Order>[] = [
@@ -91,14 +91,32 @@ const columns: MRT_ColumnDef<Order>[] = [
 
 const localStorageKey = 'userOrderTable';
 
+type UrlState = {
+  pageIndex: number;
+  pageSize: number;
+};
+
 export const UserOrdersPage = () => {
   const showNotImplemented = useNotImplementedToast();
   const {userId} = useParams();
+
+  const {urlState, setUrl} = useUrlState<UrlState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const {
-    data: orders,
+    data,
     isPending: isLoading,
     error,
-  } = useGetUserOrders(userId ?? '', {enabled: !!userId});
+  } = useGetUserOrders(
+    {
+      userId: userId ?? '',
+      page: urlState.pageIndex + 1,
+      pageSize: urlState.pageSize,
+    },
+    {enabled: !!userId},
+  );
 
   if (error) {
     return (
@@ -111,7 +129,7 @@ export const UserOrdersPage = () => {
   return (
     <MrTable
       columns={columns}
-      data={orders ?? []}
+      data={data?.items ?? []}
       renderTopToolbarCustomActions={() => {
         return <Header title={`Orders of user "${userId}"`} />;
       }}
@@ -132,8 +150,16 @@ export const UserOrdersPage = () => {
       enableColumnDragging={false}
       localStorageKeyForSettings={localStorageKey}
       enableHiding
+      /////////////////////////////
+      // pagination + state
+      enablePagination
+      manualPagination
+      onPaginationChange={setUrl}
+      rowCount={data?.total ?? 0}
+      /////////////////////////////
       state={{
         isLoading,
+        pagination: urlState,
       }}
       enableColumnPinning
       initialState={{

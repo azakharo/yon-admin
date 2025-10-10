@@ -1,12 +1,12 @@
 import {CurrentUser, User} from '@entities/user';
-import {axi} from '@shared/api';
+import {axi, GetListOutput, GetListParams} from '@shared/api';
 import {currencyValueDivider} from '@shared/constants';
 import {validateData} from '@shared/utils';
 import {
   currentUserV8nSchema,
   v8nSchemaOfGetUsersResponse,
 } from './backendSchemas';
-import {CurrentUserOnBackend, UserOnBackend} from './backendTypes';
+import {CurrentUserOnBackend, GetUsersResponse} from './backendTypes';
 import {mapCurrentUserFromBackend, mapUserFromBackend} from './dataMappers';
 
 export const getCurrentUser = async (): Promise<CurrentUser> => {
@@ -17,12 +17,37 @@ export const getCurrentUser = async (): Promise<CurrentUser> => {
   return mapCurrentUserFromBackend(response.data);
 };
 
-export const getUsers = async (): Promise<User[]> => {
-  const response = await axi.get<UserOnBackend[]>('/admin/users');
+export type GetUsersParams = GetListParams;
 
-  validateData(response.data, v8nSchemaOfGetUsersResponse, 'getUsers');
+export const getUsers = async ({page, pageSize}: GetUsersParams = {}): Promise<
+  GetListOutput<User>
+> => {
+  const response = await axi.get<GetUsersResponse>('/admin/users', {
+    params: {
+      page,
+      per_page: pageSize,
+    },
+  });
 
-  return response.data.map(item => mapUserFromBackend(item));
+  const data = response.data;
+
+  validateData(data, v8nSchemaOfGetUsersResponse, 'getUsers');
+
+  const {
+    total,
+    total_pages,
+    array,
+    page: pageFromBackend,
+    per_page: pageSizeFromBackend,
+  } = data;
+
+  return {
+    page: pageFromBackend,
+    pageSize: pageSizeFromBackend,
+    total,
+    totalPages: total_pages,
+    items: array.map(item => mapUserFromBackend(item)),
+  };
 };
 
 export const setAdmin = (userId: string): Promise<void> => {
