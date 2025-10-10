@@ -1,8 +1,9 @@
 import {useNavigate} from 'react-router-dom';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
-import {Alert, Box, Button, IconButton} from '@mui/material';
+import {Alert, Box, Button, IconButton, Tooltip} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
+import {useSnackbar} from 'notistack';
 
 import {
   useGetUsers,
@@ -96,6 +97,7 @@ const columns: MRT_ColumnDef<User>[] = [
 const localStorageKey = 'userTable';
 
 export const UsersPage = () => {
+  const {enqueueSnackbar} = useSnackbar();
   const navigate = useNavigate();
   const {data: users, isPending: isLoading, error} = useGetUsers();
   const {mutate: setAdmin, isPending: isSettingAdmin} = useSetAdmin();
@@ -131,8 +133,15 @@ export const UsersPage = () => {
 
             <IconButton
               title="Grant admin permissions"
-              disabled={isAdmin || isSettingAdmin}
+              disabled={isSettingAdmin}
               onClick={() => {
+                if (isAdmin) {
+                  enqueueSnackbar('The selected user is already admin', {
+                    variant: 'info',
+                  });
+                  return;
+                }
+
                 setAdmin(id);
               }}
             >
