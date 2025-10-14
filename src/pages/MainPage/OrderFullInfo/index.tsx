@@ -64,6 +64,7 @@ export const OrderFullInfoPage = () => {
       matched_quantity,
       matching,
       profit,
+      cancelled,
     } = info;
 
     return (
@@ -387,6 +388,7 @@ export const OrderFullInfoPage = () => {
                 isListExpandable={false}
               />
             )}
+
             <Item
               label={<SecondaryLabel label="Matched items" />}
               value={
@@ -399,10 +401,20 @@ export const OrderFullInfoPage = () => {
               paddingLeft={2}
               isListExpandable={false}
             />
+
             {isNil(matching) ? null : (
               <Item
                 label={<SecondaryLabel label="Matching" />}
                 value={<StringValue value={matching} isPrimary={false} />}
+                paddingLeft={2}
+                isListExpandable={false}
+              />
+            )}
+
+            {isNil(cancelled) ? null : (
+              <Item
+                label={<SecondaryLabel label="cancelled" />}
+                value={<StringValue value={cancelled} isPrimary={false} />}
                 paddingLeft={2}
                 isListExpandable={false}
               />

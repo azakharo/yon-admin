@@ -50,8 +50,15 @@ export const getUsers = async ({page, pageSize}: GetUsersParams = {}): Promise<
   };
 };
 
-export const setAdmin = (userId: string): Promise<void> => {
-  return axi.put(`/admin/users/${userId}/grant_admin`);
+export interface SetAdminParams {
+  userId: string;
+  isAdmin: boolean;
+}
+
+export const setAdmin = ({userId, isAdmin}: SetAdminParams): Promise<void> => {
+  return axi.put(
+    `/admin/users/${userId}/${isAdmin ? 'grant_admin' : 'revoke_admin'}`,
+  );
 };
 
 export interface TopUpBalanceParams {

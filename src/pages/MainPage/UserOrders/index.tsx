@@ -25,22 +25,12 @@ const columns: MRT_ColumnDef<Order>[] = [
     size: 140,
   },
   {
-    accessorKey: 'startDate',
-    header: 'Start',
+    accessorKey: 'created',
+    header: 'Created',
     Cell: ({row}) => {
-      const {startDate} = row.original;
+      const {created} = row.original;
 
-      return format(startDate, 'dd.MM.yyyy HH:mm');
-    },
-    size: 140,
-  },
-  {
-    accessorKey: 'endDate',
-    header: 'End',
-    Cell: ({row}) => {
-      const {endDate} = row.original;
-
-      return format(endDate, 'dd.MM.yyyy HH:mm');
+      return format(created, 'dd.MM.yyyy HH:mm');
     },
     size: 140,
   },

@@ -1,7 +1,7 @@
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {useSnackbar} from 'notistack';
 
-import {setAdmin} from '../api';
+import {setAdmin, SetAdminParams} from '../api';
 import {QUERY__USERS} from '../queryKeys';
 
 export const useSetAdmin = () => {
@@ -9,7 +9,7 @@ export const useSetAdmin = () => {
   const {enqueueSnackbar} = useSnackbar();
 
   return useMutation({
-    mutationFn: (userId: string) => setAdmin(userId),
+    mutationFn: (params: SetAdminParams) => setAdmin(params),
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: [QUERY__USERS],

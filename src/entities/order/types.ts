@@ -6,6 +6,12 @@ export enum OrderType {
 }
 
 // The values are defined on the backend
+export enum OrderKindType {
+  limit = 'limit',
+  market = 'market',
+}
+
+// The values are defined on the backend
 export enum ChoiceVariant {
   yes = 'yes',
   no = 'no',
@@ -17,10 +23,27 @@ export enum MarketType {
   maxInvestment = 'max_investment',
 }
 
+export interface AutoCancel {
+  orderId: string;
+  timeoutAt: Date;
+  status: AutoCancelStatus;
+}
+
+export interface StopLoss {
+  orderId: string;
+  triggerType: TriggerType;
+  price: number;
+  status: AutoCancelStatus;
+}
+
+export enum CancelType {
+  auto = 'auto',
+  manual = 'manual',
+}
+
 export interface Order {
   id: string;
-  startDate: Date;
-  endDate: Date;
+  created: Date;
   orderType: OrderType;
   choice: ChoiceVariant;
   eventId: string;
@@ -29,6 +52,9 @@ export interface Order {
   price: number | null;
   slippage: number | null;
   matching: MarketType | null;
+  auto_cancel: AutoCancel | null;
+  stop_loss: StopLoss | null;
+  take_profit: StopLoss | null;
 }
 
 // The values are defined by the backend
@@ -47,24 +73,11 @@ export enum TriggerType {
   take_profit = 'take_profit',
 }
 
-export interface AutoCancel {
-  orderId: string;
-  timeoutAt: Date;
-  status: AutoCancelStatus;
-}
-
-export interface StopLoss {
-  orderId: string;
-  triggerType: TriggerType;
-  price: number;
-  status: AutoCancelStatus;
-}
-
 export interface OrderFullInfo {
   id: string;
   startDate: Date;
   endDate: Date;
-  orderType: OrderType;
+  orderType: OrderKindType;
   choice: ChoiceVariant;
   requested_items_quantity: number | null;
   executed_items_quantity: number | null;
@@ -86,4 +99,5 @@ export interface OrderFullInfo {
   matched_quantity: number | null;
   matching: MarketType | null;
   profit: number | null;
+  cancelled: CancelType | null;
 }

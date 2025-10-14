@@ -1,9 +1,9 @@
 import {useNavigate} from 'react-router-dom';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
+import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
+import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import {Alert, Box, Button, IconButton} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
-import {useSnackbar} from 'notistack';
 
 import {
   useGetUsers,
@@ -103,7 +103,6 @@ type UrlState = {
 };
 
 export const UsersPage = () => {
-  const {enqueueSnackbar} = useSnackbar();
   const navigate = useNavigate();
 
   const {urlState, setUrl} = useUrlState<UrlState>({
@@ -151,20 +150,17 @@ export const UsersPage = () => {
             </Button>
 
             <IconButton
-              title="Grant admin permissions"
+              title={`${isAdmin ? 'Revoke' : 'Grant'} admin permissions`}
               disabled={isSettingAdmin}
               onClick={() => {
-                if (isAdmin) {
-                  enqueueSnackbar('The selected user is already admin', {
-                    variant: 'info',
-                  });
-                  return;
-                }
-
-                setAdmin(id);
+                setAdmin({userId: id, isAdmin: !isAdmin});
               }}
             >
-              <AccountCircleOutlinedIcon />
+              {isAdmin ? (
+                <PersonRemoveOutlinedIcon />
+              ) : (
+                <PersonAddAltOutlinedIcon />
+              )}
             </IconButton>
 
             <IconButton

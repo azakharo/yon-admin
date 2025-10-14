@@ -9,32 +9,6 @@ import {
   StopLossOnBackend,
 } from './backendTypes';
 
-export const mapOrderFromBackend = ({
-  id,
-  start_date,
-  end_date,
-  type,
-  side,
-  event_id,
-  requested_items_quantity,
-  requested_max_inv,
-  price,
-  slippage,
-  matching,
-}: OrderOnBackend): Order => ({
-  id,
-  startDate: getDateFromIsoString(start_date),
-  endDate: getDateFromIsoString(end_date),
-  orderType: type,
-  choice: side,
-  eventId: event_id,
-  requestedItemCount: requested_items_quantity,
-  requestedMaxInv: getBackendCurrencyValue(requested_max_inv) as number,
-  price: getBackendCurrencyValue(price),
-  slippage: getBackendCurrencyValue(slippage),
-  matching,
-});
-
 export const mapAutoCancelFromBackend = ({
   order_id,
   timeout_at,
@@ -55,6 +29,38 @@ export const mapStopLossFromBackend = ({
   triggerType: type,
   price: getBackendCurrencyValue(price) as number,
   status,
+});
+
+export const mapOrderFromBackend = ({
+  id,
+  created_at,
+  type,
+  side,
+  event_id,
+  requested_items_quantity,
+  requested_max_inv,
+  price,
+  slippage,
+  matching,
+  auto_cancel,
+  stop_loss,
+  take_profit,
+}: OrderOnBackend): Order => ({
+  id,
+  created: getDateFromIsoString(created_at),
+  orderType: type,
+  choice: side,
+  eventId: event_id,
+  requestedItemCount: requested_items_quantity,
+  requestedMaxInv: getBackendCurrencyValue(requested_max_inv) as number,
+  price: getBackendCurrencyValue(price),
+  slippage: getBackendCurrencyValue(slippage),
+  matching,
+  auto_cancel: isNil(auto_cancel)
+    ? null
+    : mapAutoCancelFromBackend(auto_cancel),
+  stop_loss: isNil(stop_loss) ? null : mapStopLossFromBackend(stop_loss),
+  take_profit: isNil(take_profit) ? null : mapStopLossFromBackend(take_profit),
 });
 
 export const mapOrderFullInfoFromBackend = ({
@@ -83,6 +89,7 @@ export const mapOrderFullInfoFromBackend = ({
   matched_quantity,
   matching,
   profit,
+  cancelled,
 }: OrderFullInfoOnBackend): OrderFullInfo => ({
   id,
   startDate: getDateFromIsoString(start_date),
@@ -111,4 +118,5 @@ export const mapOrderFullInfoFromBackend = ({
   matched_quantity: matched_quantity ?? null,
   matching: matching ?? null,
   profit: getBackendCurrencyValue(profit),
+  cancelled: cancelled ?? null,
 });
