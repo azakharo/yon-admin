@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import {Alert, Box, Button} from '@mui/material';
 import {format} from 'date-fns';
 import isNil from 'lodash/isNil';
@@ -11,8 +11,11 @@ import {
   rightAlignmentColumnProps,
   TableRowActionsContainer,
 } from '@shared/components';
-import {entityTableCommonProps} from '@shared/constants';
-import {useNotImplementedToast, useUrlState} from '@shared/hooks';
+import {
+  entityTableCommonProps,
+  ROUTE__ORDER_FULL_INFO,
+} from '@shared/constants';
+import {useUrlState} from '@shared/hooks';
 import {Header} from '@widgets/common';
 
 const columns: MRT_ColumnDef<Order>[] = [
@@ -97,7 +100,7 @@ type UrlState = {
 };
 
 export const UserOrdersPage = () => {
-  const showNotImplemented = useNotImplementedToast();
+  const navigate = useNavigate();
   const {userId} = useParams();
 
   const {urlState, setUrl} = useUrlState<UrlState>({
@@ -133,13 +136,17 @@ export const UserOrdersPage = () => {
       renderTopToolbarCustomActions={() => {
         return <Header title={`Orders of user "${userId}"`} />;
       }}
-      renderRowActions={() => {
+      renderRowActions={({row}) => {
         return (
           <TableRowActionsContainer>
             <Button
               variant="text"
               color="secondary"
-              onClick={showNotImplemented}
+              onClick={() => {
+                navigate(
+                  ROUTE__ORDER_FULL_INFO.replace(':id', row.original.id),
+                );
+              }}
             >
               Details
             </Button>
@@ -165,10 +172,10 @@ export const UserOrdersPage = () => {
       initialState={{
         columnPinning: {
           left: ['id'],
+          right: ['mrt-row-actions'],
         },
       }}
       {...entityTableCommonProps}
-      enableRowActions={false}
     />
   );
 };

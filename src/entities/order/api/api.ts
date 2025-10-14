@@ -1,9 +1,12 @@
 import {axi, GetListOutput, GetListParams} from '@shared/api';
 import {validateData} from '@shared/utils';
-import {Order} from '../types';
-import {v8nSchemaOfGetUserOrdersResponse} from './backendSchemas';
-import {GetUserOrdersResponse} from './backendTypes';
-import {mapOrderFromBackend} from './dataMappers';
+import {Order, OrderFullInfo} from '../types';
+import {
+  orderFullInfoV8nSchema,
+  v8nSchemaOfGetUserOrdersResponse,
+} from './backendSchemas';
+import {GetUserOrdersResponse, OrderFullInfoOnBackend} from './backendTypes';
+import {mapOrderFromBackend, mapOrderFullInfoFromBackend} from './dataMappers';
 
 export interface GetUserOrdersParams extends GetListParams {
   userId: string;
@@ -26,11 +29,7 @@ export const getUserOrders = async ({
 
   const data = response.data;
 
-  validateData(
-    response.data,
-    v8nSchemaOfGetUserOrdersResponse,
-    'getUserOrders',
-  );
+  validateData(data, v8nSchemaOfGetUserOrdersResponse, 'getUserOrders');
 
   const {
     total,
@@ -47,4 +46,18 @@ export const getUserOrders = async ({
     totalPages: total_pages,
     items: array.map(item => mapOrderFromBackend(item)),
   };
+};
+
+export const getOrderFullInfo = async (
+  orderId: string,
+): Promise<OrderFullInfo> => {
+  const response = await axi.get<OrderFullInfoOnBackend>(
+    `/admin/orders/${orderId}`,
+  );
+
+  const data = response.data;
+
+  validateData(data, orderFullInfoV8nSchema, 'getOrderFullInfo');
+
+  return mapOrderFullInfoFromBackend(data);
 };

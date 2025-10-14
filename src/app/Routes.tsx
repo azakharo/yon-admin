@@ -7,6 +7,7 @@ import {
   ROUTE__LOGIN__ENTER_CODE,
   ROUTE__LOGIN__ENTER_PHONE,
   ROUTE__MAIN,
+  ROUTE__ORDER_FULL_INFO,
   ROUTE__USER_ORDERS,
   ROUTE__USERS,
 } from '@shared/constants';
@@ -18,6 +19,7 @@ import {LoginPage} from '@/pages/LoginPage';
 import {EnterCodeStep} from '@/pages/LoginPage/EnterCodeStep';
 import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
+import {OrderFullInfoPage} from '@/pages/MainPage/OrderFullInfo';
 import {TaskCategoryTable} from '@/pages/MainPage/Section1/TaskCategoryTable';
 import {UserOrdersPage} from '@/pages/MainPage/UserOrders';
 import {UsersPage} from '@/pages/MainPage/Users';
@@ -47,6 +49,7 @@ export const routes = createRoutesFromElements(
         <Route path="group1/section2" element={<div>Section 2</div>} />
         <Route path={ROUTE__USERS} element={<UsersPage />} />
         <Route path={ROUTE__USER_ORDERS} element={<UserOrdersPage />} />
+        <Route path={ROUTE__ORDER_FULL_INFO} element={<OrderFullInfoPage />} />
 
         <Route index element={<Navigate replace to={ROUTE__USERS} />} />
         <Route path="*" element={<ErrorPage404 />} />

@@ -1,8 +1,11 @@
 import {AxiosError} from 'axios';
 import {format, isValid, parseISO} from 'date-fns';
 import isEmpty from 'lodash/isEmpty';
+import isNil from 'lodash/isNil';
 import isNull from 'lodash/isNull';
 import trimEnd from 'lodash/trimEnd';
+
+import {currencyValueDivider} from '../constants';
 
 // if invalid input, returns "0 date"
 export const getDateFromIsoString = (
@@ -54,4 +57,14 @@ export const parseBackendNumberString = (str: string | null): number => {
   const parsed = Number.parseFloat(str);
 
   return Number.isNaN(parsed) ? 0 : parsed;
+};
+
+export const getBackendCurrencyValue = (
+  val: number | null | undefined,
+): number | null => {
+  if (isNil(val)) {
+    return null;
+  }
+
+  return val / currencyValueDivider;
 };

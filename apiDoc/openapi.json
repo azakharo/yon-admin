@@ -4262,6 +4262,210 @@
         }
       }
     },
+    "/v1/events/{event_id}/top_holders": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Event Top Holders",
+        "operationId": "event_top_holders_v1_events__event_id__top_holders_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Event Id"
+            }
+          },
+          {
+            "name": "range_",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Range "
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopHoldersResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "EventNotFoundException": {
+                    "summary": "Event not found",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Event not found",
+                          "type": "EventNotFoundException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/events/{event_id}/orderbook/{side}": {
+      "get": {
+        "tags": [
+          "events"
+        ],
+        "summary": "Event Orderbook",
+        "operationId": "event_orderbook_v1_events__event_id__orderbook__side__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Event Id"
+            }
+          },
+          {
+            "name": "side",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/OrderSideEnum"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventOrderbookResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Event not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "EventNotFoundException": {
+                    "summary": "Event not found",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Event not found",
+                          "type": "EventNotFoundException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/balance": {
       "get": {
         "tags": [
@@ -9002,6 +9206,55 @@
         ],
         "title": "EventOrderItemsMatchedDTO"
       },
+      "EventOrderbookResponseDTO": {
+        "properties": {
+          "array": {
+            "items": {
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array",
+              "maxItems": 2,
+              "minItems": 2,
+              "description": "[price, quantity]"
+            },
+            "type": "array",
+            "title": "Array",
+            "examples": [
+              [
+                [
+                  72,
+                  4
+                ],
+                [
+                  65,
+                  3
+                ],
+                [
+                  55,
+                  200
+                ]
+              ]
+            ]
+          },
+          "channel": {
+            "type": "string",
+            "title": "Channel",
+            "description": "Websocket key"
+          }
+        },
+        "type": "object",
+        "required": [
+          "array",
+          "channel"
+        ],
+        "title": "EventOrderbookResponseDTO"
+      },
       "EventResponseDTO": {
         "properties": {
           "id": {
@@ -9363,7 +9616,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "6cc9fbef-3db1-4c04-8fcc-952331387cd1"
+              "108d9def-8879-497d-921c-105835823236"
             ]
           },
           "side": {
@@ -9482,7 +9735,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "6cc9fbef-3db1-4c04-8fcc-952331387cd1"
+              "108d9def-8879-497d-921c-105835823236"
             ]
           },
           "side": {
@@ -11384,6 +11637,24 @@
         ],
         "title": "SDKTokenDTO"
       },
+      "ShareHolderDTO": {
+        "properties": {
+          "user_name": {
+            "type": "string",
+            "title": "User Name"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_name",
+          "amount"
+        ],
+        "title": "ShareHolderDTO"
+      },
       "SortingOptionsDTO": {
         "properties": {
           "id": {
@@ -11654,6 +11925,30 @@
           "is_enabled"
         ],
         "title": "TimeLimitResponseDTO"
+      },
+      "TopHoldersResponseDTO": {
+        "properties": {
+          "yes": {
+            "items": {
+              "$ref": "#/components/schemas/ShareHolderDTO"
+            },
+            "type": "array",
+            "title": "Yes"
+          },
+          "no": {
+            "items": {
+              "$ref": "#/components/schemas/ShareHolderDTO"
+            },
+            "type": "array",
+            "title": "No"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yes",
+          "no"
+        ],
+        "title": "TopHoldersResponseDTO"
       },
       "TopicFavoriteRequestDTO": {
         "properties": {
