@@ -1,8 +1,8 @@
-import {useNavigate} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import AttachMoneyOutlinedIcon from '@mui/icons-material/AttachMoneyOutlined';
 import PersonAddAltOutlinedIcon from '@mui/icons-material/PersonAddAltOutlined';
 import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
-import {Alert, Box, Button, IconButton} from '@mui/material';
+import {Button, IconButton, Link} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
 
 import {
@@ -18,7 +18,11 @@ import {
   rightAlignmentColumnProps,
   TableRowActionsContainer,
 } from '@shared/components';
-import {entityTableCommonProps, ROUTE__USER_ORDERS} from '@shared/constants';
+import {
+  entityTableCommonProps,
+  ROUTE__USER_ACCOUNT,
+  ROUTE__USER_ORDERS,
+} from '@shared/constants';
 import {useUrlState} from '@shared/hooks';
 import {openTopUpBalanceDialog} from '@widgets/user';
 
@@ -26,7 +30,18 @@ const columns: MRT_ColumnDef<User>[] = [
   {
     accessorKey: 'id',
     header: 'ID',
-    size: 140,
+    Cell: ({row}) => {
+      const {id} = row.original;
+
+      return (
+        <Link
+          component={RouterLink}
+          to={ROUTE__USER_ACCOUNT.replace(':id', id)}
+        >
+          {id}
+        </Link>
+      );
+    },
   },
   {
     accessorKey: 'name',
@@ -122,18 +137,11 @@ export const UsersPage = () => {
   const {mutate: topUpBalance, isPending: isToppingUpBalance} =
     useTopUpBalance();
 
-  if (error) {
-    return (
-      <Box p={4}>
-        <Alert severity="error">{error.message}</Alert>
-      </Box>
-    );
-  }
-
   return (
     <MrTable
       columns={columns}
       data={data?.items ?? []}
+      error={error}
       renderRowActions={({row}) => {
         const {id, isAdmin} = row.original;
 

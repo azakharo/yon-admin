@@ -3,14 +3,18 @@ import {ProtectedRoute} from '@features/auth';
 
 import {
   ROUTE__CURRENT_USER_PROFILE,
+  ROUTE__EVENT_DETAILS,
+  ROUTE__EVENTS,
   ROUTE__LOGIN,
   ROUTE__LOGIN__ENTER_CODE,
   ROUTE__LOGIN__ENTER_PHONE,
   ROUTE__MAIN,
   ROUTE__ORDER_FULL_INFO,
+  ROUTE__USER_ACCOUNT,
   ROUTE__USER_ORDERS,
   ROUTE__USERS,
 } from '@shared/constants';
+import {EventsPage} from '../pages/MainPage/Events';
 import {AppWrapper} from './AppWrapper';
 
 import {CurrentUserProfilePage} from '@/pages/CurrentUserProfilePage';
@@ -19,8 +23,10 @@ import {LoginPage} from '@/pages/LoginPage';
 import {EnterCodeStep} from '@/pages/LoginPage/EnterCodeStep';
 import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
+import {EventDetailsPage} from '@/pages/MainPage/EventDetails';
 import {OrderFullInfoPage} from '@/pages/MainPage/OrderFullInfo';
 import {TaskCategoryTable} from '@/pages/MainPage/Section1/TaskCategoryTable';
+import {UserAccountPage} from '@/pages/MainPage/UserAccount';
 import {UserOrdersPage} from '@/pages/MainPage/UserOrders';
 import {UsersPage} from '@/pages/MainPage/Users';
 
@@ -48,8 +54,11 @@ export const routes = createRoutesFromElements(
         <Route path="group1/section1" element={<TaskCategoryTable />} />
         <Route path="group1/section2" element={<div>Section 2</div>} />
         <Route path={ROUTE__USERS} element={<UsersPage />} />
+        <Route path={ROUTE__USER_ACCOUNT} element={<UserAccountPage />} />
         <Route path={ROUTE__USER_ORDERS} element={<UserOrdersPage />} />
         <Route path={ROUTE__ORDER_FULL_INFO} element={<OrderFullInfoPage />} />
+        <Route path={ROUTE__EVENTS} element={<EventsPage />} />
+        <Route path={ROUTE__EVENT_DETAILS} element={<EventDetailsPage />} />
 
         <Route index element={<Navigate replace to={ROUTE__USERS} />} />
         <Route path="*" element={<ErrorPage404 />} />

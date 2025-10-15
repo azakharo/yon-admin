@@ -10,7 +10,7 @@ import {
 import isEmpty from 'lodash/isEmpty';
 
 import {CardBox, HeartButton} from '@shared/components';
-import dummyCategoryLogoSrc from '@shared/images/bitcoin.png';
+import dummyCategoryLogoSrc from '@shared/images/logo.svg';
 import {EventInfoLine} from '../../../event';
 import {useAddRemoveEventFromFavorites} from '../../apiHooks';
 import {PortfolioEvent} from '../../types';

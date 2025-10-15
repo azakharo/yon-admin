@@ -29,10 +29,12 @@ interface Props<TData extends MRT_RowData> extends MRT_TableOptions<TData> {
   localStorageKeyForSettings?: string;
   columns: MRT_ColumnDef<TData>[];
   data: TData[];
+  error?: Error | null;
 }
 
 export const MrTable = <TData extends MRT_RowData>({
   localStorageKeyForSettings,
+  error,
   enableColumnOrdering,
   enableColumnFilters,
   enableHiding,
@@ -119,6 +121,12 @@ export const MrTable = <TData extends MRT_RowData>({
       : undefined,
     onColumnVisibilityChange: setColumnVisibility,
     positionToolbarAlertBanner: 'head-overlay',
+    muiToolbarAlertBannerProps: error
+      ? {
+          color: 'error',
+          children: error.message,
+        }
+      : undefined,
     muiTablePaperProps: {
       sx: {
         ...tablePaperStyles,
@@ -170,6 +178,7 @@ export const MrTable = <TData extends MRT_RowData>({
       ...state,
       columnOrder,
       columnVisibility,
+      showAlertBanner: !!error,
     },
     globalFilterFn: 'contains', // turn off fuzzy matching and use simple contains filter function
     ...restProps,
