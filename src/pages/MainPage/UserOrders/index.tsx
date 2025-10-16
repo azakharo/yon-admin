@@ -18,7 +18,7 @@ import {
 import {useUrlState} from '@shared/hooks';
 import {Header} from '@widgets/common';
 
-const columns: MRT_ColumnDef<Order>[] = [
+export const columns: MRT_ColumnDef<Order>[] = [
   {
     accessorKey: 'id',
     header: 'ID',

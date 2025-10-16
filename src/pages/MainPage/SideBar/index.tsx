@@ -1,8 +1,9 @@
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
+import RequestPageOutlinedIcon from '@mui/icons-material/RequestPageOutlined';
 import {Box, Stack} from '@mui/material';
 
-import {ROUTE__EVENTS, ROUTE__USERS} from '@shared/constants';
+import {ROUTE__EVENTS, ROUTE__ORDERS, ROUTE__USERS} from '@shared/constants';
 import {NavigationLink} from './NavigationLink';
 
 export const SideBar = () => {
@@ -19,6 +20,12 @@ export const SideBar = () => {
           route={ROUTE__EVENTS}
           text="Events"
           icon={<EventAvailableOutlinedIcon />}
+        />
+
+        <NavigationLink
+          route={ROUTE__ORDERS}
+          text="Orders"
+          icon={<RequestPageOutlinedIcon />}
         />
 
         {/*<SubMenu*/}

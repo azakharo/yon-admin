@@ -9,5 +9,6 @@ export const ROUTE__ORDER_FULL_INFO = `${ROUTE__MAIN}/orders/:id`;
 export const ROUTE__USER_ACCOUNT = `${ROUTE__USERS}/:id`;
 export const ROUTE__EVENTS = `${ROUTE__MAIN}/events`;
 export const ROUTE__EVENT_DETAILS = `${ROUTE__EVENTS}/:id`;
+export const ROUTE__ORDERS = `${ROUTE__MAIN}/orders`;
 
 export const ROUTE__CURRENT_USER_PROFILE = '/profile';

@@ -61,3 +61,37 @@ export const getOrderFullInfo = async (
 
   return mapOrderFullInfoFromBackend(data);
 };
+
+export type GetOrdersParams = GetListParams;
+
+export const getOrders = async ({
+  page,
+  pageSize,
+}: GetOrdersParams): Promise<GetListOutput<Order>> => {
+  const response = await axi.get<GetUserOrdersResponse>('/admin/orders', {
+    params: {
+      page,
+      per_page: pageSize,
+    },
+  });
+
+  const data = response.data;
+
+  validateData(data, v8nSchemaOfGetUserOrdersResponse, 'getOrders');
+
+  const {
+    total,
+    total_pages,
+    array,
+    page: pageFromBackend,
+    per_page: pageSizeFromBackend,
+  } = data;
+
+  return {
+    page: pageFromBackend,
+    pageSize: pageSizeFromBackend,
+    total,
+    totalPages: total_pages,
+    items: array.map(item => mapOrderFromBackend(item)),
+  };
+};

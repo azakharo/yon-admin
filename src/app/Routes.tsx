@@ -10,6 +10,7 @@ import {
   ROUTE__LOGIN__ENTER_PHONE,
   ROUTE__MAIN,
   ROUTE__ORDER_FULL_INFO,
+  ROUTE__ORDERS,
   ROUTE__USER_ACCOUNT,
   ROUTE__USER_ORDERS,
   ROUTE__USERS,
@@ -25,6 +26,7 @@ import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
 import {EventDetailsPage} from '@/pages/MainPage/EventDetails';
 import {OrderFullInfoPage} from '@/pages/MainPage/OrderFullInfo';
+import {OrdersPage} from '@/pages/MainPage/Orders';
 import {TaskCategoryTable} from '@/pages/MainPage/Section1/TaskCategoryTable';
 import {UserAccountPage} from '@/pages/MainPage/UserAccount';
 import {UserOrdersPage} from '@/pages/MainPage/UserOrders';
@@ -59,6 +61,7 @@ export const routes = createRoutesFromElements(
         <Route path={ROUTE__ORDER_FULL_INFO} element={<OrderFullInfoPage />} />
         <Route path={ROUTE__EVENTS} element={<EventsPage />} />
         <Route path={ROUTE__EVENT_DETAILS} element={<EventDetailsPage />} />
+        <Route path={ROUTE__ORDERS} element={<OrdersPage />} />
 
         <Route index element={<Navigate replace to={ROUTE__USERS} />} />
         <Route path="*" element={<ErrorPage404 />} />
