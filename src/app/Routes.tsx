@@ -2,6 +2,7 @@ import {createRoutesFromElements, Navigate, Route} from 'react-router-dom';
 import {ProtectedRoute} from '@features/auth';
 
 import {
+  ROUTE__CREATE_EVENT,
   ROUTE__CURRENT_USER_PROFILE,
   ROUTE__EVENT_DETAILS,
   ROUTE__EVENTS,
@@ -24,6 +25,7 @@ import {LoginPage} from '@/pages/LoginPage';
 import {EnterCodeStep} from '@/pages/LoginPage/EnterCodeStep';
 import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
+import {CreateEventPage} from '@/pages/MainPage/CreateEvent';
 import {EventDetailsPage} from '@/pages/MainPage/EventDetails';
 import {OrderFullInfoPage} from '@/pages/MainPage/OrderFullInfo';
 import {OrdersPage} from '@/pages/MainPage/Orders';
@@ -61,6 +63,7 @@ export const routes = createRoutesFromElements(
         <Route path={ROUTE__ORDER_FULL_INFO} element={<OrderFullInfoPage />} />
         <Route path={ROUTE__EVENTS} element={<EventsPage />} />
         <Route path={ROUTE__EVENT_DETAILS} element={<EventDetailsPage />} />
+        <Route path={ROUTE__CREATE_EVENT} element={<CreateEventPage />} />
         <Route path={ROUTE__ORDERS} element={<OrdersPage />} />
 
         <Route index element={<Navigate replace to={ROUTE__USERS} />} />

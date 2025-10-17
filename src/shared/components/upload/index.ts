@@ -1,0 +1,1 @@
+export {FileToUploadThumbnail} from './FileToUploadThumbnail';

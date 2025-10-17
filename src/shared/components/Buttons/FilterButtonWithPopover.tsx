@@ -1,9 +1,9 @@
 import {FC} from 'react';
-import {Button} from '@mui/material';
+import {Button, ButtonProps} from '@mui/material';
 
 import {ButtonWithPopover} from './ButtonWithPopover';
 
-import {COLOR__LIGHT_GRAY} from '@/theme/colors';
+import {COLOR__LINE} from '@/theme/colors';
 
 const buttonMinWidth = 200;
 
@@ -20,6 +20,7 @@ export interface FilterComponentProps<TFilterValue> {
 
 interface Props<TFilterValue> {
   buttonText: string;
+  buttonVariant?: ButtonProps['variant'];
   value: TFilterValue;
   onChange: (newValue: TFilterValue) => void;
   FilterComponent: FC<FilterComponentProps<TFilterValue>>;
@@ -27,6 +28,7 @@ interface Props<TFilterValue> {
 
 export const FilterButtonWithPopover = <TFilterValue,>({
   buttonText,
+  buttonVariant = 'subtle',
   value,
   onChange,
   FilterComponent,
@@ -35,7 +37,7 @@ export const FilterButtonWithPopover = <TFilterValue,>({
     <ButtonWithPopover
       buttonElement={
         <Button
-          variant="subtle"
+          variant={buttonVariant}
           color="inherit"
           size="small"
           sx={{
@@ -44,8 +46,9 @@ export const FilterButtonWithPopover = <TFilterValue,>({
             minWidth: buttonMinWidth,
             fontSize: 16,
             fontWeight: 400,
-            color: COLOR__LIGHT_GRAY,
+            borderColor: COLOR__LINE,
             justifyContent: 'flex-start',
+            minHeight: 43,
           }}
         >
           {buttonText}

@@ -34,7 +34,7 @@ const PopoverContent: FC<FilterComponentProps<Date | undefined>> = ({
           }}
           fullWidth
         >
-          Отмена
+          Cancel
         </Button>
 
         <Button
@@ -44,14 +44,14 @@ const PopoverContent: FC<FilterComponentProps<Date | undefined>> = ({
           }}
           fullWidth
         >
-          Применить
+          Apply
         </Button>
       </Stack>
     </Stack>
   );
 };
 
-type DateSelectorProps = Omit<
+export type DateSelectorProps = Omit<
   FilterComponentProps<Date | undefined>,
   'onFinish'
 > & {
@@ -65,7 +65,8 @@ export const DateSelector: FC<DateSelectorProps> = ({
 }) => {
   return (
     <FilterButtonWithPopover
-      buttonText={value ? format(value, 'd MMMM') : defaultButtonText}
+      buttonText={value ? format(value, 'MMMM d') : defaultButtonText}
+      buttonVariant="outlined"
       FilterComponent={PopoverContent}
       value={value}
       onChange={onChange}

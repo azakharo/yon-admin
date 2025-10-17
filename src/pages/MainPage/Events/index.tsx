@@ -1,4 +1,4 @@
-import {Link as RouterLink} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {Button, Link} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
 
@@ -9,7 +9,11 @@ import {
   rightAlignmentColumnProps,
   TableRowActionsContainer,
 } from '@shared/components';
-import {entityTableCommonProps, ROUTE__EVENT_DETAILS} from '@shared/constants';
+import {
+  entityTableCommonProps,
+  ROUTE__CREATE_EVENT,
+  ROUTE__EVENT_DETAILS,
+} from '@shared/constants';
 import {useNotImplementedToast} from '@shared/hooks';
 
 const columns: MRT_ColumnDef<Event>[] = [
@@ -62,6 +66,7 @@ const columns: MRT_ColumnDef<Event>[] = [
 const localStorageKey = 'eventTable';
 
 export const EventsPage = () => {
+  const navigate = useNavigate();
   const showNotImplemented = useNotImplementedToast();
   const {data, isPending, error} = useGetEvents({page: 1, pageSize: 10});
 
@@ -70,6 +75,17 @@ export const EventsPage = () => {
       error={error}
       columns={columns}
       data={data?.items ?? []}
+      renderTopToolbarCustomActions={() => {
+        return (
+          <Button
+            onClick={() => {
+              navigate(ROUTE__CREATE_EVENT);
+            }}
+          >
+            Create event
+          </Button>
+        );
+      }}
       renderRowActions={() => {
         return (
           <TableRowActionsContainer>

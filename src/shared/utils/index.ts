@@ -1,6 +1,7 @@
 export * from './browser';
 export * from './dateTime';
 export * from './debug';
+export * from './filePaths';
 export * from './i18n';
 export * from './localStorage';
 export * from './reactQuery';

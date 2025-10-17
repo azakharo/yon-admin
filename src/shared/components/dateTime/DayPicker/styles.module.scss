@@ -1,8 +1,8 @@
-$COLOR__WARNING: #FF9900;
+$COLOR__ACCENT: #1751D0;
 $COLOR__MAIN_BLACK: #171717;
 
 :global(.rdp-root) {
-  --rdp-accent-color: #{$COLOR__WARNING};
+  --rdp-accent-color: #{$COLOR__ACCENT};
 }
 
 .day-text {
@@ -16,7 +16,7 @@ $COLOR__MAIN_BLACK: #171717;
 }
 
 .selected > button {
-  background-color: $COLOR__WARNING;
+  background-color: $COLOR__ACCENT;
   color: #fff;
 }
 

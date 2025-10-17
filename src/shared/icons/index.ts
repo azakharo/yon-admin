@@ -3,6 +3,7 @@ export {CalendarFilledIcon} from './CalendarFilledIcon';
 export {CalendarOutlinedIcon} from './CalendarOutlinedIcon';
 export {ClockIcon} from './ClockIcon';
 export {FilterIcon} from './FilterIcon';
+export {PaperClipIcon} from './PaperClipIcon';
 export {SettingsIcon} from './SettingsIcon';
 export {ShareIcon} from './ShareIcon';
 export {SortIcon} from './SortIcon';

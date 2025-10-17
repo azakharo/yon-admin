@@ -30,3 +30,4 @@ export * from './tables';
 export * from './Tabs';
 export {TextLimitedNChars} from './TextLimitedNChars';
 export {TextLimitedNLines} from './TextLimitedNLines';
+export * from './upload';
