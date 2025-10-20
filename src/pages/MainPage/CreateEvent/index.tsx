@@ -1,19 +1,22 @@
 import {FileWithPath, useDropzone} from 'react-dropzone';
 import {Controller, useForm, useWatch} from 'react-hook-form';
-import {TextFieldElement} from 'react-hook-form-mui';
+import {CheckboxElement, TextFieldElement} from 'react-hook-form-mui';
 import {useNavigate} from 'react-router-dom';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {
   Box,
   Button,
+  Chip,
   FormHelperText,
   Grid2 as Grid,
   Stack,
   Typography,
 } from '@mui/material';
 import useUpdateEffect from 'ahooks/es/useUpdateEffect';
+import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
-import {InferType, mixed, object, string} from 'yup';
+import {useSnackbar} from 'notistack';
+import {array, boolean, InferType, mixed, number, object, string} from 'yup';
 
 import {
   Category,
@@ -29,8 +32,13 @@ import {
   RhfNumberInput,
   RhfTimeField,
 } from '@shared/components';
-import {numberTransformEmptyStringToNull, stringify} from '@shared/utils';
-import {Header} from '@widgets/common';
+import {
+  numberTransformEmptyStringToNull,
+  stringDefinedButCanBeEmpty,
+  stringify,
+} from '@shared/utils';
+import {Header, openGeoFilterDialog} from '@widgets/common';
+import {Row} from './Row';
 
 import {COLOR__LIGHT_BACK, COLOR__WHITE} from '@/theme/colors';
 
@@ -59,11 +67,28 @@ const v8nSchema = object().shape({
     .required()
     .nullable()
     .notOneOf([null], 'required'),
+  broadcastLink: stringDefinedButCanBeEmpty,
+  sourceOfTruth: string().required(),
+  rules: string().required(),
+  latestNews: stringDefinedButCanBeEmpty,
+  stat: stringDefinedButCanBeEmpty,
+  spread: number().required(),
+  geoTags: array().of(string().required()).required(),
+  hasParent: boolean().required(),
+  parentEvent: stringDefinedButCanBeEmpty,
+  parentEventTab: stringDefinedButCanBeEmpty,
+  isPromoted: boolean().required(),
+  v8nType: string().required(),
+  dataSource: string().required(),
+  isScheduled: boolean().required(),
+  permission: string().required(),
+  hiddenFor: string().required(),
 });
 
 type FormValues = InferType<typeof v8nSchema>;
 
 export const CreateEventPage = () => {
+  const {enqueueSnackbar} = useSnackbar();
   const navigate = useNavigate();
 
   const {control, handleSubmit, setValue, trigger} = useForm({
@@ -79,6 +104,22 @@ export const CreateEventPage = () => {
       yesPrice: 0,
       noPrice: 0,
       iconFile: null,
+      broadcastLink: 'link',
+      sourceOfTruth: 'link',
+      rules: 'text',
+      latestNews: 'text',
+      stat: 'text',
+      spread: 0.1,
+      geoTags: [],
+      hasParent: false,
+      parentEvent: 'parent event',
+      parentEventTab: 'parent event tab',
+      isPromoted: false,
+      v8nType: 'auto',
+      dataSource: 'link',
+      isScheduled: true,
+      permission: 'participants',
+      hiddenFor: 'hidden for',
     },
   });
 
@@ -113,7 +154,15 @@ export const CreateEventPage = () => {
   }, [currentCategory?.id]);
 
   const onSubmit = (values: FormValues): void => {
-    alert(`You entered:\n${stringify(values)}`);
+    const msg = stringify(values);
+    console.log(msg);
+
+    enqueueSnackbar(`You entered:\n${msg}`, {
+      variant: 'info',
+      style: {
+        whiteSpace: 'pre-line',
+      },
+    });
   };
 
   return (
@@ -122,14 +171,8 @@ export const CreateEventPage = () => {
 
       <CardBox bgcolor={COLOR__WHITE}>
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <Grid
-            container
-            rowSpacing={1}
-            columnSpacing={4}
-            mt={2}
-            maxWidth={1000}
-          >
-            <Grid size={6}>
+          <Grid container rowSpacing={1} columnSpacing={4} mt={2}>
+            <Grid size={4}>
               <Stack spacing={5}>
                 <TextFieldElement
                   name="name"
@@ -151,7 +194,7 @@ export const CreateEventPage = () => {
                   }}
                 />
 
-                <Box display="flex" gap={4}>
+                <Row>
                   <RhfDateSelector
                     name="startDate"
                     control={control}
@@ -164,9 +207,9 @@ export const CreateEventPage = () => {
                     control={control}
                     label={'Start time'}
                   />
-                </Box>
+                </Row>
 
-                <Box display="flex" gap={4}>
+                <Row>
                   <RhfDateSelector
                     name="endDate"
                     control={control}
@@ -179,9 +222,37 @@ export const CreateEventPage = () => {
                     control={control}
                     label={'End time'}
                   />
-                </Box>
+                </Row>
 
-                <Box display="flex" alignItems="center" gap={2}>
+                <Row>
+                  <TextFieldElement
+                    name="broadcastLink"
+                    label="Broadcast link"
+                    control={control}
+                    placeholder="link"
+                  />
+
+                  <TextFieldElement
+                    name="sourceOfTruth"
+                    label="Source of truth"
+                    control={control}
+                    placeholder="link"
+                  />
+                </Row>
+
+                <TextFieldElement
+                  name="rules"
+                  label="Event rules"
+                  control={control}
+                  placeholder="text"
+                  multiline
+                  rows={4}
+                  InputProps={{
+                    inputComponent: 'textarea',
+                  }}
+                />
+
+                <Row>
                   <Button
                     type="button"
                     variant="outlined"
@@ -196,11 +267,11 @@ export const CreateEventPage = () => {
                   <Button type="submit" sx={{flex: 2}}>
                     Create event
                   </Button>
-                </Box>
+                </Row>
               </Stack>
             </Grid>
 
-            <Grid size={6}>
+            <Grid size={4}>
               <Stack spacing={5}>
                 <Controller
                   render={({field, fieldState}) => (
@@ -233,7 +304,7 @@ export const CreateEventPage = () => {
                   control={control}
                 />
 
-                <Box display="flex" alignItems="center" gap={2}>
+                <Row>
                   <RhfNumberInput
                     name="yesPrice"
                     label="Cost of Yes (in cent)"
@@ -247,7 +318,13 @@ export const CreateEventPage = () => {
                     control={control}
                     inputType={InputType.positiveInteger}
                   />
-                </Box>
+
+                  <RhfNumberInput
+                    name="spread"
+                    label="Spread"
+                    control={control}
+                  />
+                </Row>
               </Stack>
 
               <Controller
@@ -299,6 +376,150 @@ export const CreateEventPage = () => {
                   </Box>
                 )}
                 name="iconFile"
+                control={control}
+              />
+
+              <Stack spacing={5} mt={4}>
+                <TextFieldElement
+                  name="latestNews"
+                  label="Latest news"
+                  control={control}
+                  placeholder="text"
+                  multiline
+                  rows={4}
+                  InputProps={{
+                    inputComponent: 'textarea',
+                  }}
+                />
+              </Stack>
+            </Grid>
+
+            <Grid size={4}>
+              <Row>
+                <TextFieldElement
+                  name="stat"
+                  label="Statistic"
+                  control={control}
+                  placeholder="text"
+                  multiline
+                  rows={4}
+                  InputProps={{
+                    inputComponent: 'textarea',
+                  }}
+                />
+              </Row>
+
+              <Row position="relative" left={-16} mt={2}>
+                <CheckboxElement
+                  name="hasParent"
+                  label="Has parent?"
+                  control={control}
+                  labelProps={{
+                    labelPlacement: 'start',
+                  }}
+                />
+              </Row>
+
+              <Row mt={4}>
+                <TextFieldElement
+                  name="parentEvent"
+                  label="Parent event"
+                  control={control}
+                  placeholder="id"
+                />
+
+                <TextFieldElement
+                  name="parentEventTab"
+                  label="Parent event tab"
+                  control={control}
+                  placeholder="tab name"
+                />
+              </Row>
+
+              <Row position="relative" left={-16} mt={2}>
+                <CheckboxElement
+                  name="isPromoted"
+                  label="Need promotion?"
+                  control={control}
+                  labelProps={{
+                    labelPlacement: 'start',
+                  }}
+                />
+
+                <CheckboxElement
+                  name="isScheduled"
+                  label="Scheduled"
+                  control={control}
+                  labelProps={{
+                    labelPlacement: 'start',
+                  }}
+                />
+              </Row>
+
+              <Row mt={4}>
+                <TextFieldElement
+                  name="v8nType"
+                  label="Validation type"
+                  control={control}
+                  placeholder="auto or manual"
+                />
+
+                <TextFieldElement
+                  name="dataSource"
+                  label="Data source"
+                  control={control}
+                  placeholder="link"
+                />
+              </Row>
+
+              <Row mt={5}>
+                <TextFieldElement
+                  name="permission"
+                  label="Event permission"
+                  control={control}
+                  placeholder="who can participate"
+                />
+
+                <TextFieldElement
+                  name="hiddenFor"
+                  label="Event visibility"
+                  control={control}
+                  placeholder="hidden for whom"
+                />
+              </Row>
+
+              <Controller
+                render={({field: {value}}) => (
+                  <Box
+                    display="flex"
+                    alignItems="center"
+                    gap={1}
+                    mt={4}
+                    flexWrap="wrap"
+                  >
+                    <Typography>GEO tags</Typography>
+
+                    {!isEmpty(value) &&
+                      value.map(item => <Chip key={item} label={item} />)}
+
+                    <Button
+                      variant="outlined"
+                      onClick={() => {
+                        void openGeoFilterDialog({
+                          initialFilterOptionIds: value,
+                        })
+                          .then((newFilterIds: string[]) => {
+                            setValue('geoTags', newFilterIds);
+                            return;
+                          })
+                          .catch(() => {});
+                      }}
+                    >
+                      Select
+                    </Button>
+                  </Box>
+                )}
+                name="geoTags"
                 control={control}
               />
             </Grid>
