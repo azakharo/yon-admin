@@ -7,6 +7,7 @@ import {
   Box,
   Button,
   Chip,
+  Divider,
   FormHelperText,
   Grid2 as Grid,
   Stack,
@@ -40,7 +41,7 @@ import {
 import {Header, openGeoFilterDialog} from '@widgets/common';
 import {Row} from './Row';
 
-import {COLOR__LIGHT_BACK, COLOR__WHITE} from '@/theme/colors';
+import {COLOR__WHITE} from '@/theme/colors';
 
 const priceSchema = numberTransformEmptyStringToNull
   .required()
@@ -83,6 +84,13 @@ const v8nSchema = object().shape({
   isScheduled: boolean().required(),
   permission: string().required(),
   hiddenFor: string().required(),
+  youtubeVideoId: stringDefinedButCanBeEmpty.when('category', {
+    is: (cat: Category | null) => {
+      return cat?.id === 'youtube';
+    },
+    // eslint-disable-next-line unicorn/no-thenable
+    then: () => string().required(),
+  }),
 });
 
 type FormValues = InferType<typeof v8nSchema>;
@@ -120,6 +128,7 @@ export const CreateEventPage = () => {
       isScheduled: true,
       permission: 'participants',
       hiddenFor: 'hidden for',
+      youtubeVideoId: '',
     },
   });
 
@@ -240,70 +249,6 @@ export const CreateEventPage = () => {
                   />
                 </Row>
 
-                <TextFieldElement
-                  name="rules"
-                  label="Event rules"
-                  control={control}
-                  placeholder="text"
-                  multiline
-                  rows={4}
-                  InputProps={{
-                    inputComponent: 'textarea',
-                  }}
-                />
-
-                <Row>
-                  <Button
-                    type="button"
-                    variant="outlined"
-                    onClick={() => {
-                      navigate(-1);
-                    }}
-                    sx={{flex: 1, border: '0.4px solid #CBCDD8 !important'}}
-                  >
-                    Back
-                  </Button>
-
-                  <Button type="submit" sx={{flex: 2}}>
-                    Create event
-                  </Button>
-                </Row>
-              </Stack>
-            </Grid>
-
-            <Grid size={4}>
-              <Stack spacing={5}>
-                <Controller
-                  render={({field, fieldState}) => (
-                    <CategorySelect
-                      label="Category"
-                      error={fieldState.error?.message}
-                      {...field}
-                    />
-                  )}
-                  name="category"
-                  control={control}
-                />
-
-                {!!currentCategory && (
-                  <CardBox bgcolor={COLOR__LIGHT_BACK}>
-                    <Typography>{`Here will be additional input fields for "${currentCategory.name}" category`}</Typography>
-                  </CardBox>
-                )}
-
-                <Controller
-                  render={({field, fieldState}) => (
-                    <SubCategorySelect
-                      label="Sub-category"
-                      categoryId={currentCategory?.id ?? ''}
-                      error={fieldState.error?.message}
-                      {...field}
-                    />
-                  )}
-                  name="subCategory"
-                  control={control}
-                />
-
                 <Row>
                   <RhfNumberInput
                     name="yesPrice"
@@ -325,6 +270,47 @@ export const CreateEventPage = () => {
                     control={control}
                   />
                 </Row>
+              </Stack>
+            </Grid>
+
+            <Grid size={4}>
+              <Stack spacing={5}>
+                <Controller
+                  render={({field, fieldState}) => (
+                    <CategorySelect
+                      label="Category"
+                      error={fieldState.error?.message}
+                      {...field}
+                    />
+                  )}
+                  name="category"
+                  control={control}
+                />
+
+                <Controller
+                  render={({field, fieldState}) => (
+                    <SubCategorySelect
+                      label="Sub-category"
+                      categoryId={currentCategory?.id ?? ''}
+                      error={fieldState.error?.message}
+                      {...field}
+                    />
+                  )}
+                  name="subCategory"
+                  control={control}
+                />
+
+                <TextFieldElement
+                  name="rules"
+                  label="Event rules"
+                  control={control}
+                  placeholder="text"
+                  multiline
+                  rows={4}
+                  InputProps={{
+                    inputComponent: 'textarea',
+                  }}
+                />
               </Stack>
 
               <Controller
@@ -524,6 +510,38 @@ export const CreateEventPage = () => {
               />
             </Grid>
           </Grid>
+
+          {currentCategory?.id === 'youtube' && (
+            <Stack mt={2} spacing={2}>
+              <Divider />
+
+              <Box py={2}>
+                <TextFieldElement
+                  name="youtubeVideoId"
+                  label="Youtube video ID"
+                  control={control}
+                  placeholder="id"
+                />
+              </Box>
+            </Stack>
+          )}
+
+          <Row width={420} mt={2}>
+            <Button
+              type="button"
+              variant="outlined"
+              onClick={() => {
+                navigate(-1);
+              }}
+              sx={{flex: 1, border: '0.4px solid #CBCDD8 !important'}}
+            >
+              Back
+            </Button>
+
+            <Button type="submit" sx={{flex: 2}}>
+              Create event
+            </Button>
+          </Row>
         </form>
       </CardBox>
     </>
