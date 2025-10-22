@@ -7,3 +7,4 @@ export {FilterButtonWithPopover} from './FilterButtonWithPopover';
 export {HeartButton} from './HeartButton';
 export {MoreButton} from './MoreButton';
 export {ShareButton} from './ShareButton';
+export {TranslateFieldButton} from './TranslateFieldButton';

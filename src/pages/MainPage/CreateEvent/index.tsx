@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {FileWithPath, useDropzone} from 'react-dropzone';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import {CheckboxElement, TextFieldElement} from 'react-hook-form-mui';
@@ -32,13 +33,18 @@ import {
   RhfDateSelector,
   RhfNumberInput,
   RhfTimeField,
+  TranslateFieldButton,
 } from '@shared/components';
+import {createEmptyTranslationDict} from '@shared/helpers';
+import {TranslationDict} from '@shared/types';
 import {
+  dummyFunc,
   numberTransformEmptyStringToNull,
   stringDefinedButCanBeEmpty,
   stringify,
 } from '@shared/utils';
 import {Header, openGeoFilterDialog} from '@widgets/common';
+import {openAddTranslationsDialog} from '@widgets/common/AddTranslationsDialog';
 import {Row} from './Row';
 
 import {COLOR__WHITE} from '@/theme/colors';
@@ -99,6 +105,16 @@ export const CreateEventPage = () => {
   const {enqueueSnackbar} = useSnackbar();
   const navigate = useNavigate();
 
+  const [nameTranslations, setNameTranslations] = useState<TranslationDict>(
+    () => {
+      return createEmptyTranslationDict();
+    },
+  );
+  const [descriptionTranslations, setDescriptionTranslations] =
+    useState<TranslationDict>(() => {
+      return createEmptyTranslationDict();
+    });
+
   const {control, handleSubmit, setValue, trigger} = useForm({
     mode: 'onBlur',
     resolver: yupResolver(v8nSchema),
@@ -132,6 +148,8 @@ export const CreateEventPage = () => {
     },
   });
 
+  const currentName = useWatch({control, name: 'name'});
+  const currentDescription = useWatch({control, name: 'description'});
   const currentCategory = useWatch({control, name: 'category'});
   const currentIconFile = useWatch({control, name: 'iconFile'});
 
@@ -163,7 +181,11 @@ export const CreateEventPage = () => {
   }, [currentCategory?.id]);
 
   const onSubmit = (values: FormValues): void => {
-    const msg = stringify(values);
+    const msg = stringify({
+      ...values,
+      nameTranslations,
+      descriptionTranslations,
+    });
     console.log(msg);
 
     enqueueSnackbar(`You entered:\n${msg}`, {
@@ -183,25 +205,67 @@ export const CreateEventPage = () => {
           <Grid container rowSpacing={1} columnSpacing={4} mt={2}>
             <Grid size={4}>
               <Stack spacing={5}>
-                <TextFieldElement
-                  name="name"
-                  label="Name"
-                  control={control}
-                  autoFocus
-                  placeholder="name"
-                />
+                <Box display="flex" alignItems="center" gap={2}>
+                  <TextFieldElement
+                    name="name"
+                    label="Name"
+                    control={control}
+                    autoFocus
+                    placeholder="name"
+                    sx={{
+                      flex: 1,
+                    }}
+                  />
 
-                <TextFieldElement
-                  name="description"
-                  label="Description"
-                  control={control}
-                  placeholder="description"
-                  multiline
-                  rows={4}
-                  InputProps={{
-                    inputComponent: 'textarea',
-                  }}
-                />
+                  <TranslateFieldButton
+                    onClick={() => {
+                      void openAddTranslationsDialog({
+                        fieldName: 'Name',
+                        initialTranslations: nameTranslations,
+                        enTrans: currentName,
+                      })
+                        .then((translations: TranslationDict) => {
+                          setValue('name', translations.English);
+                          setNameTranslations(translations);
+                          return;
+                        })
+                        .catch(dummyFunc);
+                    }}
+                  />
+                </Box>
+
+                <Box display="flex" alignItems="center" gap={2}>
+                  <TextFieldElement
+                    name="description"
+                    label="Description"
+                    control={control}
+                    placeholder="description"
+                    multiline
+                    rows={4}
+                    InputProps={{
+                      inputComponent: 'textarea',
+                    }}
+                    sx={{
+                      flex: 1,
+                    }}
+                  />
+
+                  <TranslateFieldButton
+                    onClick={() => {
+                      void openAddTranslationsDialog({
+                        fieldName: 'Description',
+                        initialTranslations: descriptionTranslations,
+                        enTrans: currentDescription,
+                      })
+                        .then((translations: TranslationDict) => {
+                          setValue('description', translations.English);
+                          setDescriptionTranslations(translations);
+                          return;
+                        })
+                        .catch(dummyFunc);
+                    }}
+                  />
+                </Box>
 
                 <Row>
                   <RhfDateSelector
