@@ -10,6 +10,7 @@ interface Props extends InstanceProps<TranslationDict, void> {
   enTrans: string;
   initialTranslations: TranslationDict;
   fieldName: string;
+  isMultiLineText?: boolean;
 }
 
 const AddTranslationsDialog: FC<Props> = ({
@@ -18,6 +19,7 @@ const AddTranslationsDialog: FC<Props> = ({
   fieldName,
   onReject,
   onResolve,
+  isMultiLineText = false,
 }) => {
   const [translations, setTranslations] = useState<TranslationDict>(() => {
     const trans = {...initialTranslations};
@@ -53,6 +55,7 @@ const AddTranslationsDialog: FC<Props> = ({
                 lang={lang}
                 trans={translations[lang]}
                 onChange={handleLangTransChange}
+                isMultiLineText={isMultiLineText}
               />
             );
           })}

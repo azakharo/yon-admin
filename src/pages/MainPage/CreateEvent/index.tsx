@@ -256,6 +256,7 @@ export const CreateEventPage = () => {
                         fieldName: 'Description',
                         initialTranslations: descriptionTranslations,
                         enTrans: currentDescription,
+                        isMultiLineText: true,
                       })
                         .then((translations: TranslationDict) => {
                           setValue('description', translations.English);
