@@ -44,7 +44,10 @@ const AddTranslationsDialog: FC<Props> = ({
 
   return (
     <Dialog onClose={handleCancel} open={true}>
-      <DialogTitle title={`Add translations for "${fieldName}"`} />
+      <DialogTitle
+        title={`Add translations for "${fieldName}"`}
+        onClose={handleCancel}
+      />
 
       <DialogContent sx={{width: 600, maxWidth: '90vw'}}>
         <Stack maxHeight="60vh" sx={{overflowY: 'auto'}} mt={2} spacing={2}>
