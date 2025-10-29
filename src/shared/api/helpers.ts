@@ -48,6 +48,21 @@ export const getErrorMessageFromApiError = (error: AxiosError): string => {
   return errorMessage1 || errorMessage2 || '';
 };
 
+export const getErrorMessageFromCreateEventError = (
+  error: AxiosError,
+): string => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const detail = error.response?.data?.detail;
+
+  // Здесь не описываю detail в Typescript, просто проверяю наличие в runtime
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const errorMessage1 = detail?.[0]?.msg as string;
+
+  return errorMessage1 || '';
+};
+
 // Returns 0 if the passed string is invalid or null
 export const parseBackendNumberString = (str: string | null): number => {
   if (isNull(str)) {

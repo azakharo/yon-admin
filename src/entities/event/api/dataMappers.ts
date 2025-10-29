@@ -1,4 +1,4 @@
-import {getDateFromIsoString} from '@shared/api';
+import {getBackendCurrencyValue, getDateFromIsoString} from '@shared/api';
 import {Category} from '../../category';
 import {Event} from '../types';
 import {EventOnBackend} from './backendTypes';
@@ -31,9 +31,9 @@ export const mapEventFromBackend = (
   startDate: getDateFromIsoString(start_date),
   isLive: is_live,
   isFavorite: is_favorite,
-  yesPrice: yes_price ?? 0,
+  yesPrice: getBackendCurrencyValue(yes_price) ?? 0,
   yesText: yes_text ?? '',
-  noPrice: no_price ?? 0,
+  noPrice: getBackendCurrencyValue(no_price) ?? 0,
   noText: no_text ?? '',
   tradingVolume: trading_volume,
 });

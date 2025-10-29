@@ -1,6 +1,12 @@
 import isEmpty from 'lodash/isEmpty';
 
-import {axi, GetListOutput, GetListParams} from '@shared/api';
+import {
+  axi,
+  createBackendDateTimeString,
+  GetListOutput,
+  GetListParams,
+} from '@shared/api';
+import {TranslationDict} from '@shared/types';
 import {validateData} from '@shared/utils';
 import {getCategories} from '../../category';
 import {Event} from '../types';
@@ -64,4 +70,40 @@ export const getEvents = async ({
     total,
     totalPages: total_pages,
   };
+};
+
+export interface CreateEventParams {
+  nameTrans: TranslationDict;
+  descriptionTrans: TranslationDict;
+  startDate: Date;
+  endDate: Date;
+  yesPrice: number;
+  noPrice: number;
+  subCategoryId: string;
+  parentId: string | null;
+  isPromotionNeeded: boolean;
+}
+
+export const createEvent = ({
+  nameTrans,
+  descriptionTrans,
+  startDate,
+  endDate,
+  yesPrice,
+  noPrice,
+  subCategoryId,
+  parentId,
+  isPromotionNeeded,
+}: CreateEventParams): Promise<void> => {
+  return axi.post('/admin/events', {
+    name: nameTrans,
+    description: descriptionTrans,
+    start_datetime: createBackendDateTimeString(startDate),
+    end_datetime: createBackendDateTimeString(endDate),
+    yes_cost: yesPrice,
+    no_cost: noPrice,
+    sub_category_id: subCategoryId,
+    parent_id: parentId,
+    need_promotion: isPromotionNeeded,
+  });
 };

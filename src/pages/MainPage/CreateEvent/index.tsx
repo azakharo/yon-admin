@@ -15,6 +15,7 @@ import {
   Typography,
 } from '@mui/material';
 import useUpdateEffect from 'ahooks/es/useUpdateEffect';
+import {AxiosError} from 'axios';
 import isEmpty from 'lodash/isEmpty';
 import isNil from 'lodash/isNil';
 import {useSnackbar} from 'notistack';
@@ -26,6 +27,8 @@ import {
   SubCategory,
   SubCategorySelect,
 } from '@entities/category';
+import {useCreateEvent} from '@entities/event';
+import {getErrorMessageFromCreateEventError} from '@shared/api';
 import {
   CardBox,
   FileToUploadThumbnail,
@@ -36,12 +39,12 @@ import {
   TranslateFieldButton,
 } from '@shared/components';
 import {createEmptyTranslationDict} from '@shared/helpers';
-import {TranslationDict} from '@shared/types';
+import {SupportedLanguage, TranslationDict} from '@shared/types';
 import {
   dummyFunc,
   numberTransformEmptyStringToNull,
+  setTimeFromAnotherDate,
   stringDefinedButCanBeEmpty,
-  stringify,
 } from '@shared/utils';
 import {Header, openGeoFilterDialog} from '@widgets/common';
 import {openAddTranslationsDialog} from '@widgets/common/AddTranslationsDialog';
@@ -64,16 +67,13 @@ const v8nSchema = object().shape({
     .required()
     .nullable()
     .notOneOf([null], 'required'),
-  startDate: mixed<Date>().required().nullable(),
-  startTime: mixed<Date>().required().nullable(),
+  startDate: mixed<Date>().required(),
+  startTime: mixed<Date>().required(),
   endDate: mixed<Date>().required(),
   endTime: mixed<Date>().required(),
   yesPrice: priceSchema,
   noPrice: priceSchema,
-  iconFile: mixed<FileWithPath>()
-    .required()
-    .nullable()
-    .notOneOf([null], 'required'),
+  iconFile: mixed<FileWithPath>().required().nullable(),
   broadcastLink: stringDefinedButCanBeEmpty,
   sourceOfTruth: string().required(),
   rules: string().required(),
@@ -81,7 +81,6 @@ const v8nSchema = object().shape({
   stat: stringDefinedButCanBeEmpty,
   spread: number().required(),
   geoTags: array().of(string().required()).required(),
-  hasParent: boolean().required(),
   parentEvent: stringDefinedButCanBeEmpty,
   parentEventTab: stringDefinedButCanBeEmpty,
   isPromoted: boolean().required(),
@@ -123,8 +122,6 @@ export const CreateEventPage = () => {
       description: '',
       category: null,
       subCategory: null,
-      startDate: null,
-      startTime: null,
       yesPrice: 0,
       noPrice: 0,
       iconFile: null,
@@ -135,8 +132,7 @@ export const CreateEventPage = () => {
       stat: 'text',
       spread: 0.1,
       geoTags: [],
-      hasParent: false,
-      parentEvent: 'parent event',
+      parentEvent: '',
       parentEventTab: 'parent event tab',
       isPromoted: false,
       v8nType: 'auto',
@@ -180,20 +176,52 @@ export const CreateEventPage = () => {
     }
   }, [currentCategory?.id]);
 
-  const onSubmit = (values: FormValues): void => {
-    const msg = stringify({
-      ...values,
-      nameTranslations,
-      descriptionTranslations,
-    });
-    console.log(msg);
+  const {mutate: createEvent, isPending: isCreatingEvent} = useCreateEvent();
 
-    enqueueSnackbar(`You entered:\n${msg}`, {
-      variant: 'info',
-      style: {
-        whiteSpace: 'pre-line',
+  const onSubmit = ({
+    name,
+    description,
+    startDate,
+    startTime,
+    endDate,
+    endTime,
+    yesPrice,
+    noPrice,
+    subCategory,
+    parentEvent,
+    isPromoted,
+  }: FormValues): void => {
+    createEvent(
+      {
+        nameTrans: {...nameTranslations, [SupportedLanguage.English]: name},
+        descriptionTrans: {
+          ...descriptionTranslations,
+          [SupportedLanguage.English]: description,
+        },
+        startDate: setTimeFromAnotherDate(startDate, startTime),
+        endDate: setTimeFromAnotherDate(endDate, endTime),
+        yesPrice,
+        noPrice,
+        subCategoryId: subCategory?.id ?? '',
+        parentId: parentEvent || null,
+        isPromotionNeeded: isPromoted,
       },
-    });
+      {
+        onSuccess: () => {
+          navigate(-1);
+        },
+        onError: err => {
+          let errMsg = '';
+          if (err instanceof AxiosError) {
+            errMsg = getErrorMessageFromCreateEventError(err);
+          }
+
+          enqueueSnackbar(`Could not create event ${errMsg}`, {
+            variant: 'error',
+          });
+        },
+      },
+    );
   };
 
   return (
@@ -225,7 +253,10 @@ export const CreateEventPage = () => {
                         enTrans: currentName,
                       })
                         .then((translations: TranslationDict) => {
-                          setValue('name', translations.English);
+                          setValue(
+                            'name',
+                            translations[SupportedLanguage.English],
+                          );
                           setNameTranslations(translations);
                           return;
                         })
@@ -259,7 +290,10 @@ export const CreateEventPage = () => {
                         isMultiLineText: true,
                       })
                         .then((translations: TranslationDict) => {
-                          setValue('description', translations.English);
+                          setValue(
+                            'description',
+                            translations[SupportedLanguage.English],
+                          );
                           setDescriptionTranslations(translations);
                           return;
                         })
@@ -304,6 +338,7 @@ export const CreateEventPage = () => {
                     label="Broadcast link"
                     control={control}
                     placeholder="link"
+                    disabled
                   />
 
                   <TextFieldElement
@@ -311,6 +346,7 @@ export const CreateEventPage = () => {
                     label="Source of truth"
                     control={control}
                     placeholder="link"
+                    disabled
                   />
                 </Row>
 
@@ -333,6 +369,7 @@ export const CreateEventPage = () => {
                     name="spread"
                     label="Spread"
                     control={control}
+                    disabled
                   />
                 </Row>
               </Stack>
@@ -375,6 +412,7 @@ export const CreateEventPage = () => {
                   InputProps={{
                     inputComponent: 'textarea',
                   }}
+                  disabled
                 />
               </Stack>
 
@@ -414,7 +452,11 @@ export const CreateEventPage = () => {
                     </Box>
 
                     {!currentIconFile && (
-                      <Button onClick={openFileSelectDialog} variant="outlined">
+                      <Button
+                        onClick={openFileSelectDialog}
+                        variant="outlined"
+                        disabled
+                      >
                         Select
                       </Button>
                     )}
@@ -441,6 +483,7 @@ export const CreateEventPage = () => {
                   InputProps={{
                     inputComponent: 'textarea',
                   }}
+                  disabled
                 />
               </Stack>
             </Grid>
@@ -457,17 +500,7 @@ export const CreateEventPage = () => {
                   InputProps={{
                     inputComponent: 'textarea',
                   }}
-                />
-              </Row>
-
-              <Row position="relative" left={-16} mt={2}>
-                <CheckboxElement
-                  name="hasParent"
-                  label="Has parent?"
-                  control={control}
-                  labelProps={{
-                    labelPlacement: 'start',
-                  }}
+                  disabled
                 />
               </Row>
 
@@ -484,6 +517,7 @@ export const CreateEventPage = () => {
                   label="Parent event tab"
                   control={control}
                   placeholder="tab name"
+                  disabled
                 />
               </Row>
 
@@ -504,6 +538,7 @@ export const CreateEventPage = () => {
                   labelProps={{
                     labelPlacement: 'start',
                   }}
+                  disabled
                 />
               </Row>
 
@@ -513,6 +548,7 @@ export const CreateEventPage = () => {
                   label="Validation type"
                   control={control}
                   placeholder="auto or manual"
+                  disabled
                 />
 
                 <TextFieldElement
@@ -520,6 +556,7 @@ export const CreateEventPage = () => {
                   label="Data source"
                   control={control}
                   placeholder="link"
+                  disabled
                 />
               </Row>
 
@@ -529,6 +566,7 @@ export const CreateEventPage = () => {
                   label="Event permission"
                   control={control}
                   placeholder="who can participate"
+                  disabled
                 />
 
                 <TextFieldElement
@@ -536,6 +574,7 @@ export const CreateEventPage = () => {
                   label="Event visibility"
                   control={control}
                   placeholder="hidden for whom"
+                  disabled
                 />
               </Row>
 
@@ -565,6 +604,7 @@ export const CreateEventPage = () => {
                           })
                           .catch(() => {});
                       }}
+                      disabled
                     >
                       Select
                     </Button>
@@ -586,6 +626,7 @@ export const CreateEventPage = () => {
                   label="Youtube video ID"
                   control={control}
                   placeholder="id"
+                  disabled
                 />
               </Box>
             </Stack>
@@ -603,7 +644,7 @@ export const CreateEventPage = () => {
               Back
             </Button>
 
-            <Button type="submit" sx={{flex: 2}}>
+            <Button type="submit" sx={{flex: 2}} disabled={isCreatingEvent}>
               Create event
             </Button>
           </Row>

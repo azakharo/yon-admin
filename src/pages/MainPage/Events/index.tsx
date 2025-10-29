@@ -14,7 +14,7 @@ import {
   ROUTE__CREATE_EVENT,
   ROUTE__EVENT_DETAILS,
 } from '@shared/constants';
-import {useNotImplementedToast} from '@shared/hooks';
+import {useNotImplementedToast, useUrlState} from '@shared/hooks';
 
 const columns: MRT_ColumnDef<Event>[] = [
   {
@@ -65,10 +65,24 @@ const columns: MRT_ColumnDef<Event>[] = [
 
 const localStorageKey = 'eventTable';
 
+type UrlState = {
+  pageIndex: number;
+  pageSize: number;
+};
+
 export const EventsPage = () => {
   const navigate = useNavigate();
   const showNotImplemented = useNotImplementedToast();
-  const {data, isPending, error} = useGetEvents({page: 1, pageSize: 10});
+
+  const {urlState, setUrl} = useUrlState<UrlState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const {data, isPending, error} = useGetEvents({
+    page: urlState.pageIndex + 1,
+    pageSize: urlState.pageSize,
+  });
 
   return (
     <MrTable
@@ -103,8 +117,16 @@ export const EventsPage = () => {
       enableColumnDragging
       localStorageKeyForSettings={localStorageKey}
       enableHiding
+      /////////////////////////////
+      // pagination + state
+      enablePagination
+      manualPagination
+      onPaginationChange={setUrl}
+      rowCount={data?.total ?? 0}
+      /////////////////////////////
       state={{
         isLoading: isPending,
+        pagination: urlState,
       }}
       // enableColumnPinning
       // initialState={{

@@ -47,6 +47,7 @@
             }
           }
         },
+        "deprecated": true,
         "security": [
           {
             "HTTPBearer": []
@@ -61,6 +62,7 @@
         ],
         "summary": "Webhook Sumsub Handler",
         "operationId": "webhook_sumsub_handler_v1_kyc_sumsub_webhook_post",
+        "deprecated": true,
         "parameters": [
           {
             "name": "x-payload-digest",
@@ -154,6 +156,185 @@
                           ],
                           "msg": "KYC applicant not found",
                           "type": "KYCApplicantNotFoundException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/kyc/didit/session": {
+      "post": {
+        "tags": [
+          "kyc"
+        ],
+        "summary": "Didit Session",
+        "operationId": "didit_session_v1_kyc_didit_session_post",
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiditSessionResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/v1/kyc/didit/webhook": {
+      "post": {
+        "tags": [
+          "kyc"
+        ],
+        "summary": "Webhook Didit Handler",
+        "operationId": "webhook_didit_handler_v1_kyc_didit_webhook_post",
+        "parameters": [
+          {
+            "name": "X-Signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Signature"
+            }
+          },
+          {
+            "name": "X-Timestamp",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "X-Timestamp"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiditWebhookRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "KYC applicant not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "KYCApplicantNotFoundException": {
+                    "summary": "KYC applicant not found",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "KYC applicant not found",
+                          "type": "KYCApplicantNotFoundException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Didit status unhandled",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "DiditStatusUnhandledException": {
+                    "summary": "Didit status unhandled",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Didit status unhandled",
+                          "type": "DiditStatusUnhandledException"
                         }
                       ]
                     }
@@ -856,6 +1037,150 @@
             "HTTPBearer": []
           }
         ]
+      }
+    },
+    "/v1/auth/google": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Auth By Google",
+        "operationId": "auth_by_google_v1_auth_google_post",
+        "parameters": [
+          {
+            "name": "x_forwarded_for",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X Forwarded For"
+            }
+          },
+          {
+            "name": "cf_ip_country",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cf Ip Country"
+            }
+          },
+          {
+            "name": "x_client_version",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X Client Version"
+            }
+          },
+          {
+            "name": "user_agent",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "User Agent"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GoogleAuthRequestDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokensSchema"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid token",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "InvalidIdTokenException": {
+                    "summary": "Invalid token",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            "body -> id_token"
+                          ],
+                          "msg": "Invalid token",
+                          "type": "InvalidIdTokenException"
+                        }
+                      ]
+                    }
+                  },
+                  "InvalidAuthException": {
+                    "summary": "Invalid auth",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Invalid auth",
+                          "type": "InvalidAuthException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/v1/profiles": {
@@ -5010,6 +5335,7 @@
         ],
         "summary": "Referral History",
         "operationId": "referral_history_v1_rewards_referral_history_get",
+        "deprecated": true,
         "security": [
           {
             "HTTPBearer": []
@@ -5082,6 +5408,152 @@
             }
           }
         }
+      }
+    },
+    "/v1/rewards/referral/stats/history": {
+      "get": {
+        "tags": [
+          "rewards"
+        ],
+        "summary": "User Referral Stats History",
+        "operationId": "user_referral_stats_history_v1_rewards_referral_stats_history_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "type_",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/ReferralStatsHistoryTypeEnum"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Type "
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Per Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedReferralStatsHistoryDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/rewards/referral/stats/progress": {
+      "get": {
+        "tags": [
+          "rewards"
+        ],
+        "summary": "User Referral Stats Progress",
+        "operationId": "user_referral_stats_progress_v1_rewards_referral_stats_progress_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferralProgressDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
       }
     },
     "/v1/filters": {
@@ -6873,6 +7345,124 @@
         ]
       }
     },
+    "/v1/topics/{topic_id}/trending": {
+      "get": {
+        "tags": [
+          "topics"
+        ],
+        "summary": "Get Event By Trending",
+        "operationId": "get_event_by_trending_v1_topics__topic_id__trending_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "topic_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Topic Id"
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/IntervalEnum",
+              "default": "ALL"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Per Page"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Client's preferred language(s)",
+              "example": "en-US,en;q=0.9",
+              "title": "Accept-Language"
+            },
+            "description": "Client's preferred language(s)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedEventResponseDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/topics/{topic_id}": {
       "get": {
         "tags": [
@@ -7568,6 +8158,76 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ActivePicksSummaryDTO"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/portfolio/events/{event_id}/counter/orders": {
+      "get": {
+        "tags": [
+          "portfolio"
+        ],
+        "summary": "Get Events Orders Count",
+        "operationId": "get_events_orders_count_v1_portfolio_events__event_id__counter_orders_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "event_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Event Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersCountResponseDTO"
                 }
               }
             }
@@ -8589,6 +9249,98 @@
         }
       }
     },
+    "/v1/admin/events": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "summary": "Create Event",
+        "operationId": "create_event_v1_admin_events_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EventRequestAdminDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid authentication token.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UnauthorizedException": {
+                    "summary": "Missing or invalid authentication token.",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "Missing or invalid authentication token.",
+                          "type": "UnauthorizedException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "UserNotFoundException": {
+                    "summary": "User not found",
+                    "value": {
+                      "detail": [
+                        {
+                          "loc": [
+                            ""
+                          ],
+                          "msg": "User not found",
+                          "type": "UserNotFoundException"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
     "/health/liveness": {
       "get": {
         "tags": [
@@ -8639,11 +9391,25 @@
       "ActivePicksSummaryDTO": {
         "properties": {
           "total_invested": {
-            "$ref": "#/components/schemas/TotalInvested",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TotalInvested"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Summary of all invested funds breakdown"
           },
           "live_profit": {
-            "$ref": "#/components/schemas/LiveProfit",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Current live profit/loss information for active picks"
           },
           "exit_profit": {
@@ -8651,16 +9417,55 @@
             "description": "Profit information from positions closed before resolution"
           },
           "potential_profit": {
-            "$ref": "#/components/schemas/PotentialProfit",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PotentialProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Potential profit if all active positions win"
+          },
+          "total_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Profit",
+            "description": "Total profit from all orders of resolved event"
+          },
+          "picks_profit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PickProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Profit from picks of resolved orders"
+          },
+          "refunded": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refunded",
+            "description": "Amount of funds refunded for canceled events"
           }
         },
         "type": "object",
         "required": [
-          "total_invested",
-          "live_profit",
-          "exit_profit",
-          "potential_profit"
+          "exit_profit"
         ],
         "title": "ActivePicksSummaryDTO"
       },
@@ -8904,7 +9709,7 @@
             ],
             "title": "Profit"
           },
-          "cancelled": {
+          "canceled": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/CancelTypeEnum"
@@ -8913,6 +9718,28 @@
                 "type": "null"
               }
             ]
+          },
+          "picks_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Picks Profit"
+          },
+          "settled_value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Settled Value"
           }
         },
         "type": "object",
@@ -8953,19 +9780,31 @@
         "properties": {
           "access_token": {
             "type": "string",
-            "title": "Access Token"
+            "title": "Access Token",
+            "examples": [
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNmJhNjg0MC0zMjg5LTQ0OTItYjQxNS1hNTU3NTlmM2U0MTEiLCJpc3MiOiJ5b24tYXV0aCIsImF1ZCI6Inlvbi1hdXRoIiwidG9rZW5fdHlwZSI6ImFjY2Vzc190b2tlbiIsImp0aSI6ImQ0ZjJhNWM5LWYyM2QtNDMyMC05YzRmLWJhODBiZGZkODVjZCIsImlhdCI6MTc2MDk0MzUzOSwiZXhwIjoxNzYxMDI5OTM5LCJjaGFubmVscyI6WyJhdXRoI2Y2YmE2ODQwLTMyODktNDQ5Mi1iNDE1LWE1NTc1OWYzZTQxMSIsIm5vdGlmaWNhdGlvbiNmNmJhNjg0MC0zMjg5LTQ0OTItYjQxNS1hNTU3NTlmM2U0MTEiXX0.9uk6svQntPGp4EBBnjvCTm1m27O0LrrbjWVGpK3cMMM"
+            ]
           },
           "token_type": {
             "type": "string",
-            "title": "Token Type"
+            "title": "Token Type",
+            "examples": [
+              "Bearer"
+            ]
           },
           "expires_in": {
             "type": "integer",
-            "title": "Expires In"
+            "title": "Expires In",
+            "examples": [
+              86400
+            ]
           },
           "refresh_token": {
             "type": "string",
-            "title": "Refresh Token"
+            "title": "Refresh Token",
+            "examples": [
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmNmJhNjg0MC0zMjg5LTQ0OTItYjQxNS1hNTU3NTlmM2U0MTEiLCJpc3MiOiJ5b24tYXV0aCIsImF1ZCI6Inlvbi1hdXRoIiwidG9rZW5fdHlwZSI6InJlZnJlc2hfdG9rZW4iLCJqdGkiOiJkNGYyYTVjOS1mMjNkLTQzMjAtOWM0Zi1iYTgwYmRmZDg1Y2QiLCJpYXQiOjE3NjA5NDM1MzksImV4cCI6MTc2MjIzOTUzOX0.K0yHTSZYHdVTaj3Wm3kJ5q85O5R-0Dlsq07dVXSX98U"
+            ]
           }
         },
         "type": "object",
@@ -8975,15 +9814,7 @@
           "expires_in",
           "refresh_token"
         ],
-        "title": "AuthTokensSchema",
-        "examples": [
-          {
-            "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNzJlODJiMC04YWMzLTQ4OTgtOGJmNi04ZmNkMzY3ZDY2MTUiLCJpc3MiOiJ5b24tYXV0aCIsImF1ZCI6Inlvbi1hdXRoIiwidG9rZW5fdHlwZSI6ImFjY2Vzc190b2tlbiIsImp0aSI6ImFhNDhmNzYxLTU0NmEtANDUyYy1hYTY4LTU4NzZhYjczNDM3NCIsImlhdCI6MTc1MjM1ODMzNSwiZXhwIjoxNzUyNDQ0NzM1LCJjaGFubmVscyI6WyJhdXRoI2E3MmU4MmIwLThhYzMtNDg5OC04YmY2LThemY2QzNjdkNjYxNSIsIm5vdGlmaWNhdGlvbiNhNzJlODJiMC04YWMzLTQ4OTgtOGJmNi04ZmNkMzY3ZDY2MTUiXX0.OU1q5LkROqEJpSliYuJs7ufwJyPw1q0sLKyCCM3Eo0c",
-            "expires_in": 86400,
-            "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNzJlODJiMC04YWMzLTQ4OTgtOGJmNi04ZmNkMzY3ZDY2MTUiLCJpc3MiOiJ5b24tYXV0aCIsImF1ZCI6Inlvbi1hdXRoIiwidG9rZW5fdHlwZSI6InJlZnJlc2hfdG9rZW4iLCJqdGkiOiJhYTQ4Zjc2MS01ANDZhLTQ1MmMtYWE2OC01ODc2YWI3MzQzNzQiLCJpYXQiOjE3NTIzNTgzMzUsImV4cCI6MTc1MzY1ANDMzNX0.Z_W8eMuchYXJHCMO8L3P3UKo_0FlSW_hGbhqiSo8fDDA",
-            "token_type": "Bearer"
-          }
-        ]
+        "title": "AuthTokensSchema"
       },
       "AutoCancelDTO": {
         "properties": {
@@ -9374,6 +10205,105 @@
         ],
         "title": "CategoryRequestDTO"
       },
+      "DiditSessionResponseDTO": {
+        "properties": {
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "title": "DiditSessionResponseDTO"
+      },
+      "DiditStatusEnum": {
+        "type": "string",
+        "enum": [
+          "Approved",
+          "Declined",
+          "In Review",
+          "In Progress",
+          "Not Started"
+        ],
+        "title": "DiditStatusEnum"
+      },
+      "DiditWebhookRequestDTO": {
+        "properties": {
+          "webhook_type": {
+            "$ref": "#/components/schemas/DiditWebhookTypeEnum"
+          },
+          "session_id": {
+            "type": "string",
+            "title": "Session Id"
+          },
+          "status": {
+            "$ref": "#/components/schemas/DiditStatusEnum"
+          },
+          "decision": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Decision"
+          },
+          "vendor_data": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vendor Data"
+          },
+          "workflow_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workflow Id"
+          },
+          "metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Metadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "webhook_type",
+          "session_id",
+          "status"
+        ],
+        "title": "DiditWebhookRequestDTO"
+      },
+      "DiditWebhookTypeEnum": {
+        "type": "string",
+        "enum": [
+          "data.updated",
+          "status.updated"
+        ],
+        "title": "DiditWebhookTypeEnum"
+      },
       "EntityTypeEnum": {
         "type": "string",
         "enum": [
@@ -9399,6 +10329,12 @@
           "category_name": {
             "type": "string",
             "title": "Category Name"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EventStatusEnum"
+          },
+          "result": {
+            "$ref": "#/components/schemas/EventResultEnum"
           },
           "sub_categories": {
             "items": {
@@ -9465,6 +10401,11 @@
             "type": "integer",
             "title": "Trading Volume"
           },
+          "holders": {
+            "type": "integer",
+            "title": "Holders",
+            "default": 0
+          },
           "category_logo_url": {
             "anyOf": [
               {
@@ -9497,6 +10438,8 @@
           "name",
           "description",
           "category_name",
+          "status",
+          "result",
           "sub_categories",
           "start_date",
           "is_favorite",
@@ -9595,6 +10538,97 @@
         ],
         "title": "EventOrderbookResponseDTO"
       },
+      "EventRequestAdminDTO": {
+        "properties": {
+          "name": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/LanguageEnum"
+            },
+            "type": "object",
+            "title": "Name",
+            "description": "Deprecated fields: fil",
+            "examples": [
+              {
+                "en": "name",
+                "ru": "название"
+              }
+            ]
+          },
+          "description": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/LanguageEnum"
+            },
+            "type": "object",
+            "title": "Description",
+            "description": "Deprecated fields: fil",
+            "examples": [
+              {
+                "en": "description",
+                "ru": "описание"
+              }
+            ]
+          },
+          "start_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Datetime"
+          },
+          "end_datetime": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Datetime"
+          },
+          "yes_cost": {
+            "type": "integer",
+            "maximum": 99.0,
+            "minimum": 1.0,
+            "title": "Yes Cost"
+          },
+          "no_cost": {
+            "type": "integer",
+            "maximum": 99.0,
+            "minimum": 1.0,
+            "title": "No Cost"
+          },
+          "sub_category_id": {
+            "type": "string",
+            "title": "Sub Category Id"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "need_promotion": {
+            "type": "boolean",
+            "title": "Need Promotion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "description",
+          "start_datetime",
+          "end_datetime",
+          "yes_cost",
+          "no_cost",
+          "sub_category_id",
+          "need_promotion"
+        ],
+        "title": "EventRequestAdminDTO"
+      },
       "EventResponseDTO": {
         "properties": {
           "id": {
@@ -9612,6 +10646,12 @@
           "category_name": {
             "type": "string",
             "title": "Category Name"
+          },
+          "status": {
+            "$ref": "#/components/schemas/EventStatusEnum"
+          },
+          "result": {
+            "$ref": "#/components/schemas/EventResultEnum"
           },
           "sub_categories": {
             "items": {
@@ -9678,6 +10718,11 @@
             "type": "integer",
             "title": "Trading Volume"
           },
+          "holders": {
+            "type": "integer",
+            "title": "Holders",
+            "default": 0
+          },
           "category_logo_url": {
             "anyOf": [
               {
@@ -9706,6 +10751,8 @@
           "name",
           "description",
           "category_name",
+          "status",
+          "result",
           "sub_categories",
           "start_date",
           "is_favorite",
@@ -9715,6 +10762,28 @@
           "trading_volume"
         ],
         "title": "EventResponseDTO"
+      },
+      "EventResultEnum": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "waiting_for_result",
+          "disputed",
+          "null"
+        ],
+        "title": "EventResultEnum"
+      },
+      "EventStatusEnum": {
+        "type": "string",
+        "enum": [
+          "active",
+          "closed",
+          "waiting_for_result",
+          "disputed",
+          "null"
+        ],
+        "title": "EventStatusEnum"
       },
       "ExitProfit": {
         "properties": {
@@ -9880,6 +10949,20 @@
         ],
         "title": "GeoFilterDTO"
       },
+      "GoogleAuthRequestDTO": {
+        "properties": {
+          "id_token": {
+            "type": "string",
+            "title": "Id Token",
+            "description": "Google ID token from client"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id_token"
+        ],
+        "title": "GoogleAuthRequestDTO"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -9892,6 +10975,38 @@
         },
         "type": "object",
         "title": "HTTPValidationError"
+      },
+      "IntervalEnum": {
+        "type": "string",
+        "enum": [
+          "ALL",
+          "10min",
+          "20min"
+        ],
+        "title": "IntervalEnum"
+      },
+      "InvestedFunds": {
+        "properties": {
+          "real": {
+            "type": "integer",
+            "title": "Real"
+          },
+          "promo": {
+            "type": "integer",
+            "title": "Promo"
+          },
+          "investment": {
+            "type": "integer",
+            "title": "Investment"
+          }
+        },
+        "type": "object",
+        "required": [
+          "real",
+          "promo",
+          "investment"
+        ],
+        "title": "InvestedFunds"
       },
       "KYCStatusDTO": {
         "properties": {
@@ -9913,9 +11028,23 @@
           "on_review",
           "awaiting_user",
           "completed",
-          "expired"
+          "expired",
+          "declined"
         ],
         "title": "KYCStatusEnum"
+      },
+      "LanguageEnum": {
+        "type": "string",
+        "enum": [
+          "en",
+          "pt",
+          "tl",
+          "fil",
+          "es",
+          "ru"
+        ],
+        "title": "LanguageEnum",
+        "description": "Used standard ISO 639-1\nList of ISO 639 language codes - https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes"
       },
       "LeaderboardEntryDTO": {
         "properties": {
@@ -9956,7 +11085,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "dce40dee-a6e6-4d27-8fb2-ed89d4aa23a5"
+              "31a8f5c4-f84a-46a7-9092-5412e09a53d4"
             ]
           },
           "side": {
@@ -10053,19 +11182,17 @@
         "properties": {
           "status": {
             "type": "string",
-            "title": "Status"
+            "title": "Status",
+            "examples": [
+              "Logged out"
+            ]
           }
         },
         "type": "object",
         "required": [
           "status"
         ],
-        "title": "LogOutSchema",
-        "examples": [
-          {
-            "access_token": "Logged out"
-          }
-        ]
+        "title": "LogOutSchema"
       },
       "MarketOrderRequestDTO": {
         "properties": {
@@ -10075,7 +11202,7 @@
             "title": "Ik",
             "description": "Client-generated idempotency key — must be a unique random string per request",
             "examples": [
-              "dce40dee-a6e6-4d27-8fb2-ed89d4aa23a5"
+              "31a8f5c4-f84a-46a7-9092-5412e09a53d4"
             ]
           },
           "side": {
@@ -10527,6 +11654,37 @@
         ],
         "title": "OrderTypeEnum"
       },
+      "OrdersCountResponseDTO": {
+        "properties": {
+          "matched": {
+            "type": "integer",
+            "title": "Matched",
+            "default": 0
+          },
+          "unmatched": {
+            "type": "integer",
+            "title": "Unmatched",
+            "default": 0
+          },
+          "exiting": {
+            "type": "integer",
+            "title": "Exiting",
+            "default": 0
+          },
+          "exited": {
+            "type": "integer",
+            "title": "Exited",
+            "default": 0
+          },
+          "canceled": {
+            "type": "integer",
+            "title": "Canceled",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "OrdersCountResponseDTO"
+      },
       "PaginatedEventResponseDTO": {
         "properties": {
           "array": {
@@ -10851,6 +12009,42 @@
         ],
         "title": "PaginatedReferralHistoryDTO"
       },
+      "PaginatedReferralStatsHistoryDTO": {
+        "properties": {
+          "array": {
+            "items": {
+              "$ref": "#/components/schemas/ReferralStatsHistoryDTO"
+            },
+            "type": "array",
+            "title": "Array"
+          },
+          "page": {
+            "type": "integer",
+            "title": "Page"
+          },
+          "per_page": {
+            "type": "integer",
+            "title": "Per Page"
+          },
+          "total_pages": {
+            "type": "integer",
+            "title": "Total Pages"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "array",
+          "page",
+          "per_page",
+          "total_pages",
+          "total"
+        ],
+        "title": "PaginatedReferralStatsHistoryDTO"
+      },
       "PaginatedTopicResponseDTO": {
         "properties": {
           "array": {
@@ -11010,6 +12204,37 @@
         ],
         "title": "PhoneValidateDTO"
       },
+      "PickProfit": {
+        "properties": {
+          "investment": {
+            "$ref": "#/components/schemas/InvestedFunds",
+            "description": "Amount of investments in event/events"
+          },
+          "settled": {
+            "type": "integer",
+            "title": "Settled",
+            "description": "Amount of settled funds in event/events"
+          },
+          "platform_fee": {
+            "type": "integer",
+            "title": "Platform Fee",
+            "description": "Platform charge for profit"
+          },
+          "picks_profit": {
+            "type": "integer",
+            "title": "Picks Profit",
+            "description": "Profit from picks of resolved orders"
+          }
+        },
+        "type": "object",
+        "required": [
+          "investment",
+          "settled",
+          "platform_fee",
+          "picks_profit"
+        ],
+        "title": "PickProfit"
+      },
       "PicksTypeEnum": {
         "type": "string",
         "enum": [
@@ -11022,11 +12247,25 @@
       "PortfolioEventSchemaDTO": {
         "properties": {
           "total_invested": {
-            "$ref": "#/components/schemas/TotalInvested",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TotalInvested"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Summary of all invested funds breakdown"
           },
           "live_profit": {
-            "$ref": "#/components/schemas/LiveProfit",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Current live profit/loss information for active picks"
           },
           "exit_profit": {
@@ -11034,8 +12273,50 @@
             "description": "Profit information from positions closed before resolution"
           },
           "potential_profit": {
-            "$ref": "#/components/schemas/PotentialProfit",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PotentialProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Potential profit if all active positions win"
+          },
+          "total_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Profit",
+            "description": "Total profit from all orders of resolved event"
+          },
+          "picks_profit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PickProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Profit from picks of resolved orders"
+          },
+          "refunded": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refunded",
+            "description": "Amount of funds refunded for canceled events"
           },
           "id": {
             "type": "string",
@@ -11051,6 +12332,16 @@
             "type": "string",
             "title": "Description",
             "description": "Event description"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "description": "Event status"
+          },
+          "result": {
+            "type": "string",
+            "title": "Result",
+            "description": "Event result"
           },
           "start_date": {
             "type": "string",
@@ -11070,17 +12361,6 @@
             "title": "Logo Url",
             "description": "Event logo URL"
           },
-          "result": {
-            "anyOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ],
-            "title": "Result"
-          },
           "predict": {
             "anyOf": [
               {
@@ -11090,17 +12370,21 @@
                 "type": "null"
               }
             ]
+          },
+          "holders": {
+            "type": "integer",
+            "title": "Holders",
+            "default": 0
           }
         },
         "type": "object",
         "required": [
-          "total_invested",
-          "live_profit",
           "exit_profit",
-          "potential_profit",
           "id",
           "name",
           "description",
+          "status",
+          "result",
           "start_date"
         ],
         "title": "PortfolioEventSchemaDTO"
@@ -11108,11 +12392,25 @@
       "PortfolioEventSearchSchema": {
         "properties": {
           "total_invested": {
-            "$ref": "#/components/schemas/TotalInvested",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TotalInvested"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Summary of all invested funds breakdown"
           },
           "live_profit": {
-            "$ref": "#/components/schemas/LiveProfit",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/LiveProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Current live profit/loss information for active picks"
           },
           "exit_profit": {
@@ -11120,8 +12418,50 @@
             "description": "Profit information from positions closed before resolution"
           },
           "potential_profit": {
-            "$ref": "#/components/schemas/PotentialProfit",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PotentialProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "description": "Potential profit if all active positions win"
+          },
+          "total_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Profit",
+            "description": "Total profit from all orders of resolved event"
+          },
+          "picks_profit": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PickProfit"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Profit from picks of resolved orders"
+          },
+          "refunded": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refunded",
+            "description": "Amount of funds refunded for canceled events"
           },
           "id": {
             "type": "string",
@@ -11190,6 +12530,11 @@
             "type": "string",
             "title": "Category Name"
           },
+          "holders": {
+            "type": "integer",
+            "title": "Holders",
+            "default": 0
+          },
           "category_logo_url": {
             "anyOf": [
               {
@@ -11214,10 +12559,7 @@
         },
         "type": "object",
         "required": [
-          "total_invested",
-          "live_profit",
           "exit_profit",
-          "potential_profit",
           "id",
           "name",
           "description",
@@ -11471,7 +12813,7 @@
             ],
             "title": "Profit"
           },
-          "cancelled": {
+          "canceled": {
             "anyOf": [
               {
                 "$ref": "#/components/schemas/CancelTypeEnum"
@@ -11480,6 +12822,28 @@
                 "type": "null"
               }
             ]
+          },
+          "picks_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Picks Profit"
+          },
+          "settled_value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Settled Value"
           }
         },
         "type": "object",
@@ -11581,6 +12945,28 @@
               }
             ],
             "title": "Profit"
+          },
+          "settled_value": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Settled Value"
+          },
+          "picks_profit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Picks Profit"
           }
         },
         "type": "object",
@@ -11905,6 +13291,101 @@
           "promo"
         ],
         "title": "ReferralHistoryDTO"
+      },
+      "ReferralProgressDTO": {
+        "properties": {
+          "registered_count": {
+            "type": "integer",
+            "title": "Registered Count"
+          },
+          "verified_and_deposited_count": {
+            "type": "integer",
+            "title": "Verified And Deposited Count"
+          },
+          "made_picks_count": {
+            "type": "integer",
+            "title": "Made Picks Count"
+          },
+          "inactive_count": {
+            "type": "integer",
+            "title": "Inactive Count"
+          },
+          "rewards_amount": {
+            "type": "integer",
+            "title": "Rewards Amount"
+          },
+          "pending_amount": {
+            "type": "integer",
+            "title": "Pending Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "registered_count",
+          "verified_and_deposited_count",
+          "made_picks_count",
+          "inactive_count",
+          "rewards_amount",
+          "pending_amount"
+        ],
+        "title": "ReferralProgressDTO"
+      },
+      "ReferralStatsHistoryDTO": {
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Date"
+          },
+          "transactions": {
+            "items": {
+              "$ref": "#/components/schemas/ReferralStatsTransactionDTO"
+            },
+            "type": "array",
+            "title": "Transactions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "date",
+          "transactions"
+        ],
+        "title": "ReferralStatsHistoryDTO"
+      },
+      "ReferralStatsHistoryTypeEnum": {
+        "type": "string",
+        "enum": [
+          "active",
+          "inactive"
+        ],
+        "title": "ReferralStatsHistoryTypeEnum"
+      },
+      "ReferralStatsTransactionDTO": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "referral_deposit",
+              "referral_made_picks"
+            ],
+            "title": "Type"
+          },
+          "amount": {
+            "type": "integer",
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "amount"
+        ],
+        "title": "ReferralStatsTransactionDTO"
       },
       "RefreshTokenRequestDTO": {
         "properties": {
@@ -12774,12 +14255,18 @@
         "properties": {
           "token": {
             "type": "string",
-            "title": "Token"
+            "title": "Token",
+            "examples": [
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNzJlODJiMC04YWMzLTQ4OTgtOGJmNi04ZmNkMzY3ZDY2MTUiLCJpc3MiOiJ5b24tYXV0aCIsImF1ZCI6Inlvbi1hdXRoIiwidG9rZW5fdHlwZSI6InZlcmlmaWNhdGlvbl90b2tlbiIsImp0aSI6ImIyNDkyODIzLWJmZGYtNGYwNS1hNzg2LTQzNjQyZTdlNWQzYiIsImlhdCI6MTc1MjM1ODEzNCwiZXhwIjoxNzUyMzU4MjU0fQ.mAGdAWl0G2hlLZAmx7lOXHnPA99t9bGsUlWuxMWw1QQ"
+            ]
           },
           "expires_at": {
             "type": "string",
             "format": "date-time",
-            "title": "Expires At"
+            "title": "Expires At",
+            "examples": [
+              "2025-07-12T22:05:56.268Z"
+            ]
           },
           "otp": {
             "anyOf": [
@@ -12798,13 +14285,7 @@
           "token",
           "expires_at"
         ],
-        "title": "VerificationTokenDTO",
-        "examples": [
-          {
-            "expires_at": "2025-07-12T22:05:56.268Z",
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhNzJlODJiMC04YWMzLTQ4OTgtOGJmNi04ZmNkMzY3ZDY2MTUiLCJpc3MiOiJ5b24tYXV0aCIsImF1ZCI6Inlvbi1hdXRoIiwidG9rZW5fdHlwZSI6InZlcmlmaWNhdGlvbl90b2tlbiIsImp0aSI6ImIyNDkyODIzLWJmZGYtNGYwNS1hNzg2LTQzNjQyZTdlNWQzYiIsImlhdCI6MTc1MjM1ODEzNCwiZXhwIjoxNzUyMzU4MjU0fQ.mAGdAWl0G2hlLZAmx7lOXHnPA99t9bGsUlWuxMWw1QQ"
-          }
-        ]
+        "title": "VerificationTokenDTO"
       }
     },
     "securitySchemes": {

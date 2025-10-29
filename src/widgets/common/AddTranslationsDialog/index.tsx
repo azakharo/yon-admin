@@ -23,7 +23,7 @@ const AddTranslationsDialog: FC<Props> = ({
 }) => {
   const [translations, setTranslations] = useState<TranslationDict>(() => {
     const trans = {...initialTranslations};
-    trans.English = enTrans;
+    trans[SupportedLanguage.English] = enTrans;
 
     return trans;
   });

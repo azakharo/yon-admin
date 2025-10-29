@@ -1,8 +1,11 @@
+// The values are backend specific
 export enum SupportedLanguage {
-  English = 'English',
-  Portugal = 'Portugal',
-  Mexico = 'Mexico',
-  Brazil = 'Brazil',
+  English = 'en',
+  Portugal = 'pt',
+  Tagalog = 'tl',
+  Filipino = 'fil',
+  Spanish = 'es',
+  Russian = 'ru',
 }
 
 export type TranslationDict = Record<SupportedLanguage, string>;
