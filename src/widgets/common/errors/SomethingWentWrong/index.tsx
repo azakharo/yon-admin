@@ -1,5 +1,4 @@
 import {FC, useEffect, useRef} from 'react';
-import {useNavigate} from 'react-router-dom';
 import {useIsMobile} from '@features/responsive';
 import {Box, Button, Typography} from '@mui/material';
 import {isAxiosError} from 'axios';
@@ -14,7 +13,6 @@ interface Props {
 }
 
 export const SomethingWentWrong: FC<Props> = ({error}) => {
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -60,13 +58,12 @@ export const SomethingWentWrong: FC<Props> = ({error}) => {
       <Button
         variant="contained"
         onClick={() => {
-          navigate('/');
           setTimeout(() => {
             window.location.reload();
           }, 0);
         }}
       >
-        Back to the main page
+        Reload page
       </Button>
     </Box>
   );
