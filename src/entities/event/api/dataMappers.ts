@@ -19,6 +19,8 @@ export const mapEventFromBackend = (
     no_price,
     no_text,
     trading_volume,
+    status,
+    result,
   }: EventOnBackend,
   categories: Category[],
 ): Event => ({
@@ -36,4 +38,6 @@ export const mapEventFromBackend = (
   noPrice: getBackendCurrencyValue(no_price) ?? 0,
   noText: no_text ?? '',
   tradingVolume: trading_volume,
+  status,
+  result,
 });

@@ -26,7 +26,7 @@ import {EnterCodeStep} from '@/pages/LoginPage/EnterCodeStep';
 import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
 import {CreateEventPage} from '@/pages/MainPage/CreateEvent';
-import {EventDetailsPage} from '@/pages/MainPage/EventDetails';
+import {EditEventPage} from '@/pages/MainPage/EditEvent';
 import {OrderFullInfoPage} from '@/pages/MainPage/OrderFullInfo';
 import {OrdersPage} from '@/pages/MainPage/Orders';
 import {TaskCategoryTable} from '@/pages/MainPage/Section1/TaskCategoryTable';
@@ -62,7 +62,7 @@ export const routes = createRoutesFromElements(
         <Route path={ROUTE__USER_ORDERS} element={<UserOrdersPage />} />
         <Route path={ROUTE__ORDER_FULL_INFO} element={<OrderFullInfoPage />} />
         <Route path={ROUTE__EVENTS} element={<EventsPage />} />
-        <Route path={ROUTE__EVENT_DETAILS} element={<EventDetailsPage />} />
+        <Route path={ROUTE__EVENT_DETAILS} element={<EditEventPage />} />
         <Route path={ROUTE__CREATE_EVENT} element={<CreateEventPage />} />
         <Route path={ROUTE__ORDERS} element={<OrdersPage />} />
 

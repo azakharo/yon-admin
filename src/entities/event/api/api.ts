@@ -10,8 +10,8 @@ import {TranslationDict} from '@shared/types';
 import {validateData} from '@shared/utils';
 import {getCategories} from '../../category';
 import {Event} from '../types';
-import {v8nSchemaOfGetEventsResponse} from './backendSchemas';
-import {GetEventsResponse} from './backendTypes';
+import {eventV8nSchema, v8nSchemaOfGetEventsResponse} from './backendSchemas';
+import {EventOnBackend, GetEventsResponse} from './backendTypes';
 import {mapEventFromBackend} from './dataMappers';
 
 export interface GetEventsParams extends GetListParams {
@@ -106,4 +106,15 @@ export const createEvent = ({
     parent_id: parentId,
     need_promotion: isPromotionNeeded,
   });
+};
+
+export const getEvent = async (id: string): Promise<Event> => {
+  const [response, categories] = await Promise.all([
+    axi.get<EventOnBackend>(`/events/${id}`),
+    getCategories(),
+  ]);
+
+  validateData(response.data, eventV8nSchema, 'getEvent');
+
+  return mapEventFromBackend(response.data, categories);
 };

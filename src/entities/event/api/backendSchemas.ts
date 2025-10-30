@@ -3,6 +3,7 @@ import {array, boolean, number, object, string} from 'yup';
 import {paginationV8nSchema} from '@shared/api';
 import {stringOptionalNullable} from '@shared/utils';
 import {subCategoryV8nSchema} from '../../category/api/backendSchemas';
+import {EventResult, EventStatus} from '../types';
 
 export const eventV8nSchema = object().shape({
   id: string().required(),
@@ -19,6 +20,8 @@ export const eventV8nSchema = object().shape({
   yes_text: stringOptionalNullable,
   no_text: stringOptionalNullable,
   trading_volume: number().integer().required(),
+  status: string().oneOf(Object.values(EventStatus)).required(),
+  result: string().oneOf(Object.values(EventResult)).required(),
 });
 
 export const v8nSchemaOfGetEventsResponse = paginationV8nSchema.shape({
