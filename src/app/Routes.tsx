@@ -2,6 +2,8 @@ import {createRoutesFromElements, Navigate, Route} from 'react-router-dom';
 import {ProtectedRoute} from '@features/auth';
 
 import {
+  ROUTE__CATEGORIES,
+  ROUTE__CATEGORIES_GEO,
   ROUTE__CREATE_EVENT,
   ROUTE__CURRENT_USER_PROFILE,
   ROUTE__EVENT_DETAILS,
@@ -12,11 +14,11 @@ import {
   ROUTE__MAIN,
   ROUTE__ORDER_FULL_INFO,
   ROUTE__ORDERS,
+  ROUTE__SUB_CATEGORIES,
   ROUTE__USER_ACCOUNT,
   ROUTE__USER_ORDERS,
   ROUTE__USERS,
 } from '@shared/constants';
-import {EventsPage} from '../pages/MainPage/Events';
 import {AppWrapper} from './AppWrapper';
 
 import {CurrentUserProfilePage} from '@/pages/CurrentUserProfilePage';
@@ -25,11 +27,15 @@ import {LoginPage} from '@/pages/LoginPage';
 import {EnterCodeStep} from '@/pages/LoginPage/EnterCodeStep';
 import {EnterPhoneStep} from '@/pages/LoginPage/EnterPhoneStep';
 import {MainPage} from '@/pages/MainPage';
+import {CategoriesPage} from '@/pages/MainPage/Categories';
 import {CreateEventPage} from '@/pages/MainPage/CreateEvent';
 import {EditEventPage} from '@/pages/MainPage/EditEvent';
+import {EventsPage} from '@/pages/MainPage/Events';
+import {GeoCategoriesPage} from '@/pages/MainPage/GeoCategoriesPage';
 import {OrderFullInfoPage} from '@/pages/MainPage/OrderFullInfo';
 import {OrdersPage} from '@/pages/MainPage/Orders';
 import {TaskCategoryTable} from '@/pages/MainPage/Section1/TaskCategoryTable';
+import {SubCategoriesPage} from '@/pages/MainPage/SubCategories';
 import {UserAccountPage} from '@/pages/MainPage/UserAccount';
 import {UserOrdersPage} from '@/pages/MainPage/UserOrders';
 import {UsersPage} from '@/pages/MainPage/Users';
@@ -65,6 +71,9 @@ export const routes = createRoutesFromElements(
         <Route path={ROUTE__EVENT_DETAILS} element={<EditEventPage />} />
         <Route path={ROUTE__CREATE_EVENT} element={<CreateEventPage />} />
         <Route path={ROUTE__ORDERS} element={<OrdersPage />} />
+        <Route path={ROUTE__CATEGORIES} element={<CategoriesPage />} />
+        <Route path={ROUTE__SUB_CATEGORIES} element={<SubCategoriesPage />} />
+        <Route path={ROUTE__CATEGORIES_GEO} element={<GeoCategoriesPage />} />
 
         <Route index element={<Navigate replace to={ROUTE__USERS} />} />
         <Route path="*" element={<ErrorPage404 />} />

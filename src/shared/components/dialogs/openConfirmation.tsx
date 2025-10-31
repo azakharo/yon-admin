@@ -26,7 +26,7 @@ const ConfirmationDialog: FC<Props> = ({
   text,
   content,
   okButtonText = 'OK',
-  cancelButtonText = 'Отмена',
+  cancelButtonText = 'Cancel',
 }) => {
   const handleCancel = () => {
     onReject();

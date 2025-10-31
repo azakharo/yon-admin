@@ -7,8 +7,8 @@ import {useSnackbar} from 'notistack';
 import {openConfirmation} from '../../dialogs';
 
 interface Props extends IconButtonProps {
-  removeMethod: UseMutateFunction<unknown, Error, number, unknown>;
-  entityId: number;
+  removeMethod: UseMutateFunction<unknown, Error, number | string, unknown>;
+  entityId: number | string;
   confirmationTitle?: string;
   confirmationMainText?: string;
 }
@@ -16,8 +16,8 @@ interface Props extends IconButtonProps {
 export const DeleteButton: FC<Props> = ({
   removeMethod,
   entityId,
-  confirmationTitle = 'Удалить?',
-  confirmationMainText = 'Вы уверены, что хотите удалить выбранную запись?',
+  confirmationTitle = 'Delete?',
+  confirmationMainText = 'Are you sure that you want to delete the selected recored?',
   ...restProps
 }) => {
   const {enqueueSnackbar} = useSnackbar();
@@ -33,13 +33,10 @@ export const DeleteButton: FC<Props> = ({
               <>
                 <Typography>{confirmationMainText}</Typography>
                 <br />
-                <Typography>
-                  Позже при необходимости вы сможете восстановить удалённую
-                  запись.
-                </Typography>
+                <Typography>This action can not be undone!</Typography>
               </>
             ),
-            okButtonText: 'Удалить',
+            okButtonText: 'Delete',
           });
         } catch (_) {
           return;
@@ -47,12 +44,12 @@ export const DeleteButton: FC<Props> = ({
 
         removeMethod(entityId, {
           onSuccess: () => {
-            enqueueSnackbar('Запись удалена', {
+            enqueueSnackbar('The record has been deleted', {
               variant: 'success',
             });
           },
           onError: () => {
-            enqueueSnackbar('Ошибка! Не удалось удалить запись', {
+            enqueueSnackbar('Error! Could not delete the record', {
               variant: 'error',
             });
           },

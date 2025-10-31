@@ -12,4 +12,9 @@ export const ROUTE__EVENT_DETAILS = `${ROUTE__EVENTS}/:id`;
 export const ROUTE__ORDERS = `${ROUTE__MAIN}/orders`;
 export const ROUTE__CREATE_EVENT = `${ROUTE__EVENTS}/create`;
 
+export const ROUTE__CATEGORIES_GROUP = `${ROUTE__MAIN}/categories`;
+export const ROUTE__CATEGORIES = `${ROUTE__CATEGORIES_GROUP}/theme`;
+export const ROUTE__SUB_CATEGORIES = `${ROUTE__CATEGORIES}/:categoryId/subcategories`;
+export const ROUTE__CATEGORIES_GEO = `${ROUTE__CATEGORIES_GROUP}/geo`;
+
 export const ROUTE__CURRENT_USER_PROFILE = '/profile';

@@ -42,7 +42,7 @@ export const OrdersPage = () => {
       columns={columns}
       data={data?.items ?? []}
       renderTopToolbarCustomActions={() => {
-        return <Header title="Orders" />;
+        return <Header title="Orders" isBackButtonShown={false} />;
       }}
       renderRowActions={({row}) => {
         return (

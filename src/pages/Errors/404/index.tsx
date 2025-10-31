@@ -21,16 +21,15 @@ const ErrorPage404 = () => {
         <Icon width={280} height={'100%'} />
 
         <Typography variant="h1" mt={3}>
-          404: Страница не найдена
+          404: Page not found
         </Typography>
 
         <Typography variant="b1medium" mt={1} mb={3}>
-          Наша команда обещает использовать свои суперспособности, чтобы её
-          найти
+          Check the URL
         </Typography>
 
         <Button variant="contained" onClick={handleGoHome}>
-          Вернуться на Главную
+          Back to the main page
         </Button>
       </Box>
     </Box>

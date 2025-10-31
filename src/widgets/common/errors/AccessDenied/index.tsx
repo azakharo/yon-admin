@@ -22,7 +22,7 @@ export const AccessDenied = forwardRef<HTMLDivElement>((_, ref) => {
       <Icon width={280} height={'100%'} />
 
       <Typography variant="h1" mt={3} align="center" sx={{textWrap: 'pretty'}}>
-        У вас нет доступа к запрашиваемой странице
+        You don't have access rights
       </Typography>
 
       <Typography
@@ -32,7 +32,7 @@ export const AccessDenied = forwardRef<HTMLDivElement>((_, ref) => {
         align="center"
         sx={{textWrap: 'pretty'}}
       >
-        Чтобы получить доступ, обратитесь к своему руководству
+        Contact your manager for getting access
       </Typography>
 
       <Button
@@ -41,7 +41,7 @@ export const AccessDenied = forwardRef<HTMLDivElement>((_, ref) => {
           navigate(-1);
         }}
       >
-        Вернуться назад
+        Back
       </Button>
     </Box>
   );
