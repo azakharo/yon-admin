@@ -9,8 +9,7 @@ import {
 } from '@shared/constants';
 import {useUrlState} from '@shared/hooks';
 import {Header} from '@widgets/common';
-
-import {columns} from '@/pages/MainPage/UserOrders';
+import {columns} from '../../user/UserOrders';
 
 const localStorageKey = 'orderTable';
 

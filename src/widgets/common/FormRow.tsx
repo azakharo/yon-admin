@@ -1,7 +1,7 @@
 import {FC} from 'react';
 import {Box, BoxProps} from '@mui/material';
 
-export const Row: FC<BoxProps> = ({children, ...restProps}) => {
+export const FormRow: FC<BoxProps> = ({children, ...restProps}) => {
   return (
     <Box
       display="flex"

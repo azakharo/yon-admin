@@ -46,9 +46,8 @@ import {
   setTimeFromAnotherDate,
   stringDefinedButCanBeEmpty,
 } from '@shared/utils';
-import {Header, openGeoFilterDialog} from '@widgets/common';
+import {FormRow, Header, openGeoFilterDialog} from '@widgets/common';
 import {openAddTranslationsDialog} from '@widgets/common/AddTranslationsDialog';
-import {Row} from './Row';
 
 import {COLOR__WHITE} from '@/theme/colors';
 
@@ -302,7 +301,7 @@ export const CreateEventPage = () => {
                   />
                 </Box>
 
-                <Row>
+                <FormRow>
                   <RhfDateSelector
                     name="startDate"
                     control={control}
@@ -315,9 +314,9 @@ export const CreateEventPage = () => {
                     control={control}
                     label={'Start time'}
                   />
-                </Row>
+                </FormRow>
 
-                <Row>
+                <FormRow>
                   <RhfDateSelector
                     name="endDate"
                     control={control}
@@ -330,9 +329,9 @@ export const CreateEventPage = () => {
                     control={control}
                     label={'End time'}
                   />
-                </Row>
+                </FormRow>
 
-                <Row>
+                <FormRow>
                   <TextFieldElement
                     name="broadcastLink"
                     label="Broadcast link"
@@ -348,9 +347,9 @@ export const CreateEventPage = () => {
                     placeholder="link"
                     disabled
                   />
-                </Row>
+                </FormRow>
 
-                <Row>
+                <FormRow>
                   <RhfNumberInput
                     name="yesPrice"
                     label="Cost of Yes (in cent)"
@@ -371,7 +370,7 @@ export const CreateEventPage = () => {
                     control={control}
                     disabled
                   />
-                </Row>
+                </FormRow>
               </Stack>
             </Grid>
 
@@ -457,7 +456,7 @@ export const CreateEventPage = () => {
                         variant="outlined"
                         disabled
                       >
-                        Select
+                        Select...
                       </Button>
                     )}
 
@@ -489,7 +488,7 @@ export const CreateEventPage = () => {
             </Grid>
 
             <Grid size={4}>
-              <Row>
+              <FormRow>
                 <TextFieldElement
                   name="stat"
                   label="Statistic"
@@ -502,9 +501,9 @@ export const CreateEventPage = () => {
                   }}
                   disabled
                 />
-              </Row>
+              </FormRow>
 
-              <Row mt={4}>
+              <FormRow mt={4}>
                 <TextFieldElement
                   name="parentEvent"
                   label="Parent event"
@@ -519,9 +518,9 @@ export const CreateEventPage = () => {
                   placeholder="tab name"
                   disabled
                 />
-              </Row>
+              </FormRow>
 
-              <Row position="relative" left={-16} mt={2}>
+              <FormRow position="relative" left={-16} mt={2}>
                 <CheckboxElement
                   name="isPromoted"
                   label="Need promotion?"
@@ -540,9 +539,9 @@ export const CreateEventPage = () => {
                   }}
                   disabled
                 />
-              </Row>
+              </FormRow>
 
-              <Row mt={4}>
+              <FormRow mt={4}>
                 <TextFieldElement
                   name="v8nType"
                   label="Validation type"
@@ -558,9 +557,9 @@ export const CreateEventPage = () => {
                   placeholder="link"
                   disabled
                 />
-              </Row>
+              </FormRow>
 
-              <Row mt={5}>
+              <FormRow mt={5}>
                 <TextFieldElement
                   name="permission"
                   label="Event permission"
@@ -576,7 +575,7 @@ export const CreateEventPage = () => {
                   placeholder="hidden for whom"
                   disabled
                 />
-              </Row>
+              </FormRow>
 
               <Controller
                 render={({field: {value}}) => (
@@ -606,7 +605,7 @@ export const CreateEventPage = () => {
                       }}
                       disabled
                     >
-                      Select
+                      Select...
                     </Button>
                   </Box>
                 )}
@@ -632,7 +631,7 @@ export const CreateEventPage = () => {
             </Stack>
           )}
 
-          <Row width={420} mt={2}>
+          <FormRow width={420} mt={2}>
             <Button
               type="button"
               variant="outlined"
@@ -647,7 +646,7 @@ export const CreateEventPage = () => {
             <Button type="submit" sx={{flex: 2}} disabled={isCreatingEvent}>
               Create event
             </Button>
-          </Row>
+          </FormRow>
         </form>
       </CardBox>
     </>

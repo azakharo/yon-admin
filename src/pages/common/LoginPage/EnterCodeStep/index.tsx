@@ -2,6 +2,8 @@ import {FormEvent, useState} from 'react';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import {
+  enterPhone,
+  enterSmsCode,
   getUrlToGoAfterLoginFromLocalStorage,
   remUrlToGoAfterLoginFromLocalStorage,
   useAuth,
@@ -15,13 +17,12 @@ import useUpdateEffect from 'ahooks/es/useUpdateEffect';
 import {MuiOtpInput} from 'mui-one-time-password-input';
 import {object} from 'yup';
 
-import {ROUTE__MAIN} from '@shared/constants';
+import {ROUTE__DASHBOARD} from '@shared/constants';
 import {stringDefinedButCanBeEmpty} from '@shared/utils';
 import {Header} from '@widgets/common';
 import {useAuthData} from '../AuthDataContext';
 import {StepPageLayout} from '../components/StepPageLayout';
 
-import {enterPhone, enterSmsCode} from '@/features/auth';
 import {COLOR__GRAY} from '@/theme/colors';
 
 const inputProps = {
@@ -112,7 +113,7 @@ export const EnterCodeStep = () => {
     manual: true,
     onSuccess: tokens => {
       void onLoginSuccess(tokens).then(() => {
-        navigate(getUrlToGoAfterLoginFromLocalStorage() || ROUTE__MAIN);
+        navigate(getUrlToGoAfterLoginFromLocalStorage() || ROUTE__DASHBOARD);
         remUrlToGoAfterLoginFromLocalStorage();
         return;
       });

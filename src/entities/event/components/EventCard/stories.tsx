@@ -3,6 +3,7 @@ import type {Meta, StoryObj} from '@storybook/react';
 import categoryIconSrc from '@shared/images/bitcoin.png';
 import iconSrc from '@shared/images/emirates.png';
 import bannerSrc from '@shared/images/footballBanner.jpg';
+import {EventResult, EventStatus} from '../../types';
 import {EventCard} from './index';
 
 const meta = {
@@ -40,6 +41,8 @@ export const Initial: Story = {
       noText: 'No',
       isLive: false,
       tradingVolume: 12.1,
+      status: EventStatus.active,
+      result: EventResult.waitingForResult,
     },
     maxWidth: 343,
   },

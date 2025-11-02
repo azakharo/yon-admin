@@ -4,7 +4,7 @@ import {DashboardLayout} from '@shared/layouts';
 import {Header} from './Header';
 import {SideBar} from './SideBar';
 
-export const MainPage = () => {
+export const DashboardPage = () => {
   return (
     <DashboardLayout
       header={<Header />}

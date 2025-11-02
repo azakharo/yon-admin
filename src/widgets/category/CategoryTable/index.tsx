@@ -4,7 +4,12 @@ import {MRT_ColumnDef} from 'material-react-table';
 
 import {Category, useGetCategories} from '@entities/category';
 import {DeleteButton, EditButton, MrTable} from '@shared/components';
-import {entityTableCommonProps, ROUTE__SUB_CATEGORIES} from '@shared/constants';
+import {
+  entityTableCommonProps,
+  ROUTE__CATEGORY_CREATE,
+  ROUTE__CATEGORY_EDIT,
+  ROUTE__SUB_CATEGORIES,
+} from '@shared/constants';
 import {useNotImplementedToast} from '@shared/hooks';
 import {BaseComponentLayout} from '@shared/layouts';
 import {TableRowActionsContainer} from '../../common';
@@ -69,6 +74,17 @@ export const CategoryTable = () => {
       <MrTable
         columns={columns}
         data={categories}
+        renderTopToolbarCustomActions={() => {
+          return (
+            <Button
+              onClick={() => {
+                navigate(ROUTE__CATEGORY_CREATE);
+              }}
+            >
+              Create category
+            </Button>
+          );
+        }}
         renderRowActions={({row}) => (
           <TableRowActionsContainer>
             <Button
@@ -84,19 +100,9 @@ export const CategoryTable = () => {
             </Button>
 
             <EditButton
-              onClick={
-                // async () => {
-                //   try {
-                //     await openChangeTaskCategoryDialog({
-                //       originalCategory: row.original,
-                //     });
-                //   } catch (e) {
-                //     // on cancel do nothing
-                //     return;
-                //   }
-                // }
-                showNotImplemented
-              }
+              onClick={() => {
+                navigate(ROUTE__CATEGORY_EDIT.replace(':id', row.original.id));
+              }}
             />
 
             <DeleteButton

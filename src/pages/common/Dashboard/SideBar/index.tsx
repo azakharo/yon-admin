@@ -8,9 +8,9 @@ import {Box, Stack} from '@mui/material';
 
 import {
   ROUTE__CATEGORIES,
-  ROUTE__CATEGORIES_GEO,
   ROUTE__CATEGORIES_GROUP,
   ROUTE__EVENTS,
+  ROUTE__GEO_FILTER_OPTIONS,
   ROUTE__ORDERS,
   ROUTE__USERS,
 } from '@shared/constants';
@@ -51,7 +51,7 @@ export const SideBar = () => {
           />
 
           <NavigationLink
-            route={ROUTE__CATEGORIES_GEO}
+            route={ROUTE__GEO_FILTER_OPTIONS}
             text="Geo"
             icon={<PublicOutlinedIcon />}
           />

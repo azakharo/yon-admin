@@ -28,7 +28,7 @@ import {
   stringDefinedButCanBeEmpty,
   stringify,
 } from '@shared/utils';
-import {Row} from '../../../pages/MainPage/CreateEvent/Row';
+import {FormRow} from '../../common/FormRow';
 
 const priceSchema = numberTransformEmptyStringToNull
   .required()
@@ -134,7 +134,7 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
               }}
             />
 
-            <Row>
+            <FormRow>
               <Box display="flex" gap={2}>
                 <Typography>Status: </Typography>
                 <Typography>
@@ -148,9 +148,9 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
                   <strong>{event.result}</strong>
                 </Typography>
               </Box>
-            </Row>
+            </FormRow>
 
-            <Row>
+            <FormRow>
               <RhfDateSelector
                 name="startDate"
                 control={control}
@@ -163,9 +163,9 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
                 control={control}
                 label={'Start time'}
               />
-            </Row>
+            </FormRow>
 
-            <Row>
+            <FormRow>
               <RhfDateSelector
                 name="endDate"
                 control={control}
@@ -178,9 +178,9 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
                 control={control}
                 label={'End time'}
               />
-            </Row>
+            </FormRow>
 
-            <Row sx={{marginTop: '18px !important'}}>
+            <FormRow sx={{marginTop: '18px !important'}}>
               <Box display="flex" gap={2}>
                 <Typography>Remaining time: </Typography>
                 {remainingTimeString && (
@@ -189,9 +189,9 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
                   </Typography>
                 )}
               </Box>
-            </Row>
+            </FormRow>
 
-            <Row>
+            <FormRow>
               <RhfNumberInput
                 name="yesPrice"
                 label="Cost of Yes (in cent)"
@@ -205,7 +205,7 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
                 control={control}
                 inputType={InputType.positiveInteger}
               />
-            </Row>
+            </FormRow>
           </Stack>
         </Grid>
 
@@ -246,7 +246,7 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
         </Grid>
       </Grid>
 
-      <Row width={420} mt={2}>
+      <FormRow width={420} mt={2}>
         <Button
           type="button"
           variant="outlined"
@@ -259,7 +259,7 @@ export const EditEventForm: FC<Props> = ({event, onClose}) => {
         <Button type="submit" sx={{flex: 2}}>
           Apply changes
         </Button>
-      </Row>
+      </FormRow>
     </form>
   );
 };

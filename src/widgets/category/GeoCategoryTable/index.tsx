@@ -1,8 +1,14 @@
+import {useNavigate} from 'react-router-dom';
+import {Button} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
 
 import {GeoFilterOption, useGetGeoFilterOptions} from '@entities/common';
 import {DeleteButton, EditButton, MrTable} from '@shared/components';
-import {entityTableCommonProps} from '@shared/constants';
+import {
+  entityTableCommonProps,
+  ROUTE__GEO_FILTER_OPTION__CREATE,
+  ROUTE__GEO_FILTER_OPTION__EDIT,
+} from '@shared/constants';
 import {useNotImplementedToast} from '@shared/hooks';
 import {BaseComponentLayout} from '@shared/layouts';
 import {TableRowActionsContainer} from '../../common';
@@ -35,6 +41,7 @@ const columns: MRT_ColumnDef<GeoFilterOption>[] = [
 ];
 
 export const GeoCategoryTable = () => {
+  const navigate = useNavigate();
   const showNotImplemented = useNotImplementedToast();
   const {data, isPending, error} = useGetGeoFilterOptions();
 
@@ -47,22 +54,28 @@ export const GeoCategoryTable = () => {
       <MrTable
         columns={columns}
         data={categories}
+        renderTopToolbarCustomActions={() => {
+          return (
+            <Button
+              onClick={() => {
+                navigate(ROUTE__GEO_FILTER_OPTION__CREATE);
+              }}
+            >
+              Add
+            </Button>
+          );
+        }}
         renderRowActions={({row}) => (
           <TableRowActionsContainer>
             <EditButton
-              onClick={
-                // async () => {
-                //   try {
-                //     await openChangeTaskCategoryDialog({
-                //       originalCategory: row.original,
-                //     });
-                //   } catch (e) {
-                //     // on cancel do nothing
-                //     return;
-                //   }
-                // }
-                showNotImplemented
-              }
+              onClick={() => {
+                navigate(
+                  ROUTE__GEO_FILTER_OPTION__EDIT.replace(
+                    ':id',
+                    row.original.id,
+                  ),
+                );
+              }}
             />
 
             <DeleteButton

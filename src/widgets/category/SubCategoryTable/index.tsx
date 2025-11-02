@@ -1,9 +1,15 @@
 import {FC} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {Button} from '@mui/material';
 import {MRT_ColumnDef} from 'material-react-table';
 
 import {SubCategory, useGetSubCategories} from '@entities/category';
 import {DeleteButton, EditButton, MrTable} from '@shared/components';
-import {entityTableCommonProps} from '@shared/constants';
+import {
+  entityTableCommonProps,
+  ROUTE__SUB_CATEGORY_CREATE,
+  ROUTE__SUB_CATEGORY_EDIT,
+} from '@shared/constants';
 import {useNotImplementedToast} from '@shared/hooks';
 import {BaseComponentLayout} from '@shared/layouts';
 import {Header, TableRowActionsContainer} from '../../common';
@@ -25,6 +31,7 @@ interface Props {
 }
 
 export const SubCategoryTable: FC<Props> = ({categoryId}) => {
+  const navigate = useNavigate();
   const showNotImplemented = useNotImplementedToast();
 
   const {data, isPending, error} = useGetSubCategories(categoryId ?? '', {
@@ -41,24 +48,37 @@ export const SubCategoryTable: FC<Props> = ({categoryId}) => {
         columns={columns}
         data={subCategories}
         renderTopToolbarCustomActions={() => {
-          return <Header title={`Sub-categories of ${categoryId}`} />;
+          return (
+            <Header
+              title={`Sub-categories of ${categoryId}`}
+              rightPart={
+                <Button
+                  onClick={() => {
+                    navigate(
+                      ROUTE__SUB_CATEGORY_CREATE.replace(
+                        ':categoryId',
+                        categoryId,
+                      ),
+                    );
+                  }}
+                >
+                  Create sub-category
+                </Button>
+              }
+            />
+          );
         }}
         renderRowActions={({row}) => (
           <TableRowActionsContainer>
             <EditButton
-              onClick={
-                // async () => {
-                //   try {
-                //     await openChangeTaskCategoryDialog({
-                //       originalCategory: row.original,
-                //     });
-                //   } catch (e) {
-                //     // on cancel do nothing
-                //     return;
-                //   }
-                // }
-                showNotImplemented
-              }
+              onClick={() => {
+                navigate(
+                  ROUTE__SUB_CATEGORY_EDIT.replace(
+                    ':categoryId',
+                    categoryId,
+                  ).replace(':id', row.original.id),
+                );
+              }}
             />
 
             <DeleteButton

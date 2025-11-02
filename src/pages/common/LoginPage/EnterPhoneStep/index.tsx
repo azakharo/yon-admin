@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
+import {enterPhone} from '@features/auth';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {Box, Button, Stack, Typography} from '@mui/material';
 import useRequest from 'ahooks/es/useRequest';
@@ -10,12 +11,10 @@ import {object} from 'yup';
 import {CountryFlag} from '@shared/components';
 import {ROUTE__LOGIN__ENTER_CODE} from '@shared/constants';
 import {stringDefinedButCanBeEmpty} from '@shared/utils';
+import {COLOR__LINE, COLOR__WHITE} from '@/theme/colors';
 import {useAuthData} from '../AuthDataContext';
 import {StepPageLayout} from '../components/StepPageLayout';
 import imageSrc from './image.jpg';
-
-import {enterPhone} from '@/features/auth';
-import {COLOR__LINE, COLOR__WHITE} from '@/theme/colors';
 
 const USA = 'US';
 const browserLanguage = navigator.language;

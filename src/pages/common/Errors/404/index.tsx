@@ -15,7 +15,7 @@ const ErrorPage404 = () => {
       display="flex"
       alignItems="center"
       justifyContent="center"
-      height="100dvh"
+      height="100%"
     >
       <Box display="flex" flexDirection="column" alignItems="center">
         <Icon width={280} height={'100%'} />
