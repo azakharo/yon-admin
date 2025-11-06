@@ -6,7 +6,6 @@ import {AxiosError} from 'axios';
 import {useSnackbar} from 'notistack';
 
 import {CardBox} from '@shared/components';
-import {stringify} from '@shared/utils';
 import {FormRow, Header} from '@widgets/common';
 import {FormFields} from './FormFields';
 
