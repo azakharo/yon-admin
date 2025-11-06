@@ -18,6 +18,8 @@ import {
   ROUTE__LOGIN__ENTER_PHONE,
   ROUTE__ORDER_FULL_INFO,
   ROUTE__ORDERS,
+  ROUTE__PROMOCODE_CREATE,
+  ROUTE__PROMOCODES,
   ROUTE__SUB_CATEGORIES,
   ROUTE__SUB_CATEGORY_CREATE,
   ROUTE__SUB_CATEGORY_EDIT,
@@ -46,6 +48,8 @@ import {EditEventPage} from '@/pages/event/EditEvent';
 import {EventsPage} from '@/pages/event/Events';
 import {OrderFullInfoPage} from '@/pages/order/OrderFullInfo';
 import {OrdersPage} from '@/pages/order/Orders';
+import {CreatePromocodePage} from '@/pages/promocode/CreatePromocode';
+import {PromocodesPage} from '@/pages/promocode/Promocodes';
 import {CurrentUserProfilePage} from '@/pages/user/CurrentUserProfilePage';
 import {UserAccountPage} from '@/pages/user/UserAccount';
 import {UserOrdersPage} from '@/pages/user/UserOrders';
@@ -108,6 +112,12 @@ export const routes = createRoutesFromElements(
         <Route
           path={ROUTE__GEO_FILTER_OPTION__EDIT}
           element={<EditGeoFilterOptionPage />}
+        />
+
+        <Route path={ROUTE__PROMOCODES} element={<PromocodesPage />} />
+        <Route
+          path={ROUTE__PROMOCODE_CREATE}
+          element={<CreatePromocodePage />}
         />
 
         <Route index element={<Navigate replace to={ROUTE__USERS} />} />

@@ -26,6 +26,8 @@ import {
 import {useUrlState} from '@shared/hooks';
 import {openTopUpBalanceDialog} from '@widgets/user';
 
+import {PaginationState} from '@/shared/types';
+
 const columns: MRT_ColumnDef<User>[] = [
   {
     accessorKey: 'id',
@@ -112,10 +114,7 @@ const columns: MRT_ColumnDef<User>[] = [
 
 const localStorageKey = 'userTable';
 
-type UrlState = {
-  pageIndex: number;
-  pageSize: number;
-};
+type UrlState = PaginationState;
 
 export const UsersPage = () => {
   const navigate = useNavigate();

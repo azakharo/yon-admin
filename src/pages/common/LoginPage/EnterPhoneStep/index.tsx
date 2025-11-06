@@ -11,10 +11,11 @@ import {object} from 'yup';
 import {CountryFlag} from '@shared/components';
 import {ROUTE__LOGIN__ENTER_CODE} from '@shared/constants';
 import {stringDefinedButCanBeEmpty} from '@shared/utils';
-import {COLOR__LINE, COLOR__WHITE} from '@/theme/colors';
 import {useAuthData} from '../AuthDataContext';
 import {StepPageLayout} from '../components/StepPageLayout';
 import imageSrc from './image.jpg';
+
+import {COLOR__LINE, COLOR__WHITE} from '@/theme/colors';
 
 const USA = 'US';
 const browserLanguage = navigator.language;

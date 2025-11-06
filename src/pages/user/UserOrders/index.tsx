@@ -18,6 +18,8 @@ import {
 import {useUrlState} from '@shared/hooks';
 import {Header} from '@widgets/common';
 
+import {PaginationState} from '@/shared/types';
+
 export const columns: MRT_ColumnDef<Order>[] = [
   {
     accessorKey: 'id',
@@ -84,10 +86,7 @@ export const columns: MRT_ColumnDef<Order>[] = [
 
 const localStorageKey = 'userOrderTable';
 
-type UrlState = {
-  pageIndex: number;
-  pageSize: number;
-};
+type UrlState = PaginationState;
 
 export const UserOrdersPage = () => {
   const navigate = useNavigate();

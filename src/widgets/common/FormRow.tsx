@@ -5,6 +5,7 @@ export const FormRow: FC<BoxProps> = ({children, ...restProps}) => {
   return (
     <Box
       display="flex"
+      alignItems="flex-start"
       gap={4}
       sx={{
         '& > *': {

@@ -11,12 +11,11 @@ import {useUrlState} from '@shared/hooks';
 import {Header} from '@widgets/common';
 import {columns} from '../../user/UserOrders';
 
+import {PaginationState} from '@/shared/types';
+
 const localStorageKey = 'orderTable';
 
-type UrlState = {
-  pageIndex: number;
-  pageSize: number;
-};
+type UrlState = PaginationState;
 
 export const OrdersPage = () => {
   const navigate = useNavigate();

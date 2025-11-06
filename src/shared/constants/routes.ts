@@ -26,3 +26,6 @@ export const ROUTE__GEO_FILTER_OPTION__CREATE = `${ROUTE__GEO_FILTER_OPTIONS}/cr
 export const ROUTE__GEO_FILTER_OPTION__EDIT = `${ROUTE__GEO_FILTER_OPTIONS}/:id`;
 
 export const ROUTE__CURRENT_USER_PROFILE = '/profile';
+
+export const ROUTE__PROMOCODES = `${ROUTE__DASHBOARD}/promocodes`;
+export const ROUTE__PROMOCODE_CREATE = `${ROUTE__PROMOCODES}/create`;

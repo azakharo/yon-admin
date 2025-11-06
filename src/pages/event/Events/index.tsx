@@ -16,6 +16,8 @@ import {
 } from '@shared/constants';
 import {useNotImplementedToast, useUrlState} from '@shared/hooks';
 
+import {PaginationState} from '@/shared/types';
+
 const columns: MRT_ColumnDef<Event>[] = [
   {
     accessorKey: 'id',
@@ -65,10 +67,7 @@ const columns: MRT_ColumnDef<Event>[] = [
 
 const localStorageKey = 'eventTable';
 
-type UrlState = {
-  pageIndex: number;
-  pageSize: number;
-};
+type UrlState = PaginationState;
 
 export const EventsPage = () => {
   const navigate = useNavigate();
