@@ -1,3 +1,4 @@
+import CardGiftcardOutlinedIcon from '@mui/icons-material/CardGiftcardOutlined';
 import CategoryOutlinedIcon from '@mui/icons-material/CategoryOutlined';
 import EventAvailableOutlinedIcon from '@mui/icons-material/EventAvailableOutlined';
 import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
@@ -13,6 +14,7 @@ import {
   ROUTE__EVENTS,
   ROUTE__GEO_FILTER_OPTIONS,
   ROUTE__ORDERS,
+  ROUTE__PROMO_MONEY_TRANSACTIONS,
   ROUTE__PROMOCODES,
   ROUTE__USERS,
 } from '@shared/constants';
@@ -63,6 +65,12 @@ export const SideBar = () => {
           route={ROUTE__PROMOCODES}
           text="Promo-codes"
           icon={<PasswordOutlinedIcon />}
+        />
+
+        <NavigationLink
+          route={ROUTE__PROMO_MONEY_TRANSACTIONS}
+          text="Promo Money"
+          icon={<CardGiftcardOutlinedIcon />}
         />
       </Stack>
     </Box>

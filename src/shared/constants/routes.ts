@@ -29,3 +29,5 @@ export const ROUTE__CURRENT_USER_PROFILE = '/profile';
 
 export const ROUTE__PROMOCODES = `${ROUTE__DASHBOARD}/promocodes`;
 export const ROUTE__PROMOCODE_CREATE = `${ROUTE__PROMOCODES}/create`;
+
+export const ROUTE__PROMO_MONEY_TRANSACTIONS = `${ROUTE__DASHBOARD}/promo-money-transactions`;

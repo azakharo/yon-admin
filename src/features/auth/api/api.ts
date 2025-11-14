@@ -21,6 +21,7 @@ export const enterPhone = async (
   >('/auth/phone', {
     cell_phone: phone.replaceAll(' ', ''),
     country: countryCode,
+    visitor_id: 'visitor_id',
   });
 
   const data = response.data;
@@ -52,6 +53,7 @@ export const enterSmsCode = async (
     '/auth/validate',
     {
       otp: code,
+      visitor_id: 'visitor_id',
     },
     {
       headers: {

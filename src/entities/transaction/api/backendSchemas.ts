@@ -8,7 +8,7 @@ export const transactionV8nSchema = object().shape({
   real_amount: number().integer().required(),
   promo_amount: number().integer().required(),
   created_at: string().required(),
-  related_entity: string().oneOf(['order', 'payment']).required(),
+  related_entity: string().oneOf(['order', 'payment']).nullable(),
   related_entity_id: stringOptionalNullable,
   label: stringOptionalNullable,
   payment_type: string().oneOf(['deposit', 'withdrawals']).nullable(),

@@ -18,7 +18,7 @@ export const mapTransactionFromBackend = ({
   value: real_amount / currencyValueDivider,
   bonus: promo_amount / currencyValueDivider,
   created: getDateFromIsoString(created_at),
-  relatedEntity: related_entity,
+  relatedEntity: related_entity ?? '',
   relatedEntityId: related_entity_id ?? '',
   label: label ? label.toLowerCase() : '',
   paymentType: payment_type ?? '',

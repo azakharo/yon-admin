@@ -18,6 +18,7 @@ import {
   ROUTE__LOGIN__ENTER_PHONE,
   ROUTE__ORDER_FULL_INFO,
   ROUTE__ORDERS,
+  ROUTE__PROMO_MONEY_TRANSACTIONS,
   ROUTE__PROMOCODE_CREATE,
   ROUTE__PROMOCODES,
   ROUTE__SUB_CATEGORIES,
@@ -50,6 +51,7 @@ import {OrderFullInfoPage} from '@/pages/order/OrderFullInfo';
 import {OrdersPage} from '@/pages/order/Orders';
 import {CreatePromocodePage} from '@/pages/promocode/CreatePromocode';
 import {PromocodesPage} from '@/pages/promocode/Promocodes';
+import {PromoMoneyTransactionsPage} from '@/pages/transaction/PromoMoneyTransactions';
 import {CurrentUserProfilePage} from '@/pages/user/CurrentUserProfilePage';
 import {UserAccountPage} from '@/pages/user/UserAccount';
 import {UserOrdersPage} from '@/pages/user/UserOrders';
@@ -118,6 +120,11 @@ export const routes = createRoutesFromElements(
         <Route
           path={ROUTE__PROMOCODE_CREATE}
           element={<CreatePromocodePage />}
+        />
+
+        <Route
+          path={ROUTE__PROMO_MONEY_TRANSACTIONS}
+          element={<PromoMoneyTransactionsPage />}
         />
 
         <Route index element={<Navigate replace to={ROUTE__USERS} />} />

@@ -10,6 +10,7 @@ export enum TransactionTypeFilter {
   all = 'all',
   credit = 'credit',
   debit = 'debit',
+  coins = 'coins',
 }
 
 export interface GetTransactionHistoryParams extends GetListParams {
