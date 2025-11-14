@@ -130,9 +130,9 @@ export const PromoMoneyTransactionsPage = () => {
       error={error}
       columns={columns}
       data={transactions}
-      renderTopToolbarCustomActions={() => {
-        return <Button onClick={showNotImplemented}>TBD</Button>;
-      }}
+      // renderTopToolbarCustomActions={() => {
+      //   return <Button onClick={showNotImplemented}>TBD</Button>;
+      // }}
       renderRowActions={({row}) => {
         return (
           <TableRowActionsContainer>
